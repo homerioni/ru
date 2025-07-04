@@ -1,0 +1,82 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  width: fit-content;
+  margin: 15rem auto;
+}
+
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.infoTitle {
+  font-size: 3rem;
+  text-transform: uppercase;
+  padding: 1.5rem 2rem;
+  border-radius: .6rem;
+  background: var(--red);
+  color: var(--background);
+}
+
+.timer {
+  width: 40rem;
+  padding: 1.5rem 0;
+  margin: 6rem 0;
+  background: rgba(230, 230, 230, .4);
+  font-size: 4rem;
+  color: var(--foreground);
+}
+
+.date {
+  font-size: 3rem;
+  color: var(--gray);
+}
+
+.time {
+  font-size: 3rem;
+  text-transform: uppercase;
+  padding: 1.5rem 5rem;
+  border-radius: .6rem;
+  background: var(--red);
+  color: var(--background);
+}
+
+@media (max-width: 48em) {
+  .main {
+    flex-direction: column;
+    gap: 6rem;
+  }
+
+  .infoBox {
+    gap: 2rem;
+  }
+
+  .infoTitle {
+    font-size: 4rem;
+    padding: 2rem 3rem;
+    border-radius: 1rem;
+  }
+
+  .timer {
+    width: 60rem;
+    padding: 2rem 0;
+    margin: 4rem 0;
+    font-size: 6rem;
+  }
+
+  .date {
+    font-size: 4.4rem;
+  }
+
+  .time {
+    font-size: 4.4rem;
+    padding: 1.6rem 6.4rem;
+    border-radius: 1rem;
+  }
+}

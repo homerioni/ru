@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "baseUrl": ".",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -19,6 +21,11 @@
       }
     ],
     "paths": {
+      "~components/*": ["./src/components/*"],
+      "~ui/*": ["./src/components/ui/*"],
+      "~constants/*": ["src/constants/*"],
+      "~hooks/*": ["src/hooks/*"],
+      "~assets/*": ["src/assets/*"],
       "@/*": ["./src/*"]
     }
   },

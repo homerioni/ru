@@ -1,0 +1,179 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoBox {
+  position: relative;
+  width: 15rem;
+  height: 8rem;
+}
+
+.logo {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  padding: 1rem 1rem 2.4rem 1rem;
+  background-color: rgb(236, 236, 236);
+  box-shadow: .4rem 0 1rem rgb(0,0,0,.4);
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    width: 1px;
+    height: 1px;
+  }
+
+  &:before {
+    left: 0;
+    border-left: 3.75rem solid rgb(236, 236, 236);
+    border-right: 3.75rem solid transparent;
+    border-top: 1rem solid rgb(236, 236, 236);
+    border-bottom: 1rem solid transparent;
+  }
+
+  &:after {
+    right: 0;
+    border-right: 3.75rem solid rgb(236, 236, 236);
+    border-left: 3.75rem solid transparent;
+    border-top: 1rem solid rgb(236, 236, 236);
+    border-bottom: 1rem solid transparent;
+  }
+}
+
+.menu {}
+
+.menuList {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
+
+.menuItem {
+  font-size: 2.4rem;
+  transition: opacity .2s ease;
+  //color: var(--background);
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.socialLink {
+  width: 3rem;
+  height: 3rem;
+  transition: opacity .2s ease;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    padding: 4rem;
+  }
+
+  .burgerClose {
+    position: absolute;
+    left: 4rem;
+    top: 4rem;
+  }
+
+  .logoBox {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    z-index: 5;
+    width: 20rem;
+    height: 12rem;
+    transform: translateX(-50%);
+  }
+
+  .logo {
+    &:before {
+      border-left: 5rem solid rgb(236, 236, 236);
+      border-right: 5rem solid transparent;
+      border-top: 1.5rem solid rgb(236, 236, 236);
+      border-bottom: 1.5rem solid transparent;
+    }
+
+    &:after {
+      border-right: 5rem solid rgb(236, 236, 236);
+      border-left: 5rem solid transparent;
+      border-top: 1.5rem solid rgb(236, 236, 236);
+      border-bottom: 1.5rem solid transparent;
+    }
+  }
+
+  .menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 11;
+    width: 70vw;
+    height: 100vh;
+    transform: translateX(-100vw);
+    background-color: var(--background);
+    transition: transform .3s ease;
+
+    &.open {
+      transform: translateX(0);
+      box-shadow: 70vw 0 0 100vw rgb(0,0,0,.5);
+    }
+  }
+
+  .menuList {
+    flex-direction: column;
+    gap: 2rem;
+    padding-top: 10rem;
+    text-align: center;
+  }
+
+  .menuItem {
+    width: 100%;
+    padding: 3rem 0;
+    font-size: 4rem;
+  }
+
+  .socials {
+    gap: 3rem;
+  }
+
+  .socialLink {
+    width: 5rem;
+    height: 5rem;
+    transition: opacity .2s ease;
+
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}
