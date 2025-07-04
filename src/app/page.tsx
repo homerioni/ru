@@ -1,15 +1,15 @@
-import { Header } from '~components/Header';
 import { Intro } from '~components/Intro';
 import { NextMatch } from '~components/NextMatch';
-import { PreviousMatches } from '~components/PreviousMatches';
+import { PreviousMatchesSlider } from '~components/PreviousMatchesSlider';
+import { TeamSlider } from '~components/TeamSlider';
 
 export default function MainPage() {
   return (
     <>
-      <Header />
       <Intro />
       <NextMatch />
-      <PreviousMatches />
+      <PreviousMatchesSlider />
+      <TeamSlider />
     </>
   );
 }

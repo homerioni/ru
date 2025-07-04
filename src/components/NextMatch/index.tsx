@@ -2,6 +2,7 @@ import logo from '~assets/img/logo.svg';
 import logoS from '~assets/img/soutnik.png';
 import s from './styles.module.scss';
 import { ClubLogo, NAME_POSITION } from '~ui/ClubLogo';
+import { NextMatchTimer } from '~components/NextMatch/NextMatchTimer';
 
 export const NextMatch = () => {
   return (
@@ -9,9 +10,9 @@ export const NextMatch = () => {
       <ClubLogo logoSrc={logo} name={'Речичане United'} />
       <div className={s.infoBox}>
         <p className={s.infoTitle}>Следующий матч</p>
-        <p className={s.timer}>11ч : 30м : 45с</p>
-        <p className={s.date}>08 июля</p>
-        <p className={s.time}>18:00</p>
+        <NextMatchTimer matchDate={new Date(2025, 6, 5, 15, 0).getTime()} />
+        <p className={s.date}>05 июля</p>
+        <p className={s.time}>15:00</p>
       </div>
       <ClubLogo
         logoSrc={logoS}

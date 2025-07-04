@@ -1,0 +1,9 @@
+.main {
+  margin: 10rem auto;
+}
+
+@media (max-width: 48em) {
+  .main {
+    width: 100%;
+  }
+}

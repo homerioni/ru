@@ -10,13 +10,8 @@ export const ROUTES = {
     isProtected: false,
   },
   calendar: {
-    name: 'Календарь',
+    name: 'Матчи',
     href: '/calendar',
-    isProtected: false,
-  },
-  blog: {
-    name: 'Блог',
-    href: '/blog',
     isProtected: false,
   },
 } as const;

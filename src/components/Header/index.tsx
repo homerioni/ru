@@ -34,10 +34,10 @@ export const Header = () => {
         </ul>
       </nav>
       <div className={s.socials}>
-        <Link href={LINKS.telegram} className={s.socialLink}>
+        <Link href={LINKS.telegram} className={s.socialLink} target="_blank">
           <Image src={tg} alt="Telegram" />
         </Link>
-        <Link href={LINKS.instagram} className={s.socialLink}>
+        <Link href={LINKS.instagram} className={s.socialLink} target="_blank">
           <Image src={inst} alt="Instagram" />
         </Link>
       </div>

@@ -5,34 +5,21 @@ import { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import logo from '~assets/img/logo.svg';
 import logoS from '~assets/img/soutnik.png';
-import { MatchItem } from '~components/PreviousMatches/MatchItem';
+import { MatchItem } from '~components/PreviousMatchesSlider/MatchItem';
 import s from './styles.module.scss';
+import { SliderTitleBox } from '~ui/SliderTitleBox';
 
 const test = [
   { name: 'Речичане United', logoSrc: logo },
   { name: 'ФК Спутник', logoSrc: logoS },
 ];
 
-export const PreviousMatches = () => {
+export const PreviousMatchesSlider = () => {
   const swiperRef = useRef<SwiperType>(null);
 
   return (
     <section className={`${s.main} container`}>
-      <div className={s.titleBox}>
-        <h3 className={s.title}>Сыгранные матчи</h3>
-        <div className={s.controls}>
-          <button
-            type="button"
-            className={s.prevBtn}
-            onClick={() => swiperRef.current?.slidePrev()}
-          />
-          <button
-            type="button"
-            className={`${s.nextBtn} ${s.right}`}
-            onClick={() => swiperRef.current?.slideNext()}
-          />
-        </div>
-      </div>
+      <SliderTitleBox swiperRef={swiperRef} title={'Сыгранные матчи'} />
       <Swiper
         spaceBetween={50}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
