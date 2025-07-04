@@ -1,0 +1,14 @@
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4rem;
+  margin: 10rem auto;
+}
+
+@media (max-width: 48em) {
+  .main {
+    grid-template-columns: 1fr;
+    gap: 6rem;
+    margin: 15rem auto;
+  }
+}

@@ -21,11 +21,7 @@
       }
     ],
     "paths": {
-      "~components/*": ["./src/components/*"],
-      "~ui/*": ["./src/components/ui/*"],
-      "~constants/*": ["src/constants/*"],
-      "~hooks/*": ["src/hooks/*"],
-      "~assets/*": ["src/assets/*"],
+      "@ui/*": ["./src/components/ui/*"],
       "@/*": ["./src/*"]
     }
   },

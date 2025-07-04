@@ -1,5 +1,5 @@
 import Image, { StaticImageData } from 'next/image';
-import { SIZES } from '~constants/sizes';
+import { SIZES } from '@/constants';
 import s from './styles.module.scss';
 
 export enum NAME_POSITION {
