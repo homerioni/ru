@@ -5,12 +5,16 @@ import { Player, Match, Club } from '@prisma/client';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import s from './styles.module.scss';
 
-type TEditableItem = Player | Match | Club;
+export type TEditableItem = Player | Match | Club;
 
 type TEditableListProps = {
   selectedItems: TEditableItem[];
   setSelectedItems: Dispatch<SetStateAction<TEditableItem[]>>;
-  columns: readonly { width?: number; minWidth?: number; name: string }[];
+  columns: readonly {
+    width?: number | string;
+    minWidth?: number | string;
+    name: string;
+  }[];
   data: { data: TEditableItem; tableData: React.ReactNode[] }[];
 };
 

@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Center, Pagination, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { Player } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
-import { EditableList } from '@/components/admin/EditableList';
+import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { ModalPlayerContent } from '@/components/admin/ModalPlayerContent';
@@ -107,7 +107,9 @@ export default function AdminProductsPage() {
       {!isLoading && playersList && (
         <EditableList
           selectedItems={selectedItems}
-          setSelectedItems={setSelectedItems}
+          setSelectedItems={
+            setSelectedItems as Dispatch<SetStateAction<TEditableItem[]>>
+          }
           columns={columns}
           data={playersList}
         />
