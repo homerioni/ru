@@ -25,17 +25,20 @@ const adminRoute = '/panel';
 
 export const adminRoutes = {
   main: adminRoute,
-  products: `${adminRoute}/products`,
   games: `${adminRoute}/games`,
   team: `${adminRoute}/team`,
   clubs: `${adminRoute}/clubs`,
 } as const;
 
 export const apiRoutes = {
-  products: '/products',
-  product: '/product',
-  categories: '/categories',
-  category: '/category',
+  club: '/club',
+  updateClub: '/club/update',
+  clubs: '/clubs',
+  match: '/match',
+  updateMatch: '/match/update',
+  matches: '/matches',
+  player: '/player',
+  updatePlayer: '/player/update',
+  players: '/players',
   upload: '/upload',
-  updateProduct: '/product/update',
 } as const;

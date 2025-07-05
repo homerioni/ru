@@ -18,6 +18,7 @@ export const Matches = () => {
             clubs={test}
             type={'Товарищеский матч'}
             date={'08 июля, 18:00'}
+            score={[]}
           />
         </li>
         <li>
@@ -25,6 +26,7 @@ export const Matches = () => {
             clubs={test}
             type={'Товарищеский матч'}
             date={'08 июля, 18:00'}
+            score={[]}
           />
         </li>
         <li>
@@ -32,6 +34,7 @@ export const Matches = () => {
             clubs={test}
             type={'Товарищеский матч'}
             date={'08 июля, 18:00'}
+            score={[]}
           />
         </li>
         <li>
@@ -39,6 +42,7 @@ export const Matches = () => {
             clubs={test}
             type={'Товарищеский матч'}
             date={'08 июля, 18:00'}
+            score={[]}
           />
         </li>
       </ul>

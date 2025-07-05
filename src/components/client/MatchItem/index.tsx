@@ -9,7 +9,7 @@ type TMatchItemProps = {
   }[];
   type: string;
   date: string;
-  score?: [number, number];
+  score: [number, number] | [];
 };
 
 export const MatchItem = ({ clubs, date, score, type }: TMatchItemProps) => {
@@ -23,7 +23,9 @@ export const MatchItem = ({ clubs, date, score, type }: TMatchItemProps) => {
       />
       <div className={s.infoBox}>
         <p className={s.infoTitle}>{type}</p>
-        <p className={s.score}>{score ? `${score[0]} - ${score[1]}` : 'VS'}</p>
+        <p className={s.score}>
+          {score.length ? `${score[0]} - ${score[1]}` : 'VS'}
+        </p>
         <p className={s.date}>{date}</p>
       </div>
       <ClubLogo

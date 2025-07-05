@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getTimeLeft } from '@/constants';
 import s from '../styles.module.scss';
+import { getMoscowTimestamp } from '@/utils/getMoscowTimestamp';
 
 type TNextMatchTimerProps = {
   matchDate: number;
@@ -13,11 +14,11 @@ export const NextMatchTimer = ({ matchDate }: TNextMatchTimerProps) => {
     hours: string;
     minutes: string;
     seconds: string;
-  }>(getTimeLeft(matchDate - Date.now()));
+  }>(getTimeLeft(matchDate - getMoscowTimestamp()));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimer(getTimeLeft(matchDate - Date.now()));
+      setTimer(getTimeLeft(matchDate - getMoscowTimestamp()));
     }, 1000);
 
     return () => {

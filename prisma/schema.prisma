@@ -65,36 +65,69 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-model Category {
+model Club {
   id Int @id @default(autoincrement())
 
-  name     String    @unique
-  linkName String    @unique
-  imageUrl String?
-  products Product[]
-
-  parentId Int?
-  parent   Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryToCategory")
+  name    String  @unique
+  logoSrc String
+  Match   Match[]
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }
 
-model Product {
-  id Int @id @default(autoincrement())
+model Player {
+  id       Int           @id @default(autoincrement())
+  name     String
+  photo    String
+  position String
+  matches  Int           @default(0)
+  goals    Int           @default(0)
+  assists  Int           @default(0)
+  playedIn MatchPlayer[]
+  events   MatchEvent[]
 
-  name        String
-  description String?
-  imageUrl    String
-  price       Decimal  @db.Decimal(6, 2)
-  fullPrice   Decimal? @db.Decimal(6, 2)
-  stock       Boolean?
-  popular     Boolean?
-  linkName    String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
 
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
+model Match {
+  id      Int           @id @default(autoincrement())
+  type    String        @default("Товарищеский матч")
+  date    DateTime
+  score   Int[]         @default([])
+  club    Club          @relation(fields: [clubId], references: [id])
+  clubId  Int
+  players MatchPlayer[]
+  events  MatchEvent[]
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+model MatchPlayer {
+  id       Int    @id @default(autoincrement())
+  match    Match  @relation(fields: [matchId], references: [id])
+  player   Player @relation(fields: [playerId], references: [id])
+  matchId  Int
+  playerId Int
+
+  @@unique([matchId, playerId])
+}
+
+enum EventType {
+  GOAL
+  ASSIST
+}
+
+model MatchEvent {
+  id       Int       @id @default(autoincrement())
+  type     EventType
+  minute   Int?
+  match    Match     @relation(fields: [matchId], references: [id])
+  player   Player    @relation(fields: [playerId], references: [id])
+  matchId  Int
+  playerId Int
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
