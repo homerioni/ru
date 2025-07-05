@@ -55,57 +55,62 @@ export default function AdminLayout({
         <ColorSchemeScript defaultColorScheme="auto" />
       </Head>
       <SessionProvider>
-        {/*<AuthGuard>*/}
-        <QueryClientProvider client={queryClient}>
-          <MantineProvider>
-            <ModalsProvider>
-              <AppShell
-                header={{ height: 52 }}
-                navbar={{
-                  width: 300,
-                  breakpoint: 'sm',
-                  collapsed: { mobile: true },
-                }}
-                padding="md"
-              >
-                <AppShell.Header>
-                  <Flex align="center" justify="space-between" px={16} h="100%">
-                    <Title
-                      h={50}
-                      py={8}
-                      order={3}
-                      display={{ base: 'none', xs: 'block' }}
+        <AuthGuard>
+          <QueryClientProvider client={queryClient}>
+            <MantineProvider>
+              <ModalsProvider>
+                <AppShell
+                  header={{ height: 52 }}
+                  navbar={{
+                    width: 300,
+                    breakpoint: 'sm',
+                    collapsed: { mobile: true },
+                  }}
+                  padding="md"
+                >
+                  <AppShell.Header>
+                    <Flex
+                      align="center"
+                      justify="space-between"
+                      px={16}
+                      h="100%"
                     >
-                      ADMIN PANEL v0.1
-                    </Title>
-                    <LoginComponent />
-                  </Flex>
-                </AppShell.Header>
+                      <Title
+                        h={50}
+                        py={8}
+                        order={3}
+                        display={{ base: 'none', xs: 'block' }}
+                      >
+                        ADMIN PANEL v0.1
+                      </Title>
+                      <LoginComponent />
+                    </Flex>
+                  </AppShell.Header>
 
-                <AppShell.Navbar>
-                  <NavLink
-                    label="Матчи"
-                    href={adminRoutes.games}
-                    active={pathname === adminRoutes.games}
-                  />
-                  <NavLink
-                    label="Наш состав"
-                    href={adminRoutes.team}
-                    active={pathname === adminRoutes.team}
-                  />
-                  <NavLink
-                    label="Команды"
-                    href={adminRoutes.clubs}
-                    active={pathname === adminRoutes.clubs}
-                  />
-                </AppShell.Navbar>
+                  <AppShell.Navbar>
+                    <NavLink
+                      label="Матчи"
+                      href={adminRoutes.games}
+                      active={pathname === adminRoutes.games}
+                    />
+                    <NavLink
+                      label="Наш состав"
+                      href={adminRoutes.team}
+                      active={pathname === adminRoutes.team}
+                    />
+                    <NavLink
+                      label="Команды"
+                      href={adminRoutes.clubs}
+                      active={pathname === adminRoutes.clubs}
+                    />
+                  </AppShell.Navbar>
 
-                <AppShell.Main>{children}</AppShell.Main>
-              </AppShell>
-            </ModalsProvider>
-          </MantineProvider>
-        </QueryClientProvider>
-        {/*</AuthGuard>*/}
+                  <AppShell.Main>{children}</AppShell.Main>
+                </AppShell>
+              </ModalsProvider>
+            </MantineProvider>
+          </QueryClientProvider>
+        </AuthGuard>
       </SessionProvider>
     </>
   );
