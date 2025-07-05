@@ -37,6 +37,8 @@ export const apiRoutes = {
   match: '/match',
   updateMatch: '/match/update',
   matches: '/matches',
+  event: '/match/event',
+  updateEvent: '/match/event/update',
   player: '/player',
   updatePlayer: '/player/update',
   players: '/players',

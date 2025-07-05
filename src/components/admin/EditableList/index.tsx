@@ -1,15 +1,17 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Center, Checkbox, Table } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { Product } from '@prisma/client';
+import { Player, Match, Club } from '@prisma/client';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import s from './styles.module.scss';
 
+type TEditableItem = Player | Match | Club;
+
 type TEditableListProps = {
-  selectedItems: Product[];
-  setSelectedItems: Dispatch<SetStateAction<Product[]>>;
+  selectedItems: TEditableItem[];
+  setSelectedItems: Dispatch<SetStateAction<TEditableItem[]>>;
   columns: readonly { width?: number; minWidth?: number; name: string }[];
-  data: { product: Product; tableData: React.ReactNode[] }[];
+  data: { data: TEditableItem; tableData: React.ReactNode[] }[];
 };
 
 const getContent = (item: React.ReactNode) => {
@@ -41,16 +43,20 @@ export const EditableList = ({
 }: TEditableListProps) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  const onCheckbox = (e: ChangeEvent<HTMLInputElement>, item: Product) =>
+  const onCheckbox = (e: ChangeEvent<HTMLInputElement>, item: TEditableItem) =>
     setSelectedItems((prev) =>
-      e.target.checked ? [...prev, item] : prev.filter((product) => product.id !== item.id)
+      e.target.checked
+        ? [...prev, item]
+        : prev.filter((data) => data.id !== item.id)
     );
 
   const actionAllCheck = () =>
-    setSelectedItems((prev) => (prev.length ? [] : data.map((item) => item.product)));
+    setSelectedItems((prev) =>
+      prev.length ? [] : data.map((item) => item.data)
+    );
 
   const getBgColor = (id: number) =>
-    selectedItems.some((product) => product.id === id)
+    selectedItems.some((item) => item.id === id)
       ? 'var(--mantine-color-blue-light)'
       : undefined;
 
@@ -86,11 +92,11 @@ export const EditableList = ({
       </Table.Thead>
       <Table.Tbody>
         {data.map((row) => (
-          <Table.Tr key={row.product.id} bg={getBgColor(row.product.id)}>
+          <Table.Tr key={row.data.id} bg={getBgColor(row.data.id)}>
             <Table.Td>
               <Checkbox
-                checked={selectedItems.some((item) => item.id === row.product.id)}
-                onChange={(e) => onCheckbox(e, row.product)}
+                checked={selectedItems.some((item) => item.id === row.data.id)}
+                onChange={(e) => onCheckbox(e, row.data)}
               />
             </Table.Td>
             {row.tableData.map((column, columnIndex) => (

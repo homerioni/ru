@@ -10,7 +10,7 @@ type TGetClubsProps = {
 };
 
 type TGetClubsResponse = {
-  products: Club[];
+  clubs: Club[];
   totalCount: number;
   activePage: number;
   totalPages: number;

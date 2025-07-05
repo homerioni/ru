@@ -5,8 +5,7 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'bpfgd2dujppocayw.public.blob.vercel-storage.com',
-        port: '',
+        hostname: '**.public.blob.vercel-storage.com',
       },
     ],
   },

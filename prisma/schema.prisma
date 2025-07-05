@@ -81,6 +81,7 @@ model Player {
   name     String
   photo    String
   position String
+  number   Int
   matches  Int           @default(0)
   goals    Int           @default(0)
   assists  Int           @default(0)
