@@ -4,24 +4,22 @@ import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Center, Pagination, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Player } from '@prisma/client';
+import { Club } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
-import { ModalPlayerContent } from '@/components/admin/ModalPlayerContent';
 import { useDebounce } from '@/hooks/useDebounce';
-import { deletePlayers, getPlayers } from '@/services';
+import { deleteClubs, getClubs } from '@/services';
+import { ModalClubContent } from '@/components/admin/ModalClubContent';
 
 const columns = [
-  { name: 'Фото', width: '0%' },
-  { name: 'Номер', width: '0%' },
-  { name: 'Имя', width: 0 },
-  { name: 'Позиция', width: 0 },
+  { name: 'Логотип', width: '0%' },
+  { name: 'Название', width: 0 },
 ] as const;
 
-export default function AdminTeamPage() {
-  const [selectedItems, setSelectedItems] = useState<Player[]>([]);
+export default function AdminClubsPage() {
+  const [selectedItems, setSelectedItems] = useState<Club[]>([]);
 
   const [search, setSearch] = useState('');
   const searchDebounce = useDebounce(search, 350);
@@ -29,27 +27,27 @@ export default function AdminTeamPage() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['players', page, searchDebounce],
+    queryKey: ['clubs', page, searchDebounce],
     queryFn: () =>
-      getPlayers({ qty: 50, search: searchDebounce || undefined, page }),
+      getClubs({ qty: 50, search: searchDebounce || undefined, page }),
   });
 
-  const playersList = useMemo(
+  console.log(data);
+
+  const clubsList = useMemo(
     () =>
-      data?.players.map((player) => ({
-        data: player,
+      data?.clubs.map((club) => ({
+        data: club,
         tableData: [
           <Image
-            key={player.id}
-            src={player.photo}
+            key={club.id}
+            src={club.logoSrc}
             alt=""
             width={64}
             height={64}
             style={{ objectFit: 'cover' }}
           />,
-          player.number,
-          player.name,
-          player.position,
+          club.name,
         ],
       })),
     [data]
@@ -60,32 +58,28 @@ export default function AdminTeamPage() {
       title: 'Вы уверены, что хотите удалить?',
       centered: true,
       children: (
-        <Text>{selectedItems.map((player) => player.name).join(', ')}</Text>
+        <Text>{selectedItems.map((club) => club.name).join(', ')}</Text>
       ),
       labels: { confirm: 'Да, удалить', cancel: 'Отменить' },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deletePlayers(selectedItems.map((player) => player.id)).then(() =>
-          refetch()
-        );
+        deleteClubs(selectedItems.map((club) => club.id)).then(() => refetch());
         setSelectedItems([]);
       },
     });
 
   const onAdd = () =>
     modals.open({
-      title: 'Новый игрок',
+      title: 'Новая команда',
       size: 'xl',
-      children: <ModalPlayerContent refetch={refetch} />,
+      children: <ModalClubContent refetch={refetch} />,
     });
 
   const onEdit = () => {
     modals.open({
       title: `Редактирование "${selectedItems[0]?.name}"`,
       size: 'xl',
-      children: (
-        <ModalPlayerContent data={selectedItems[0]} refetch={refetch} />
-      ),
+      children: <ModalClubContent data={selectedItems[0]} refetch={refetch} />,
     });
     setSelectedItems([]);
   };
@@ -100,14 +94,14 @@ export default function AdminTeamPage() {
         onDel={onDel}
       />
       {isLoading && <EditableListSkeleton />}
-      {!isLoading && playersList && (
+      {!isLoading && clubsList && (
         <EditableList
           selectedItems={selectedItems}
           setSelectedItems={
             setSelectedItems as Dispatch<SetStateAction<TEditableItem[]>>
           }
           columns={columns}
-          data={playersList}
+          data={clubsList}
         />
       )}
       {data?.totalPages && data?.totalPages > 1 && (

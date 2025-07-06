@@ -10,6 +10,7 @@ export async function POST(request: Request) {
     const blob = await put(imageFile.name, imageFile, {
       access: 'public',
       allowOverwrite: true,
+      addRandomSuffix: true,
     });
 
     revalidatePath('/');

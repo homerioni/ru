@@ -4,7 +4,7 @@ import { IconEdit, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
 
 type TListControlPanelProps = {
   selectedLength: number;
-  searchState: [string, Dispatch<SetStateAction<string>>];
+  searchState?: [string, Dispatch<SetStateAction<string>>];
   onAdd: () => void;
   onEdit: () => void;
   onDel: () => void;
@@ -12,7 +12,7 @@ type TListControlPanelProps = {
 
 export const ListControlPanel = ({
   selectedLength,
-  searchState: [search, setSearch],
+  searchState,
   onAdd,
   onEdit,
   onDel,
@@ -50,15 +50,19 @@ export const ListControlPanel = ({
     >
       Удалить
     </Button>
-    <Input
-      flex="none"
-      placeholder="Поиск"
-      leftSection={<IconSearch size={20} />}
-      w={{ base: '100%', sm: 300 }}
-      radius={0}
-      styles={{ input: { border: 'none', borderBottom: '1px solid var(--input-bd)' } }}
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-    />
+    {searchState && (
+      <Input
+        flex="none"
+        placeholder="Поиск"
+        leftSection={<IconSearch size={20} />}
+        w={{ base: '100%', sm: 300 }}
+        radius={0}
+        styles={{
+          input: { border: 'none', borderBottom: '1px solid var(--input-bd)' },
+        }}
+        value={searchState[0]}
+        onChange={(e) => searchState[1](e.target.value)}
+      />
+    )}
   </Flex>
 );

@@ -13,18 +13,21 @@ export async function GET(req: NextRequest) {
 
   const activePage = skipQty ? skipQty / takeQty + 1 : 1;
 
-  const players = await prisma.player.findMany({
+  const matches = await prisma.match.findMany({
     orderBy: {
       updateAt: 'desc',
     },
     take: takeQty,
     skip: skipQty,
+    include: {
+      club: true,
+    },
   });
 
-  const totalCount = await prisma.player.count();
+  const totalCount = await prisma.match.count();
   const totalPages = Math.ceil(totalCount / takeQty);
 
-  return NextResponse.json({ players, totalCount, activePage, totalPages });
+  return NextResponse.json({ matches, totalCount, activePage, totalPages });
 }
 
 export async function DELETE(req: NextRequest) {
@@ -32,7 +35,7 @@ export async function DELETE(req: NextRequest) {
 
   const ids = idsParam ? idsParam.split(',').map(Number) : [];
 
-  const response = await prisma.player.deleteMany({
+  const response = await prisma.match.deleteMany({
     where: { id: { in: ids } },
   });
 

@@ -1,4 +1,4 @@
-import { Match } from '@prisma/client';
+import { Club, Match } from '@prisma/client';
 import { apiRoutes } from '@/constants';
 import { TCreateMatchData } from '@/types';
 import { axiosInstance } from './index';
@@ -8,8 +8,10 @@ type TGetMatchProps = {
   page?: string | number;
 };
 
+export type TGetMatch = Match & { club: Club };
+
 type TGetMatchesResponse = {
-  matches: Match[];
+  matches: TGetMatch[];
   totalCount: number;
   activePage: number;
   totalPages: number;

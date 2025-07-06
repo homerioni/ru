@@ -3,38 +3,33 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { Button, Flex, Grid, Input, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Player } from '@prisma/client';
+import { Club } from '@prisma/client';
 import { IconPhoto } from '@tabler/icons-react';
 import imageCompression from 'browser-image-compression';
 import { uploadImage } from '@/services/upload';
 import { getImagePreview } from '@/utils/getImagePreview';
-import { createPlayer, updatePlayer } from '@/services';
+import { createClub, updateClub } from '@/services';
 import s from './styles.module.scss';
 
-type TModalPlayerContentProps = {
-  data?: Player;
+type TModalClubContentProps = {
+  data?: Club;
   refetch: () => void;
 };
 
-type TForm = Omit<Player, 'createdAt' | 'updateAt' | 'id'>;
+type TForm = Omit<Club, 'createdAt' | 'updateAt' | 'id'>;
 
-export const ModalPlayerContent = ({
-  data,
-  refetch,
-}: TModalPlayerContentProps) => {
+export const ModalClubContent = ({ data, refetch }: TModalClubContentProps) => {
   const { register, handleSubmit } = useForm<TForm>({
     defaultValues: data ?? {},
   });
-  const [preview, setPreview] = useState<string | null>(data?.photo || null);
+  const [preview, setPreview] = useState<string | null>(data?.logoSrc || null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit: SubmitHandler<TForm> = async (player) => {
-    if (!fileInputRef.current?.files?.[0] && !data?.photo) {
+  const onSubmit: SubmitHandler<TForm> = async (club) => {
+    if (!fileInputRef.current?.files?.[0] && !data?.logoSrc) {
       return;
     }
-
-    player.number = +player.number;
 
     const imageFile = fileInputRef.current!.files![0];
     const compressedFile =
@@ -50,26 +45,26 @@ export const ModalPlayerContent = ({
     if (data) {
       if (imageFile) {
         setIsUploading(true);
-        const photo = await uploadImage(imageData)
+        const logoSrc = await uploadImage(imageData)
           .then((res) => res.url)
           .finally(() => setIsUploading(false));
-        updatePlayer({
+        updateClub({
           ...data,
-          ...player,
-          photo,
+          ...club,
+          logoSrc,
         }).then(() => refetch());
       } else {
-        updatePlayer({
+        updateClub({
           ...data,
-          ...player,
+          ...club,
         }).then(() => refetch());
       }
     } else {
       setIsUploading(true);
-      const photo = await uploadImage(imageData)
+      const logoSrc = await uploadImage(imageData)
         .then((res) => res.url)
         .finally(() => setIsUploading(false));
-      createPlayer({ ...player, photo }).then(() => refetch());
+      createClub({ ...club, logoSrc }).then(() => refetch());
     }
 
     modals.closeAll();
@@ -80,7 +75,7 @@ export const ModalPlayerContent = ({
       <Grid gutter={10}>
         <Grid.Col span={{ base: 12, sm: 3 }}>
           <Text fw={500} fz="sm" lh={1.7} display="block">
-            Фото *
+            Логотип *
           </Text>
           <label className={`${s.imageUpload} ${preview ? s.active : ''}`}>
             <input
@@ -98,29 +93,11 @@ export const ModalPlayerContent = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 9 }}>
           <Grid gutter={10}>
-            <Grid.Col span={{ base: 12, sm: 6 }}>
-              <Input.Wrapper label="Имя" withAsterisk>
+            <Grid.Col span={{ base: 12, sm: 12 }}>
+              <Input.Wrapper label="Название" withAsterisk>
                 <Input
                   placeholder="Имя"
                   {...register('name', { required: true })}
-                />
-              </Input.Wrapper>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, sm: 6 }}>
-              <Input.Wrapper label="Позиция" withAsterisk>
-                <Input
-                  placeholder="Позиция"
-                  {...register('position', { required: true })}
-                />
-              </Input.Wrapper>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, sm: 3 }}>
-              <Input.Wrapper label="Номер игрока" withAsterisk>
-                <Input
-                  placeholder="Номер"
-                  type="number"
-                  step={1}
-                  {...register('number', { required: true })}
                 />
               </Input.Wrapper>
             </Grid.Col>

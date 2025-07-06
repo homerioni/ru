@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
   const players = await prisma.player.findMany({
     where,
     orderBy: {
-      updateAt: 'desc',
+      matches: 'desc',
     },
     take: takeQty,
     skip: skipQty,

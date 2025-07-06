@@ -4,52 +4,47 @@ import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Center, Pagination, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Player } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
-import { ModalPlayerContent } from '@/components/admin/ModalPlayerContent';
-import { useDebounce } from '@/hooks/useDebounce';
-import { deletePlayers, getPlayers } from '@/services';
+import { deleteMatches, getMatches } from '@/services';
+import { TGetMatch } from '@/services/matches';
+import { ModalMatchContent } from '@/components/admin/ModalMatchContent';
 
 const columns = [
-  { name: 'Фото', width: '0%' },
-  { name: 'Номер', width: '0%' },
-  { name: 'Имя', width: 0 },
-  { name: 'Позиция', width: 0 },
+  { name: 'Противник', width: 0 },
+  { name: 'Вид матча', width: 100 },
+  { name: 'Дата', width: 100 },
+  { name: 'Счёт', width: 500 },
 ] as const;
 
-export default function AdminTeamPage() {
-  const [selectedItems, setSelectedItems] = useState<Player[]>([]);
-
-  const [search, setSearch] = useState('');
-  const searchDebounce = useDebounce(search, 350);
+export default function AdminMatchesPage() {
+  const [selectedItems, setSelectedItems] = useState<TGetMatch[]>([]);
 
   const [page, setPage] = useState(1);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['players', page, searchDebounce],
-    queryFn: () =>
-      getPlayers({ qty: 50, search: searchDebounce || undefined, page }),
+    queryKey: ['matches', page],
+    queryFn: () => getMatches({ qty: 50, page }),
   });
 
-  const playersList = useMemo(
+  const matchesList = useMemo(
     () =>
-      data?.players.map((player) => ({
-        data: player,
+      data?.matches.map((match) => ({
+        data: match,
         tableData: [
           <Image
-            key={player.id}
-            src={player.photo}
+            key={match.id}
+            src={match.club.logoSrc}
             alt=""
             width={64}
             height={64}
             style={{ objectFit: 'cover' }}
           />,
-          player.number,
-          player.name,
-          player.position,
+          match.type,
+          match.date.toLocaleString(),
+          match.score.length ? `${match.score[0]} - ${match.score[1]}` : '-',
         ],
       })),
     [data]
@@ -60,12 +55,12 @@ export default function AdminTeamPage() {
       title: 'Вы уверены, что хотите удалить?',
       centered: true,
       children: (
-        <Text>{selectedItems.map((player) => player.name).join(', ')}</Text>
+        <Text>{selectedItems.map((match) => match.date).join(', ')}</Text>
       ),
       labels: { confirm: 'Да, удалить', cancel: 'Отменить' },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deletePlayers(selectedItems.map((player) => player.id)).then(() =>
+        deleteMatches(selectedItems.map((match) => match.id)).then(() =>
           refetch()
         );
         setSelectedItems([]);
@@ -74,18 +69,16 @@ export default function AdminTeamPage() {
 
   const onAdd = () =>
     modals.open({
-      title: 'Новый игрок',
+      title: 'Новый матч',
       size: 'xl',
-      children: <ModalPlayerContent refetch={refetch} />,
+      children: <ModalMatchContent refetch={refetch} />,
     });
 
   const onEdit = () => {
     modals.open({
-      title: `Редактирование "${selectedItems[0]?.name}"`,
+      title: `Редактирование матча ${selectedItems[0]?.date}`,
       size: 'xl',
-      children: (
-        <ModalPlayerContent data={selectedItems[0]} refetch={refetch} />
-      ),
+      children: <ModalMatchContent data={selectedItems[0]} refetch={refetch} />,
     });
     setSelectedItems([]);
   };
@@ -94,20 +87,19 @@ export default function AdminTeamPage() {
     <Stack gap={10}>
       <ListControlPanel
         selectedLength={selectedItems.length}
-        searchState={[search, setSearch]}
         onAdd={onAdd}
         onEdit={onEdit}
         onDel={onDel}
       />
       {isLoading && <EditableListSkeleton />}
-      {!isLoading && playersList && (
+      {!isLoading && matchesList && (
         <EditableList
           selectedItems={selectedItems}
           setSelectedItems={
             setSelectedItems as Dispatch<SetStateAction<TEditableItem[]>>
           }
           columns={columns}
-          data={playersList}
+          data={matchesList}
         />
       )}
       {data?.totalPages && data?.totalPages > 1 && (
