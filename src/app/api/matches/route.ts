@@ -26,6 +26,8 @@ export async function GET(req: NextRequest) {
           id: true,
           goals: true,
           assists: true,
+          playerId: true,
+          matchId: true,
           player: {
             select: {
               name: true,
