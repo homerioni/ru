@@ -15,7 +15,7 @@ export const NextMatchTimer = ({ matchDate }: TNextMatchTimerProps) => {
 
   useEffect(() => {
     const dayLeft = getMatchLeft(new Date(matchDate));
-    let t;
+    let t: NodeJS.Timeout;
 
     if (dayLeft === 'TIME') {
       t = setInterval(() => {
