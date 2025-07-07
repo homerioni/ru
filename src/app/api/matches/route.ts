@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../prisma/prisma-client';
-import { matches } from 'bcp-47-normalize/lib/matches';
 
 export async function GET(req: NextRequest) {
   const qty = req.nextUrl.searchParams.get('qty');
