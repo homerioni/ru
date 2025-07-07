@@ -1,4 +1,4 @@
-import { Club, Match } from '@prisma/client';
+import { Club, Match, MatchPlayer } from '@prisma/client';
 import { apiRoutes } from '@/constants';
 import { TCreateMatchData } from '@/types';
 import { axiosInstance } from './index';
@@ -8,10 +8,7 @@ type TGetMatchProps = {
   page?: string | number;
 };
 
-export type TTeamStats = {
-  id: number;
-  goals: number;
-  assists: number;
+export type TTeamStats = MatchPlayer & {
   player: {
     name: string;
     number: number;
