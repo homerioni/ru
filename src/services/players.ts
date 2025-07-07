@@ -21,9 +21,7 @@ type TGetPlayersResponse = {
 export const getPlayers = async (params?: TGetPlayerProps) => {
   const { data } = await axiosInstance.get<TGetPlayersResponse>(
     apiRoutes.players,
-    {
-      params,
-    }
+    { params }
   );
 
   return data;

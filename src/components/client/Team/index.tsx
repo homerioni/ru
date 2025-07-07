@@ -1,9 +1,24 @@
-import { TeamCard } from '@/components/client/TeamCard';
-import s from './styles.module.scss';
-import { getPlayers } from '@/services';
+'use client';
 
-export const Team = async () => {
-  const { players } = await getPlayers();
+import { TeamCard } from '@/components/client/TeamCard';
+import { getPlayers } from '@/services';
+import { useEffect, useState } from 'react';
+import { Player } from '@prisma/client';
+import s from './styles.module.scss';
+
+export const Team = () => {
+  const [players, setPlayers] =
+    useState<(Player & { playedIn: { goals: number; assists: number }[] })[]>();
+
+  useEffect(() => {
+    getPlayers().then((res) => {
+      setPlayers(res.players);
+    });
+  }, []);
+
+  if (!players) {
+    return null;
+  }
 
   return (
     <section className={`${s.main} container`}>
