@@ -7,7 +7,7 @@ import { Autoplay } from 'swiper/modules';
 import { SliderTitleBox } from '@ui/SliderTitleBox';
 import s from './styles.module.scss';
 import { TeamCard } from '@/components/client/TeamCard';
-import { getMatches, getPlayers } from '@/services';
+import { getPlayers } from '@/services';
 import { Player } from '@prisma/client';
 
 export const TeamSlider = () => {
