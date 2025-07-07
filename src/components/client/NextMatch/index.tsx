@@ -1,13 +1,13 @@
 'use client';
 
 import logo from '@/assets/img/logo.svg';
-import s from './styles.module.scss';
 import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
 import { NextMatchTimer } from '@/components/client/NextMatch/NextMatchTimer';
 import { useEffect, useState } from 'react';
 import { getMatches } from '@/services/matches';
 import { Club, Match } from '@prisma/client';
 import { getMatchDate } from '@/utils/getMatchDate';
+import s from './styles.module.scss';
 
 export const NextMatch = () => {
   const [match, setMatch] = useState<Match & { club: Club }>();

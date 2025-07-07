@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   gap: 3rem;
+  transform: translateY(-2rem);
 
   &.left {
     .logo {
@@ -58,7 +59,9 @@
 }
 
 @media (max-width: 48em) {
-  .main {}
+  .main {
+    transform: none;
+  }
 
   .logo {
     width: 30rem;
