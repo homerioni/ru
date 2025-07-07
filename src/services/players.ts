@@ -50,7 +50,18 @@ export const createPlayer = async (player: TCreatePlayerData) => {
 };
 
 export const updatePlayer = async (player: Player) => {
-  const { data } = await axiosInstance.post(apiRoutes.updatePlayer, player);
+  const newData = {
+    id: player.id,
+    number: player.number,
+    name: player.name,
+    photo: player.photo,
+    position: player.position,
+    matches: player.matches,
+    goals: player.goals,
+    assists: player.assists,
+  };
+
+  const { data } = await axiosInstance.post(apiRoutes.updatePlayer, newData);
 
   return data;
 };
