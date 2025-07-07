@@ -1,14 +1,15 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Oswald, Rubik } from 'next/font/google';
+import '../assets/Circe/stylesheet.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+const oswaldSans = Oswald({
+  variable: '--fat-font',
+  subsets: ['cyrillic', 'latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+const rubikFont = Rubik({
+  variable: '--main-font',
+  subsets: ['cyrillic', 'latin'],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${oswaldSans.variable} ${rubikFont.variable}`}>
         {children}
       </body>
     </html>
