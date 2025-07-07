@@ -47,7 +47,13 @@ export const createClub = async (club: TCreateClubData) => {
 };
 
 export const updateClub = async (club: Club) => {
-  const { data } = await axiosInstance.post(apiRoutes.updateClub, club);
+  const newData = {
+    id: club.id,
+    logoSrc: club.logoSrc,
+    name: club.name,
+  };
+
+  const { data } = await axiosInstance.post(apiRoutes.updateClub, newData);
 
   return data;
 };
