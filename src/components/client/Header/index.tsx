@@ -28,7 +28,9 @@ export const Header = () => {
         <ul className={s.menuList}>
           {Object.entries(ROUTES).map(([key, item]) => (
             <li key={key} className={s.menuItem}>
-              <Link href={item.href}>{item.name}</Link>
+              <Link href={item.href} onClick={() => setMenuIsOpen(false)}>
+                {item.name}
+              </Link>
             </li>
           ))}
         </ul>

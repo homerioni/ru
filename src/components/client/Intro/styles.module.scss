@@ -51,3 +51,15 @@
   font-size: 7rem;
   color: var(--background);
 }
+
+@media (max-width: 48em) {
+  .main {
+    gap: 2rem;
+    aspect-ratio: 16 / 9;
+    padding: 0 4rem;
+  }
+
+  .title {
+    font-size: 8rem;
+  }
+}
