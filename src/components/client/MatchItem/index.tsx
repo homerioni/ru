@@ -67,19 +67,21 @@ export const MatchItem = ({
                   <span className={s.stats}>
                     {item.goals > 0 && (
                       <span>
+                        {item.goals}
                         {getEndingByAmount(item.goals, [
-                          'гол',
-                          'гола',
-                          'голов',
+                          ' гол',
+                          ' гола',
+                          ' голов',
                         ])}
                       </span>
                     )}
                     {item.assists > 0 && (
                       <span>
-                        {getEndingByAmount(item.goals, [
-                          'пас',
-                          'паса',
-                          'пасов',
+                        {item.assists}
+                        {getEndingByAmount(item.assists, [
+                          ' пас',
+                          ' паса',
+                          ' пасов',
                         ])}
                       </span>
                     )}
