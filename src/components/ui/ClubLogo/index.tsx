@@ -24,7 +24,7 @@ export const ClubLogo = ({
   return (
     <div className={`${s.main} ${s[namePosition]} ${s[size]}`}>
       <div className={s.logo}>
-        <Image src={logoSrc} alt={`Логотип ${name}`} />
+        <Image src={logoSrc} alt={`Логотип ${name}`} width={500} height={500} />
       </div>
       <h2 className={s.name}>{name}</h2>
     </div>

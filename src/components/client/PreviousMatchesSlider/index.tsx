@@ -1,21 +1,38 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import logo from '@/assets/img/logo.svg';
-import logoS from '@/assets/img/soutnik.png';
 import { MatchItem } from '@/components/client/MatchItem';
 import s from './styles.module.scss';
 import { SliderTitleBox } from '@ui/SliderTitleBox';
+import { getMatches } from '@/services';
+import { Club, Match } from '@prisma/client';
+import { getMatchDate } from '@/utils/getMatchDate';
 
-const test = [
-  { name: 'Речичане United', logoSrc: logo },
-  { name: 'ФК Спутник', logoSrc: logoS },
-];
+const myClub = { name: 'Речичане United', logoSrc: logo };
 
 export const PreviousMatchesSlider = () => {
+  const [matches, setMatches] = useState<(Match & { club: Club })[]>();
+
   const swiperRef = useRef<SwiperType>(null);
+
+  useEffect(() => {
+    getMatches().then((res) => {
+      const dateNow = Date.now();
+
+      const oldMatches = res.matches.filter(
+        (match) => new Date(match.date).getTime() <= dateNow
+      );
+
+      setMatches(oldMatches);
+    });
+  }, []);
+
+  if (!matches) {
+    return null;
+  }
 
   return (
     <section className={`${s.main} container`}>
@@ -32,22 +49,20 @@ export const PreviousMatchesSlider = () => {
           },
         }}
       >
-        <SwiperSlide>
-          <MatchItem
-            clubs={test}
-            type={'Товарищеский матч'}
-            score={[3, 9]}
-            date={'08 июля, 18:00'}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <MatchItem
-            clubs={test}
-            type={'Товарищеский матч'}
-            score={[8, 9]}
-            date={'08 июля, 18:00'}
-          />
-        </SwiperSlide>
+        {matches?.map((match) => {
+          const matchDate = getMatchDate(match.date);
+
+          return (
+            <SwiperSlide key={match.id}>
+              <MatchItem
+                clubs={[myClub, match.club]}
+                type={match.type}
+                score={match.score}
+                date={`${matchDate.day}, ${matchDate.time}`}
+              />
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </section>
   );

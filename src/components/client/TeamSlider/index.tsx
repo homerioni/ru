@@ -1,15 +1,30 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { SliderTitleBox } from '@ui/SliderTitleBox';
 import s from './styles.module.scss';
 import { TeamCard } from '@/components/client/TeamCard';
+import { getMatches, getPlayers } from '@/services';
+import { Player } from '@prisma/client';
 
 export const TeamSlider = () => {
+  const [players, setPlayers] =
+    useState<(Player & { playedIn: { goals: number; assists: number }[] })[]>();
+
   const swiperRef = useRef<SwiperType>(null);
+
+  useEffect(() => {
+    getPlayers().then((res) => {
+      setPlayers(res.players);
+    });
+  }, []);
+
+  if (!players) {
+    return null;
+  }
 
   return (
     <section className={`${s.main} container`}>
@@ -33,27 +48,18 @@ export const TeamSlider = () => {
           },
         }}
       >
-        <SwiperSlide>
-          <TeamCard small />
-        </SwiperSlide>
-        <SwiperSlide>
-          <TeamCard small />
-        </SwiperSlide>
-        <SwiperSlide>
-          <TeamCard small />
-        </SwiperSlide>
-        <SwiperSlide>
-          <TeamCard small />
-        </SwiperSlide>
-        <SwiperSlide>
-          <TeamCard small />
-        </SwiperSlide>
-        <SwiperSlide>
-          <TeamCard small />
-        </SwiperSlide>
-        <SwiperSlide>
-          <TeamCard small />
-        </SwiperSlide>
+        {players.map((player) => (
+          <SwiperSlide key={player.id}>
+            <TeamCard
+              small
+              number={player.number}
+              matches={player.playedIn.length}
+              name={player.name}
+              position={player.position}
+              photo={player.photo}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </section>
   );

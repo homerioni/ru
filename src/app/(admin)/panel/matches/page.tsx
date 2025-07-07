@@ -15,7 +15,7 @@ import { ModalMatchContent } from '@/components/admin/ModalMatchContent';
 const columns = [
   { name: 'Противник', width: 0 },
   { name: 'Вид матча', width: 100 },
-  { name: 'Дата', width: 100 },
+  { name: 'Дата', width: 150 },
   { name: 'Счёт', width: 500 },
 ] as const;
 
@@ -43,7 +43,13 @@ export default function AdminMatchesPage() {
             style={{ objectFit: 'cover' }}
           />,
           match.type,
-          match.date.toLocaleString(),
+          new Date(match.date).toLocaleString('ru-RU', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
           match.score.length ? `${match.score[0]} - ${match.score[1]}` : '-',
         ],
       })),
@@ -76,7 +82,7 @@ export default function AdminMatchesPage() {
 
   const onEdit = () => {
     modals.open({
-      title: `Редактирование матча ${selectedItems[0]?.date}`,
+      title: `Редактирование матча`,
       size: 'xl',
       children: <ModalMatchContent data={selectedItems[0]} refetch={refetch} />,
     });

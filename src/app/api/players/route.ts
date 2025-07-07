@@ -28,6 +28,14 @@ export async function GET(req: NextRequest) {
     },
     take: takeQty,
     skip: skipQty,
+    include: {
+      playedIn: {
+        select: {
+          goals: true,
+          assists: true,
+        },
+      },
+    },
   });
 
   const totalCount = await prisma.player.count({ where });

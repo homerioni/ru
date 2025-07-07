@@ -9,8 +9,10 @@ type TGetPlayerProps = {
   page?: string | number;
 };
 
+type TGetPlayer = Player & { playedIn: { goals: number; assists: number }[] };
+
 type TGetPlayersResponse = {
-  players: Player[];
+  players: TGetPlayer[];
   totalCount: number;
   activePage: number;
   totalPages: number;

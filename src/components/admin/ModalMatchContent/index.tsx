@@ -6,25 +6,25 @@ import { Match } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import { createMatch, getClubs, getPlayers, updateMatch } from '@/services';
 import s from './styles.module.scss';
+import { TGetMatch } from '@/services/matches';
 
 type TModalPlayerContentProps = {
-  data?: Match;
+  data?: TGetMatch;
   refetch: () => void;
 };
 
 type PlayerFormData = {
-  isSelected: boolean;
+  playerId: number;
   goals: number;
   assists: number;
 };
 
-type TForm = Omit<Match, 'createdAt' | 'updateAt' | 'id' | 'score'> & {
+type TForm = Omit<Match, 'createdAt' | 'updateAt' | 'id' | 'score' | 'date'> & {
+  date: string;
   goals: number;
   missed: number;
   time: string;
-  team: {
-    [key: number]: PlayerFormData;
-  };
+  team: { [key: string]: PlayerFormData };
 };
 
 export const ModalMatchContent = ({
@@ -32,11 +32,22 @@ export const ModalMatchContent = ({
   refetch,
 }: TModalPlayerContentProps) => {
   const { register, handleSubmit, setValue } = useForm<TForm>({
-    defaultValues: data ?? {},
+    defaultValues: data
+      ? {
+          ...data,
+          date: new Date(data.date).toISOString().split('T')[0],
+          time: new Date(data.date).toLocaleTimeString(),
+          goals: data.score[0],
+          missed: data.score[1],
+          team: Object.fromEntries(
+            data.players.map((item) => [`p${item.playerId}`, item])
+          ),
+        }
+      : {},
   });
 
   const registerPlayerField = (playerId: number, field: keyof PlayerFormData) =>
-    register(`team.${playerId}.${field}` as Path<TForm>);
+    register(`team.p${playerId}.${field}` as Path<TForm>);
 
   const { data: clubsData } = useQuery({
     queryKey: ['categories'],
@@ -52,20 +63,36 @@ export const ModalMatchContent = ({
     const match = {
       clubId: submitData.clubId,
       type: submitData.type,
-      date: submitData.date,
+      date: new Date(`${submitData.date}T${submitData.time}+03:00`),
       score:
-        submitData.goals !== undefined && submitData.missed !== undefined
+        submitData.goals >= 0 && submitData.missed >= 0
           ? [submitData.goals, submitData.missed]
           : [],
     };
+
+    const players: PlayerFormData[] = Object.values(submitData.team)
+      .filter((item) => item.playerId)
+      .map(
+        (item) =>
+          item && {
+            playerId: +item.playerId,
+            goals: item.goals ? +item.goals : 0,
+            assists: item.assists ? +item.assists : 0,
+          }
+      );
+
+    console.log({ ...match, players: { create: players } });
 
     if (data) {
       updateMatch({
         ...data,
         ...match,
+        players: { deleteMany: {}, create: players },
       }).then(() => refetch());
     } else {
-      createMatch({ ...match }).then(() => refetch());
+      createMatch({ ...match, players: { create: players } }).then(() =>
+        refetch()
+      );
     }
 
     modals.closeAll();
@@ -113,7 +140,7 @@ export const ModalMatchContent = ({
                   placeholder="Забили"
                   type="number"
                   step={1}
-                  {...register('goals')}
+                  {...register('goals', { valueAsNumber: true })}
                 />
               </Input.Wrapper>
             </Grid.Col>
@@ -123,7 +150,7 @@ export const ModalMatchContent = ({
                   placeholder="Пропустили"
                   type="number"
                   step={1}
-                  {...register('missed')}
+                  {...register('missed', { valueAsNumber: true })}
                 />
               </Input.Wrapper>
             </Grid.Col>
@@ -161,11 +188,8 @@ export const ModalMatchContent = ({
                                 tabIndex={-1}
                                 size="md"
                                 mr="xl"
-                                aria-hidden
-                                {...registerPlayerField(
-                                  player.id,
-                                  'isSelected'
-                                )}
+                                value={player.id}
+                                {...registerPlayerField(player.id, 'playerId')}
                               />
                               <p>{player.name}</p>
                             </div>

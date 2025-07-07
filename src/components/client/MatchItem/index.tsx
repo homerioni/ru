@@ -9,7 +9,7 @@ type TMatchItemProps = {
   }[];
   type: string;
   date: string;
-  score: [number, number] | [];
+  score: number[];
 };
 
 export const MatchItem = ({ clubs, date, score, type }: TMatchItemProps) => {

@@ -1,4 +1,4 @@
-import { Club, Match } from '@prisma/client';
+import { Club, Match, MatchPlayer } from '@prisma/client';
 import { apiRoutes } from '@/constants';
 import { TCreateMatchData } from '@/types';
 import { axiosInstance } from './index';
@@ -8,7 +8,7 @@ type TGetMatchProps = {
   page?: string | number;
 };
 
-export type TGetMatch = Match & { club: Club };
+export type TGetMatch = Match & { club: Club; players: MatchPlayer[] };
 
 type TGetMatchesResponse = {
   matches: TGetMatch[];
@@ -45,13 +45,29 @@ export const deleteMatches = async (ids: number[]) => {
 };
 
 export const createMatch = async (match: TCreateMatchData) => {
-  const { data } = await axiosInstance.post(apiRoutes.match, match);
+  const newMatch = {
+    score: match.score,
+    clubId: match.clubId,
+    date: match.date,
+    type: match.type,
+    players: match.players,
+  };
+
+  const { data } = await axiosInstance.post(apiRoutes.match, newMatch);
 
   return data;
 };
 
-export const updateMatch = async (match: Match) => {
-  const { data } = await axiosInstance.post(apiRoutes.updateMatch, match);
+export const updateMatch = async (match: TCreateMatchData & { id: number }) => {
+  const newMatch = {
+    id: match.id,
+    score: match.score,
+    clubId: match.clubId,
+    date: match.date,
+    type: match.type,
+    players: match.players,
+  };
+  const { data } = await axiosInstance.post(apiRoutes.updateMatch, newMatch);
 
   return data;
 };

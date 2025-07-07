@@ -15,12 +15,13 @@ export async function GET(req: NextRequest) {
 
   const matches = await prisma.match.findMany({
     orderBy: {
-      updateAt: 'desc',
+      date: 'desc',
     },
     take: takeQty,
     skip: skipQty,
     include: {
       club: true,
+      players: true,
     },
   });
 
