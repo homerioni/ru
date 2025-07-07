@@ -15,7 +15,7 @@ export const getTimeLeft = (time: number) => {
 
 export const getMatchLeft = (targetDate: Date) => {
   const now = new Date();
-  const diffMs = targetDate - now;
+  const diffMs = +targetDate - +now;
   const diffSec = Math.floor(diffMs / 1000);
   const diffMin = Math.floor(diffSec / 60);
   const diffHours = Math.floor(diffMin / 60);
