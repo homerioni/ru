@@ -7,10 +7,11 @@ import { getMatches } from '@/services';
 import { useEffect, useState } from 'react';
 import { Club, Match } from '@prisma/client';
 import { getMatchDate } from '@/utils/getMatchDate';
+import { TTeamStats } from '@/services/matches';
 
 type TMatches = {
-  oldMatches: (Match & { club: Club })[];
-  newMatches: (Match & { club: Club })[];
+  oldMatches: (Match & { club: Club; players: TTeamStats[] })[];
+  newMatches: (Match & { club: Club; players: TTeamStats[] })[];
 };
 
 const myClub = { name: 'Речичане United', logoSrc: logo };
@@ -57,6 +58,7 @@ export const Matches = () => {
                     type={match.type}
                     date={`${matchDate.day}, ${matchDate.time}`}
                     score={match.score}
+                    players={match.players}
                   />
                 </li>
               );
@@ -84,6 +86,7 @@ export const Matches = () => {
                 type={match.type}
                 date={`${day}, ${time}`}
                 score={match.score}
+                players={match.players}
               />
             </li>
           );
