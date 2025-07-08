@@ -12,7 +12,9 @@ export const Team = () => {
 
   useEffect(() => {
     getPlayers().then((res) => {
-      setPlayers(res.players);
+      setPlayers(
+        res.players.sort((a, b) => b.playedIn.length - a.playedIn.length)
+      );
     });
   }, []);
 

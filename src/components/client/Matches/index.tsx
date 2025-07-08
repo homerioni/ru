@@ -27,9 +27,11 @@ export const Matches = () => {
         (match) => new Date(match.date).getTime() <= dateNow
       );
 
-      const newMatches = res.matches.filter(
-        (match) => new Date(match.date).getTime() > dateNow
-      );
+      const newMatches = res.matches
+        .filter((match) => new Date(match.date).getTime() > dateNow)
+        .sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
 
       setMatches({
         oldMatches,
@@ -58,7 +60,9 @@ export const Matches = () => {
                     type={match.type}
                     date={`${matchDate.day}, ${matchDate.time}`}
                     score={match.score}
-                    players={match.players}
+                    players={match.players.sort(
+                      (a, b) => a.player.number - b.player.number
+                    )}
                   />
                 </li>
               );
@@ -86,7 +90,9 @@ export const Matches = () => {
                 type={match.type}
                 date={`${day}, ${time}`}
                 score={match.score}
-                players={match.players}
+                players={match.players.sort(
+                  (a, b) => a.player.number - b.player.number
+                )}
               />
             </li>
           );
