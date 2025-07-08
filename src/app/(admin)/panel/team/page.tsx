@@ -36,22 +36,24 @@ export default function AdminTeamPage() {
 
   const playersList = useMemo(
     () =>
-      data?.players.map((player) => ({
-        data: player,
-        tableData: [
-          <Image
-            key={player.id}
-            src={player.photo}
-            alt=""
-            width={64}
-            height={64}
-            style={{ objectFit: 'cover' }}
-          />,
-          player.number,
-          player.name,
-          player.position,
-        ],
-      })),
+      data?.players
+        .sort((a, b) => a.number - b.number)
+        .map((player) => ({
+          data: player,
+          tableData: [
+            <Image
+              key={player.id}
+              src={player.photo}
+              alt=""
+              width={64}
+              height={64}
+              style={{ objectFit: 'cover' }}
+            />,
+            player.number,
+            player.name,
+            player.position,
+          ],
+        })),
     [data]
   );
 
