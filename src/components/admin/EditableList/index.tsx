@@ -74,7 +74,7 @@ export const EditableList = ({
       highlightOnHover
       tabularNums
       stickyHeader
-      stickyHeaderOffset={isMobile ? 250 : 110}
+      stickyHeaderOffset={isMobile ? 200 : 110}
       withRowBorders={false}
       className={s.table}
     >

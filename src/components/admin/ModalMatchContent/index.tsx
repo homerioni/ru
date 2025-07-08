@@ -5,8 +5,8 @@ import { modals } from '@mantine/modals';
 import { Match } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import { createMatch, getClubs, getPlayers, updateMatch } from '@/services';
-import s from './styles.module.scss';
 import { TGetMatch } from '@/services/matches';
+import s from './styles.module.scss';
 
 type TModalPlayerContentProps = {
   data?: TGetMatch;
@@ -81,8 +81,6 @@ export const ModalMatchContent = ({
           }
       );
 
-    console.log({ ...match, players: { create: players } });
-
     if (data) {
       updateMatch({
         ...data,
@@ -103,7 +101,7 @@ export const ModalMatchContent = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className={s.main}>
       <Grid gutter={10}>
         <Grid.Col span={{ base: 12, sm: 12 }}>
           <Grid gutter={10}>
@@ -178,7 +176,7 @@ export const ModalMatchContent = ({
                   {playersData.players.map((player, i) => (
                     <Grid.Col span={{ base: 12, sm: 12 }} key={player.id}>
                       <Grid gutter={10} className={s.team}>
-                        <Grid.Col span={{ base: 4, sm: 4 }}>
+                        <Grid.Col span={{ base: 6, sm: 4 }}>
                           <Input.Wrapper
                             label={i === 0 ? 'Состав на игру' : undefined}
                             className={s.teamLabel}
@@ -195,7 +193,7 @@ export const ModalMatchContent = ({
                             </div>
                           </Input.Wrapper>
                         </Grid.Col>
-                        <Grid.Col span={{ base: 2, sm: 2 }}>
+                        <Grid.Col span={{ base: 3, sm: 2 }}>
                           <Input.Wrapper label={i === 0 ? 'Голов' : undefined}>
                             <Input
                               placeholder="Голов"
@@ -205,7 +203,7 @@ export const ModalMatchContent = ({
                             />
                           </Input.Wrapper>
                         </Grid.Col>
-                        <Grid.Col span={{ base: 2, sm: 2 }}>
+                        <Grid.Col span={{ base: 3, sm: 2 }}>
                           <Input.Wrapper
                             label={i === 0 ? 'Ассистов' : undefined}
                           >

@@ -14,9 +14,9 @@ import { ModalMatchContent } from '@/components/admin/ModalMatchContent';
 
 const columns = [
   { name: 'Противник', width: 0 },
-  { name: 'Вид матча', width: 100 },
-  { name: 'Дата', width: 150 },
-  { name: 'Счёт', width: 500 },
+  { name: 'Вид матча', width: 100, minWidth: 150 },
+  { name: 'Дата', width: 100, minWidth: 200 },
+  { name: 'Счёт', width: 500, minWidth: 100 },
 ] as const;
 
 export default function AdminMatchesPage() {

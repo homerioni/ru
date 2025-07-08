@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { SessionProvider, signOut, useSession } from 'next-auth/react';
 import {
   AppShell,
+  Burger,
   Button,
   ColorSchemeScript,
   Flex,
@@ -19,6 +20,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthGuard } from '@/components/admin/AuthGuard/AuthGuard';
 import { adminRoutes } from '@/constants';
 import '@mantine/core/styles.css';
+import { useState } from 'react';
+import { useMediaQuery } from '@mantine/hooks';
 
 const queryClient = new QueryClient();
 
@@ -48,6 +51,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
     <>
@@ -58,13 +63,22 @@ export default function AdminLayout({
         <AuthGuard>
           <QueryClientProvider client={queryClient}>
             <MantineProvider>
-              <ModalsProvider>
+              <ModalsProvider
+                modalProps={{
+                  fullScreen: isMobile,
+                  styles: {
+                    inner: {
+                      width: '100vw',
+                    },
+                  },
+                }}
+              >
                 <AppShell
                   header={{ height: 52 }}
                   navbar={{
                     width: 300,
                     breakpoint: 'sm',
-                    collapsed: { mobile: true },
+                    collapsed: { mobile: !menuIsOpen },
                   }}
                   padding="md"
                 >
@@ -83,6 +97,10 @@ export default function AdminLayout({
                       >
                         ADMIN PANEL v0.1
                       </Title>
+                      <Burger
+                        opened={menuIsOpen}
+                        onClick={() => setMenuIsOpen(!menuIsOpen)}
+                      />
                       <LoginComponent />
                     </Flex>
                   </AppShell.Header>

@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Button, Flex, Input } from '@mantine/core';
 import { IconEdit, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
+import s from './styles.module.scss';
 
 type TListControlPanelProps = {
   selectedLength: number;
@@ -17,11 +18,7 @@ export const ListControlPanel = ({
   onEdit,
   onDel,
 }: TListControlPanelProps) => (
-  <Flex
-    gap={10}
-    direction={{ base: 'column', sm: 'row' }}
-    style={{ position: 'sticky', top: 65, zIndex: 5 }}
-  >
+  <Flex gap={10} direction={{ base: 'column', sm: 'row' }} className={s.main}>
     <Button
       flex="none"
       color="green"
