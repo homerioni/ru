@@ -18,7 +18,7 @@ export const TeamSlider = () => {
 
   useEffect(() => {
     getPlayers().then((res) => {
-      setPlayers(res.players);
+      setPlayers(res.players.sort(() => Math.random() - 0.5));
     });
   }, []);
 
