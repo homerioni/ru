@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Oswald, Rubik } from 'next/font/google';
 import '../assets/Circe/stylesheet.css';
 
@@ -15,6 +15,13 @@ const rubikFont = Rubik({
 export const metadata: Metadata = {
   title: 'Речичане United',
   description: 'Любительская футбольная команда города Речица',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
