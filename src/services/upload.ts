@@ -1,4 +1,4 @@
-import { apiRoutes } from '../constants';
+import { apiRoutes } from '@/constants';
 import { axiosInstance } from './index';
 
 type TUploadImageResponse = {
@@ -9,7 +9,9 @@ type TUploadImageResponse = {
   url: string;
 };
 
-export const uploadImage = async (formData: FormData): Promise<TUploadImageResponse> => {
+export const uploadImage = async (
+  formData: FormData
+): Promise<TUploadImageResponse> => {
   const { data } = await axiosInstance.post(apiRoutes.upload, formData);
 
   return data;

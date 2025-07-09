@@ -8,11 +8,10 @@ import { SliderTitleBox } from '@ui/SliderTitleBox';
 import s from './styles.module.scss';
 import { TeamCard } from '@/components/client/TeamCard';
 import { getPlayers } from '@/services';
-import { Player } from '@prisma/client';
+import { TGetPlayer } from '@/types';
 
 export const TeamSlider = () => {
-  const [players, setPlayers] =
-    useState<(Player & { playedIn: { goals: number; assists: number }[] })[]>();
+  const [players, setPlayers] = useState<TGetPlayer[]>();
 
   const swiperRef = useRef<SwiperType>(null);
 

@@ -3,12 +3,11 @@
 import { TeamCard } from '@/components/client/TeamCard';
 import { getPlayers } from '@/services';
 import { useEffect, useState } from 'react';
-import { Player } from '@prisma/client';
+import { TGetPlayer } from '@/types';
 import s from './styles.module.scss';
 
 export const Team = () => {
-  const [players, setPlayers] =
-    useState<(Player & { playedIn: { goals: number; assists: number }[] })[]>();
+  const [players, setPlayers] = useState<TGetPlayer[]>();
 
   useEffect(() => {
     getPlayers().then((res) => {

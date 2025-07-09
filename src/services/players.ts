@@ -1,6 +1,6 @@
 import { Player } from '@prisma/client';
 import { apiRoutes } from '@/constants';
-import { TCreatePlayerData } from '@/types';
+import { TCreatePlayerData, TGetPlayer } from '@/types';
 import { axiosInstance } from './index';
 
 type TGetPlayerProps = {
@@ -8,8 +8,6 @@ type TGetPlayerProps = {
   qty?: number;
   page?: string | number;
 };
-
-type TGetPlayer = Player & { playedIn: { goals: number; assists: number }[] };
 
 type TGetPlayersResponse = {
   players: TGetPlayer[];

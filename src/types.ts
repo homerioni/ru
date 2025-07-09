@@ -9,7 +9,8 @@ export type TCreateMatchData = Omit<Match, 'id' | 'createdAt' | 'updateAt'> & {
   };
 };
 
-export type TCreatePlayerData = Omit<
-  Player,
-  'id' | 'createdAt' | 'updateAt' | 'assists' | 'goals' | 'matches'
->;
+export type TCreatePlayerData = Omit<Player, 'id' | 'createdAt' | 'updateAt'>;
+
+export type TGetPlayer = Player & {
+  playedIn: { goals: number; assists: number }[];
+};
