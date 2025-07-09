@@ -2,17 +2,14 @@ export const ROUTES = {
   main: {
     name: 'Главная',
     href: '/',
-    isProtected: false,
   },
   team: {
     name: 'Команда',
     href: '/team',
-    isProtected: false,
   },
   matches: {
     name: 'Матчи',
     href: '/matches',
-    isProtected: false,
   },
 } as const;
 

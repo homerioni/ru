@@ -93,11 +93,12 @@ export default function AdminLayout({
                         h={50}
                         py={8}
                         order={3}
-                        display={{ base: 'none', xs: 'block' }}
+                        display={{ base: 'none', sm: 'block' }}
                       >
                         ADMIN PANEL v0.1
                       </Title>
                       <Burger
+                        display={{ base: 'block', sm: 'none' }}
                         opened={menuIsOpen}
                         onClick={() => setMenuIsOpen(!menuIsOpen)}
                       />

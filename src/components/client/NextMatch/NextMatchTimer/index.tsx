@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getTimeLeft } from '@/constants';
 import s from '../styles.module.scss';
 import { getMoscowTimestamp } from '@/utils/getMoscowTimestamp';
-import { getMatchLeft } from '@/utils/getTimeLeft';
+import { getMatchLeft, getTimeLeft } from '@/utils/getTimeLeft';
 
 type TNextMatchTimerProps = {
   matchDate: number;
