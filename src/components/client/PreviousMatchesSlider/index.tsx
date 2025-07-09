@@ -10,11 +10,13 @@ import { SliderTitleBox } from '@ui/SliderTitleBox';
 import { getMatches } from '@/services';
 import { Club, Match } from '@prisma/client';
 import { getMatchDate } from '@/utils/getMatchDate';
+import { TTeamStats } from '@/services/matches';
 
 const myClub = { name: 'Речичане United', logoSrc: logo };
 
 export const PreviousMatchesSlider = () => {
-  const [matches, setMatches] = useState<(Match & { club: Club })[]>();
+  const [matches, setMatches] =
+    useState<(Match & { club: Club; players: TTeamStats[] })[]>();
 
   const swiperRef = useRef<SwiperType>(null);
 
