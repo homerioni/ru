@@ -61,27 +61,33 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
       round: submitData.round,
     };
 
-    const players: PlayerFormData[] = Object.values(submitData.team)
-      .filter((item) => item.playerId)
-      .map(
-        (item) =>
-          item && {
-            playerId: +item.playerId,
-            goals: item.goals ? +item.goals : 0,
-            assists: item.assists ? +item.assists : 0,
-          }
-      );
+    console.log('match', match);
+    console.log('submitData', submitData);
+
+    const players: PlayerFormData[] | null = isMyClub
+      ? Object.values(submitData.team)
+          .filter((item) => item.playerId)
+          .map(
+            (item) =>
+              item && {
+                playerId: +item.playerId,
+                goals: item.goals ? +item.goals : 0,
+                assists: item.assists ? +item.assists : 0,
+              }
+          )
+      : null;
 
     if (data) {
       updateMatch({
         ...data,
         ...match,
-        players: { deleteMany: {}, create: players },
+        players: players ? { deleteMany: {}, create: players } : undefined,
       }).then(() => refetch());
     } else {
-      createMatch({ ...match, players: { create: players } }).then(() =>
-        refetch()
-      );
+      createMatch({
+        ...match,
+        players: players ? { create: players } : undefined,
+      }).then(() => refetch());
     }
 
     modals.closeAll();

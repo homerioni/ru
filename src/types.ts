@@ -3,7 +3,7 @@ import { Club, Match, MatchPlayer, MatchType, Player } from '@prisma/client';
 export type TCreateClubData = Omit<Club, 'id' | 'createdAt' | 'updateAt'>;
 
 export type TCreateMatchData = Omit<Match, 'id' | 'createdAt' | 'updateAt'> & {
-  players: {
+  players?: {
     create: Omit<MatchPlayer, 'id' | 'matchId'>[];
     deleteMany?: object;
   };
