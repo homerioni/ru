@@ -66,25 +66,24 @@ model VerificationToken {
 }
 
 model Club {
-  id Int @id @default(autoincrement())
-
-  name    String  @unique
+  id      Int    @id @default(autoincrement())
+  name    String @unique
   logoSrc String
-  Match   Match[]
+
+  homeMatches Match[] @relation("HomeClubMatches")
+  awayMatches Match[] @relation("AwayClubMatches")
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }
 
 model Player {
-  id       Int           @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   name     String
   photo    String
   position String
   number   Int
-  matches  Int           @default(0)
-  goals    Int           @default(0)
-  assists  Int           @default(0)
+
   playedIn MatchPlayer[]
 
   createdAt DateTime @default(now())
@@ -92,13 +91,21 @@ model Player {
 }
 
 model Match {
-  id      Int           @id @default(autoincrement())
-  type    String        @default("Товарищеский матч")
-  date    DateTime
-  score   Int[]         @default([])
-  club    Club          @relation(fields: [clubId], references: [id])
-  clubId  Int
+  id    Int      @id @default(autoincrement())
+  date  DateTime
+  score Int[]    @default([])
+  round Int?
+
   players MatchPlayer[]
+
+  type   MatchType @relation(fields: [typeId], references: [id])
+  typeId Int
+
+  homeClub   Club @relation("HomeClubMatches", fields: [homeClubId], references: [id])
+  homeClubId Int
+
+  awayClub   Club @relation("AwayClubMatches", fields: [awayClubId], references: [id])
+  awayClubId Int
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
@@ -116,4 +123,15 @@ model MatchPlayer {
   playerId Int
 
   @@unique([matchId, playerId])
+}
+
+model MatchType {
+  id        Int     @id @default(autoincrement())
+  name      String
+  fullName  String
+  year      Int?
+  isArchive Boolean @default(false)
+  isLeague  Boolean @default(false)
+
+  matches Match[]
 }

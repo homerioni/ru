@@ -11,7 +11,7 @@ import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { useDebounce } from '@/hooks/useDebounce';
 import { deleteClubs, getClubs } from '@/services';
-import { ModalClubContent } from '@/components/admin/ModalClubContent';
+import { ModalClub } from 'src/components/admin/modals/ModalClub';
 
 const columns = [
   { name: 'Логотип', width: '0%' },
@@ -72,14 +72,14 @@ export default function AdminClubsPage() {
     modals.open({
       title: 'Новая команда',
       size: 'xl',
-      children: <ModalClubContent refetch={refetch} />,
+      children: <ModalClub refetch={refetch} />,
     });
 
   const onEdit = () => {
     modals.open({
       title: `Редактирование "${selectedItems[0]?.name}"`,
       size: 'xl',
-      children: <ModalClubContent data={selectedItems[0]} refetch={refetch} />,
+      children: <ModalClub data={selectedItems[0]} refetch={refetch} />,
     });
     setSelectedItems([]);
   };

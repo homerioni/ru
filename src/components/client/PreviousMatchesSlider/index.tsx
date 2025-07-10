@@ -3,25 +3,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import logo from '@/assets/img/logo.svg';
 import { MatchItem } from '@/components/client/MatchItem';
 import s from './styles.module.scss';
 import { SliderTitleBox } from '@ui/SliderTitleBox';
 import { getMatches } from '@/services';
-import { Club, Match } from '@prisma/client';
 import { getMatchDate } from '@/utils/getMatchDate';
-import { TTeamStats } from '@/services/matches';
-
-const myClub = { name: 'Речичане United', logoSrc: logo };
+import { TGetMatch } from '@/services/matches';
+import { MY_CLUB_ID } from '@/constants';
 
 export const PreviousMatchesSlider = () => {
-  const [matches, setMatches] =
-    useState<(Match & { club: Club; players: TTeamStats[] })[]>();
+  const [matches, setMatches] = useState<TGetMatch[]>();
 
   const swiperRef = useRef<SwiperType>(null);
 
   useEffect(() => {
-    getMatches().then((res) => {
+    getMatches({ clubId: MY_CLUB_ID }).then((res) => {
       const dateNow = Date.now();
 
       const oldMatches = res.matches.filter(
@@ -57,8 +53,8 @@ export const PreviousMatchesSlider = () => {
           return (
             <SwiperSlide key={match.id}>
               <MatchItem
-                clubs={[myClub, match.club]}
-                type={match.type}
+                clubs={[match.homeClub, match.awayClub]}
+                type={match.type.name}
                 score={match.score}
                 date={`${matchDate.day}, ${matchDate.time}`}
               />

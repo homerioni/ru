@@ -1,0 +1,192 @@
+.main {
+  margin-top: 6rem;
+  margin-bottom: 6rem;
+}
+
+.title {
+  margin-bottom: 4rem;
+  font-weight: 700;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  box-shadow: 0 .2rem 1rem rgba(0, 0, 0, 0.1);
+  border-radius: .8rem;
+  overflow: hidden;
+  font-size: 2.4rem;
+
+  thead {
+    background-color: #2c3e50;
+    color: white;
+
+    .header {
+      padding: 1.2rem 1.5rem;
+      text-align: center;
+      font-weight: 400;
+      text-transform: uppercase;
+      font-size: 1.8rem;
+
+      &:first-child {
+        width: 4rem;
+      }
+
+      &:nth-child(2) {
+        text-align: left;
+      }
+
+      &:nth-child(3) {
+        text-align: left;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #e0e0e0;
+      transition: background-color 0.15s;
+
+      &:nth-child(even) {
+        background-color: #f3f3f3;
+      }
+
+      &:hover {
+        background-color: #e9f5ff;
+      }
+
+      &:last-child {
+        border-bottom: 2px solid #2c3e50;
+      }
+
+      td {
+        padding: 1.5rem 2rem;
+        text-align: center;
+        vertical-align: middle;
+
+        &:first-child {
+          font-weight: bold;
+          color: #2c3e50;
+        }
+
+        &:nth-child(3) {
+          text-align: left;
+        }
+
+        &:nth-child(5) {
+          color: green;
+        }
+
+        &:nth-child(6) {
+          color: gray;
+        }
+
+        &:nth-child(7) {
+          color: var(--red);
+        }
+      }
+    }
+  }
+
+  .logo {
+    width: 8rem;
+    padding: 1rem;
+
+    img {
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .name {
+    font-weight: 600;
+    color: #34495e;
+  }
+}
+
+.games {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  margin-top: 8rem;
+}
+
+.roundTitle {
+  grid-column: 1 / -1;
+  font-size: 5rem;
+  text-align: center;
+}
+
+.round {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+
+  &:not(:last-child) {
+    margin-bottom: 6rem;
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    margin-top: 20rem;
+    margin-bottom: 12rem;
+  }
+
+  .tableWrapper {
+    margin: 0 -4rem;
+    padding: 0 4rem;
+    overflow-y: hidden;
+    overflow-x: scroll;
+  }
+
+  .title {
+    font-size: 5rem;
+  }
+
+  .table {
+    box-shadow: 0 .4rem 2rem rgba(0, 0, 0, 0.1);
+    border-radius: 1.6rem;
+    font-size: 3.4rem;
+
+    thead {
+      background-color: #2c3e50;
+      color: white;
+
+      .header {
+        padding: 2rem;
+        font-size: 2.6rem;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 2rem;
+        }
+      }
+    }
+
+    .logo {
+      img {
+        width: 10rem;
+      }
+    }
+
+    .name {
+    }
+  }
+
+  .games {}
+
+  .roundTitle {
+    margin-bottom: 2rem;
+    font-size: 6rem;
+  }
+
+  .round {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}

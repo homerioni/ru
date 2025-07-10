@@ -1,4 +1,4 @@
-import { Club, Match, MatchPlayer } from '@prisma/client';
+import { Club, Match, MatchPlayer, MatchType } from '@prisma/client';
 import { apiRoutes } from '@/constants';
 import { TCreateMatchData } from '@/types';
 import { axiosInstance } from './index';
@@ -6,6 +6,8 @@ import { axiosInstance } from './index';
 type TGetMatchProps = {
   qty?: number;
   page?: string | number;
+  typeId?: number;
+  clubId?: number;
 };
 
 export type TTeamStats = MatchPlayer & {
@@ -15,7 +17,12 @@ export type TTeamStats = MatchPlayer & {
   };
 };
 
-export type TGetMatch = Match & { club: Club; players: TTeamStats[] };
+export type TGetMatch = Match & {
+  awayClub: Club;
+  homeClub: Club;
+  players: TTeamStats[];
+  type: MatchType;
+};
 
 type TGetMatchesResponse = {
   matches: TGetMatch[];
@@ -27,18 +34,24 @@ type TGetMatchesResponse = {
 export const getMatches = async (params?: TGetMatchProps) => {
   const { data } = await axiosInstance.get<TGetMatchesResponse>(
     apiRoutes.matches,
-    {
-      params,
-    }
+    { params }
   );
 
   return data;
 };
 
 export const getMatch = async (id: number | string) => {
-  const { data } = await axiosInstance.get<Match>(apiRoutes.match, {
+  const { data } = await axiosInstance.get<TGetMatch>(apiRoutes.match, {
     params: { id },
   });
+
+  return data;
+};
+
+export const getNextMatch = async () => {
+  const { data } = await axiosInstance.get<Omit<TGetMatch, 'players'>>(
+    apiRoutes.nextMatch
+  );
 
   return data;
 };
@@ -54,10 +67,12 @@ export const deleteMatches = async (ids: number[]) => {
 export const createMatch = async (match: TCreateMatchData) => {
   const newMatch = {
     score: match.score,
-    clubId: match.clubId,
+    homeClubId: match.homeClubId,
+    awayClubId: match.awayClubId,
     date: match.date,
-    type: match.type,
+    typeId: match.typeId,
     players: match.players,
+    round: match.round,
   };
 
   const { data } = await axiosInstance.post(apiRoutes.match, newMatch);
@@ -69,10 +84,12 @@ export const updateMatch = async (match: TCreateMatchData & { id: number }) => {
   const newMatch = {
     id: match.id,
     score: match.score,
-    clubId: match.clubId,
+    homeClubId: match.homeClubId,
+    awayClubId: match.awayClubId,
     date: match.date,
-    type: match.type,
+    typeId: match.typeId,
     players: match.players,
+    round: match.round,
   };
   const { data } = await axiosInstance.post(apiRoutes.updateMatch, newMatch);
 

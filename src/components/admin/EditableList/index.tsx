@@ -1,11 +1,11 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Center, Checkbox, Table } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { Player, Match, Club } from '@prisma/client';
+import { Player, Match, Club, MatchType } from '@prisma/client';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import s from './styles.module.scss';
 
-export type TEditableItem = Player | Match | Club;
+export type TEditableItem = Player | Match | Club | MatchType;
 
 type TEditableListProps = {
   selectedItems: TEditableItem[];
@@ -14,6 +14,7 @@ type TEditableListProps = {
     width?: number | string;
     minWidth?: number | string;
     name: string;
+    style?: React.CSSProperties;
   }[];
   data: { data: TEditableItem; tableData: React.ReactNode[] }[];
 };
@@ -88,7 +89,12 @@ export const EditableList = ({
             />
           </Table.Th>
           {columns.map((column, i) => (
-            <Table.Th key={i} w={column.width} miw={column.minWidth}>
+            <Table.Th
+              key={i}
+              w={column.width}
+              miw={column.minWidth}
+              style={column.style}
+            >
               {column.name}
             </Table.Th>
           ))}

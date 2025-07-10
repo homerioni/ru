@@ -9,6 +9,7 @@ type TListControlPanelProps = {
   onAdd: () => void;
   onEdit: () => void;
   onDel: () => void;
+  children?: React.ReactNode;
 };
 
 export const ListControlPanel = ({
@@ -17,6 +18,7 @@ export const ListControlPanel = ({
   onAdd,
   onEdit,
   onDel,
+  children,
 }: TListControlPanelProps) => (
   <Flex gap={10} direction={{ base: 'column', sm: 'row' }} className={s.main}>
     <Button
@@ -61,5 +63,6 @@ export const ListControlPanel = ({
         onChange={(e) => searchState[1](e.target.value)}
       />
     )}
+    {children}
   </Flex>
 );

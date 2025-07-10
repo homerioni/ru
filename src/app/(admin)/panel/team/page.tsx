@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
-import { ModalPlayerContent } from '@/components/admin/ModalPlayerContent';
+import { ModalPlayerContent } from 'src/components/admin/modals/ModalPlayerContent';
 import { useDebounce } from '@/hooks/useDebounce';
 import { deletePlayers, getPlayers } from '@/services';
 

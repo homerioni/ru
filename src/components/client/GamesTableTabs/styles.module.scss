@@ -1,0 +1,35 @@
+.main {
+  display: flex;
+  gap: 5rem;
+  margin: 10rem 30rem 4rem 30rem;
+}
+
+.tab {
+  font-size: 3.4rem;
+  white-space: nowrap;
+
+  &.active {
+    font-weight: 700;
+    color: var(--red);
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    display: flex;
+    gap: 5rem;
+    margin: 16rem 0 6rem 0;
+    padding: 0 4rem;
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+
+  .tab {
+    font-size: 3.4rem;
+
+    &.active {
+      font-weight: 700;
+      color: var(--red);
+    }
+  }
+}

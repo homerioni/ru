@@ -8,8 +8,12 @@ export const ROUTES = {
     href: '/team',
   },
   matches: {
-    name: 'Матчи',
+    name: 'Наши матчи',
     href: '/matches',
+  },
+  tables: {
+    name: 'Турниры',
+    href: '/tables',
   },
 } as const;
 
@@ -25,6 +29,7 @@ export const adminRoutes = {
   games: `${adminRoute}/matches`,
   team: `${adminRoute}/team`,
   clubs: `${adminRoute}/clubs`,
+  types: `${adminRoute}/types`,
 } as const;
 
 export const apiRoutes = {
@@ -32,8 +37,12 @@ export const apiRoutes = {
   updateClub: '/club/update',
   clubs: '/clubs',
   match: '/match',
+  nextMatch: '/match/next',
   updateMatch: '/match/update',
   matches: '/matches',
+  matchType: '/match/type',
+  updateMatchType: '/match/type/update',
+  matchTypes: '/match/types',
   player: '/player',
   updatePlayer: '/player/update',
   players: '/players',

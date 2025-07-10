@@ -4,6 +4,8 @@ import { prisma } from '../../../../prisma/prisma-client';
 export async function GET(req: NextRequest) {
   const qty = req.nextUrl.searchParams.get('qty');
   const page = req.nextUrl.searchParams.get('page');
+  const typeId = req.nextUrl.searchParams.get('typeId');
+  const clubId = req.nextUrl.searchParams.get('clubId');
 
   const takeQty = qty ? +qty : 100;
 
@@ -13,14 +15,26 @@ export async function GET(req: NextRequest) {
 
   const activePage = skipQty ? skipQty / takeQty + 1 : 1;
 
+  const whereTypeId = typeId ? { typeId: +typeId } : {};
+
+  const whereClubId = clubId
+    ? { OR: [{ homeClubId: +clubId }, { awayClubId: +clubId }] }
+    : {};
+
   const matches = await prisma.match.findMany({
+    where: {
+      ...whereTypeId,
+      ...whereClubId,
+    },
     orderBy: {
       date: 'desc',
     },
     take: takeQty,
     skip: skipQty,
     include: {
-      club: true,
+      awayClub: true,
+      homeClub: true,
+      type: true,
       players: {
         select: {
           id: true,

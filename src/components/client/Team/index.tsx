@@ -1,21 +1,11 @@
-'use client';
-
 import { TeamCard } from '@/components/client/TeamCard';
 import { getPlayers } from '@/services';
-import { useEffect, useState } from 'react';
-import { TGetPlayer } from '@/types';
 import s from './styles.module.scss';
 
-export const Team = () => {
-  const [players, setPlayers] = useState<TGetPlayer[]>();
-
-  useEffect(() => {
-    getPlayers().then((res) => {
-      setPlayers(
-        res.players.sort((a, b) => b.playedIn.length - a.playedIn.length)
-      );
-    });
-  }, []);
+export const Team = async () => {
+  const players = await getPlayers().then((res) =>
+    res.players.sort((a, b) => b.playedIn.length - a.playedIn.length)
+  );
 
   if (!players) {
     return null;
