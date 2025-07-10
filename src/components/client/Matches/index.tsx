@@ -1,34 +1,45 @@
+'use client';
+
 import { MatchItem } from '@/components/client/MatchItem';
 import s from './styles.module.scss';
 import { getMatches } from '@/services';
 import { getMatchDate } from '@/utils/getMatchDate';
 import { MY_CLUB_ID } from '@/constants';
+import { useEffect, useState } from 'react';
+import { TGetMatch } from '@/services/matches';
 
-export const Matches = async () => {
-  const matches = await getMatches({ clubId: MY_CLUB_ID }).then((res) => {
-    const dateNow = Date.now();
+type TMatches = {
+  oldMatches: TGetMatch[];
+  newMatches: TGetMatch[];
+};
 
-    const oldMatches = res.matches.filter(
-      (match) => new Date(match.date).getTime() <= dateNow
-    );
+export const Matches = () => {
+  const [matches, setMatches] = useState<TMatches>();
 
-    const newMatches = res.matches
-      .filter((match) => new Date(match.date).getTime() > dateNow)
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  useEffect(() => {
+    getMatches({ clubId: MY_CLUB_ID }).then((res) => {
+      const dateNow = Date.now();
 
-    return {
-      oldMatches,
-      newMatches,
-    };
-  });
+      const oldMatches = res.matches.filter(
+        (match) => new Date(match.date).getTime() <= dateNow
+      );
 
-  if (!matches) {
-    return null;
-  }
+      const newMatches = res.matches
+        .filter((match) => new Date(match.date).getTime() > dateNow)
+        .sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+
+      setMatches({
+        oldMatches,
+        newMatches,
+      });
+    });
+  }, []);
 
   return (
     <section className={`${s.main} container`}>
-      {matches.newMatches.length && (
+      {matches?.newMatches.length && (
         <>
           <h1 className={s.title}>Будущие матчи</h1>
           <ul className={s.list}>
@@ -54,7 +65,7 @@ export const Matches = async () => {
       )}
       <h2 className={s.title}>Сыгранные матчи</h2>
       <ul className={s.list}>
-        {matches.oldMatches.map((match) => {
+        {matches?.oldMatches.map((match) => {
           const matchDate = new Date(match.date);
           const day = matchDate.toLocaleDateString('ru-RU', {
             month: 'long',

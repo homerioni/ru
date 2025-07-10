@@ -54,9 +54,6 @@ export const updatePlayer = async (player: Player) => {
     name: player.name,
     photo: player.photo,
     position: player.position,
-    matches: player.matches,
-    goals: player.goals,
-    assists: player.assists,
   };
 
   const { data } = await axiosInstance.post(apiRoutes.updatePlayer, newData);
