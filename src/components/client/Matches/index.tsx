@@ -21,7 +21,8 @@ export const Matches = () => {
       const dateNow = Date.now();
 
       const oldMatches = res.matches.filter(
-        (match) => new Date(match.date).getTime() <= dateNow
+        (match) =>
+          new Date(match.date).getTime() <= dateNow && match.score.length > 1
       );
 
       const newMatches = res.matches
