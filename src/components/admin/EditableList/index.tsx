@@ -17,6 +17,7 @@ type TEditableListProps = {
     style?: React.CSSProperties;
   }[];
   data: { data: TEditableItem; tableData: React.ReactNode[] }[];
+  stickyHeaderOffset?: { mobile?: number; desktop?: number };
 };
 
 const getContent = (item: React.ReactNode) => {
@@ -45,6 +46,7 @@ export const EditableList = ({
   setSelectedItems,
   columns,
   data,
+  stickyHeaderOffset,
 }: TEditableListProps) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -75,7 +77,11 @@ export const EditableList = ({
       highlightOnHover
       tabularNums
       stickyHeader
-      stickyHeaderOffset={isMobile ? 200 : 110}
+      stickyHeaderOffset={
+        isMobile
+          ? (stickyHeaderOffset?.mobile ?? 200)
+          : (stickyHeaderOffset?.desktop ?? 110)
+      }
       withRowBorders={false}
       className={s.table}
     >
