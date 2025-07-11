@@ -177,6 +177,7 @@ export default function AdminMatchesPage() {
           }
           columns={columns}
           data={matchesList}
+          stickyHeaderOffset={{ mobile: 300 }}
         />
       )}
       {data?.totalPages && data?.totalPages > 1 && (
