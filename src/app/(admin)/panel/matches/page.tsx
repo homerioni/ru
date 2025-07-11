@@ -37,10 +37,6 @@ export default function AdminMatchesPage() {
   const [clubId, setClubId] = useState<string | null>();
   const [typeId, setTypeId] = useState<string | null>();
 
-  const test = useSession();
-
-  console.log('test', test);
-
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['matches', page, clubId, typeId],
     queryFn: () =>
