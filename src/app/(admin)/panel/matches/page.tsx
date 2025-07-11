@@ -20,6 +20,7 @@ import { deleteMatches, getClubs, getMatches } from '@/services';
 import { TGetMatch } from '@/services/matches';
 import { ModalMatch } from 'src/components/admin/modals/ModalMatch';
 import { getMatchTypes } from '@/services/matchTypes';
+import { useSession } from 'next-auth/react';
 
 const columns = [
   { name: '', width: '0%' },
@@ -35,6 +36,10 @@ export default function AdminMatchesPage() {
   const [page, setPage] = useState(1);
   const [clubId, setClubId] = useState<string | null>();
   const [typeId, setTypeId] = useState<string | null>();
+
+  const test = useSession();
+
+  console.log('test', test);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['matches', page, clubId, typeId],
