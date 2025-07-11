@@ -4,8 +4,7 @@ export const MainIntro = () => {
   return (
     <section className={s.main}>
       <video autoPlay muted playsInline loop className={s.video}>
-        <source src="/maks.mp4" type="video/mp4" media="(min-width: 768px)" />
-        <source src="/team.mp4" type="video/mp4" media="(max-width: 767px)" />
+        <source src="/team.mp4" type="video/mp4" />
       </video>
       <h1 className={s.title}>One team One dream</h1>
       <p className={s.description}>

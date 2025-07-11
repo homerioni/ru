@@ -4,13 +4,13 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 const emails = ['homerion13@gmail.com'];
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-  const t = useSession();
+  const { status, data } = useSession();
 
-  const isAdmin = t.data?.user?.email && emails.includes(t.data?.user?.email);
+  const isAdmin = data?.user?.email && emails.includes(data?.user?.email);
 
-  const isUnauthenticated = t.status === 'unauthenticated';
+  const isUnauthenticated = status === 'unauthenticated';
 
-  const isLoading = t.status === 'loading' || t.status === 'unauthenticated';
+  const isLoading = status === 'loading' || status === 'unauthenticated';
 
   useEffect(() => {
     if (isUnauthenticated) {
@@ -23,7 +23,7 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       {isLoading && 'Загрузка...'}
-      {t.status === 'authenticated' && isAdmin && children}
+      {status === 'authenticated' && isAdmin && children}
     </>
   );
 };
