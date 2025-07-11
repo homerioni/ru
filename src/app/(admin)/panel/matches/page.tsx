@@ -70,7 +70,7 @@ export default function AdminMatchesPage() {
             height={64}
             style={{ objectFit: 'cover' }}
           />,
-          match.score.length ? `${match.score[0]} - ${match.score[1]}` : 'VS',
+          match.score.length ? `${match.score[0]} - ${match.score[1]}` : '-',
           <Image
             key={match.id}
             src={match.awayClub.logoSrc}
