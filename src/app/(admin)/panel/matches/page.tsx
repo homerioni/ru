@@ -20,7 +20,6 @@ import { deleteMatches, getClubs, getMatches } from '@/services';
 import { TGetMatch } from '@/services/matches';
 import { ModalMatch } from 'src/components/admin/modals/ModalMatch';
 import { getMatchTypes } from '@/services/matchTypes';
-import { useSession } from 'next-auth/react';
 
 const columns = [
   { name: '', width: '0%' },
