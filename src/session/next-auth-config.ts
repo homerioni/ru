@@ -12,4 +12,18 @@ export const nextAuthConfig: AuthOptions = {
       clientSecret: process.env.AUTH_GOOGLE_SECRET ?? '',
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      if (user?.role && session.user) {
+        session.user.role = user.role;
+      }
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+  },
 };

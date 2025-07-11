@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
-const emails = ['homerion13@gmail.com'];
-
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const { status, data } = useSession();
 
-  const isAdmin = data?.user?.email && emails.includes(data?.user?.email);
+  const isAdmin = data?.user?.role === 'ADMIN';
 
   const isUnauthenticated = status === 'unauthenticated';
 
