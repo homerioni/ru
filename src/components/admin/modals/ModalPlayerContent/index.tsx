@@ -45,7 +45,9 @@ export const ModalPlayerContent = ({
         photo: photo ?? data.photo,
       }).then(() => refetch());
     } else {
-      createPlayer({ ...player, photo: photo! }).then(() => refetch());
+      createPlayer({ ...player, photo: photo!, number: +player.number }).then(
+        () => refetch()
+      );
     }
 
     modals.closeAll();
