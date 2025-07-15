@@ -1,9 +1,12 @@
 .main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
   margin: 15rem auto;
+
+  > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+  }
 }
 
 .infoBox {
@@ -48,8 +51,10 @@
 
 @media (max-width: 48em) {
   .main {
-    flex-direction: column;
-    gap: 6rem;
+    > * {
+      flex-direction: column;
+      gap: 6rem;
+    }
   }
 
   .infoBox {
