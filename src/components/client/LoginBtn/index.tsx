@@ -8,6 +8,10 @@ type LoginBtnProps = {
 };
 
 export const LoginBtn = ({ status, isDesktop, isMobile }: LoginBtnProps) => {
+  if (status === 'loading') {
+    return null;
+  }
+
   if (status === 'authenticated') {
     return (
       <button
