@@ -69,7 +69,7 @@ export const HeaderContent = () => {
           </li>
           <li className={`${s.menuItem} ${s.mobile}`}>
             <Link
-              href={LINKS.telegram}
+              href={LINKS.instagram}
               onClick={() => setMenuIsOpen(false)}
               target="_blank"
             >
