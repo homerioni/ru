@@ -13,7 +13,7 @@ export const UserInfo = ({ img, points, name }: UserInfoProps) => {
     <div className={s.main}>
       <div className={s.info}>
         <p className={s.name}>{name}</p>
-        <Coins qty={points ?? 0} id="coins" />
+        {points !== undefined && <Coins qty={points ?? 0} id="coins" />}
       </div>
       <div className={s.img}>
         <Image src={img} alt={'Аватар'} width={128} height={128} />
