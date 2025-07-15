@@ -99,12 +99,10 @@ export default function AdminBetsPage() {
   };
 
   const onCompleted = () => {
-    console.log('onCompleted');
     setIsCompletedLoading(true);
     completedEvent(selectedItems[0]?.id).finally(() => {
       setIsCompletedLoading(false);
       refetch();
-      console.log('refetch');
     });
     setSelectedItems([]);
   };

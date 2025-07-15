@@ -124,8 +124,6 @@ export const GamesTable = ({ id, title, name }: TGamesTableProps) => {
     });
   }, [id]);
 
-  console.log(matches);
-
   return (
     <section className={`${s.main} container`}>
       <h1 className={s.title}>{title}</h1>

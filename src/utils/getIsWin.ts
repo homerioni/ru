@@ -1,59 +1,35 @@
 /* eslint-disable */
-import { BetOption, Match } from '@prisma/client';
+import { Match } from '@prisma/client';
 
 export const getIsWin = (code: string, match: Match, value?: any) => {
   switch (code) {
     case 'П1':
-      console.log('П1');
-      console.log('match', match.score);
-      console.log('value', value);
       return !!match.score.length && match.score[0] > match.score[1];
     case 'П2':
-      console.log('П2');
-      console.log('match', match.score);
-      console.log('value', value);
       return !!match.score.length && match.score[0] < match.score[1];
     case 'Н':
-      console.log('Н');
-      console.log('match', match.score);
-      console.log('value', value);
       return !!match.score.length && match.score[0] === match.score[1];
     case 'Г1':
-      console.log('Г1');
-      console.log('match', match.score);
-      console.log('value', value);
       return (
         !!match.score.length && value !== undefined && match.score[0] === value
       );
     case 'Г2':
-      console.log('Г2');
-      console.log('match', match.score);
-      console.log('value', value);
       return (
         !!match.score.length && value !== undefined && match.score[1] === value
       );
     case 'ГБ':
-      console.log('ГБ');
-      console.log('match', match.score);
-      console.log('value', value);
       return (
         !!match.score.length &&
         value !== undefined &&
         value <= match.score[0] + match.score[1]
       );
     case 'ГМ':
-      console.log('ГМ');
-      console.log('match', match.score);
-      console.log('value', value);
       return (
         !!match.score.length &&
         value !== undefined &&
         value >= match.score[0] + match.score[1]
       );
     case 'С':
-      console.log('С');
-      console.log('match', match.score);
-      console.log('value', value);
       return (
         !!match.score.length &&
         value !== undefined &&
@@ -61,22 +37,16 @@ export const getIsWin = (code: string, match: Match, value?: any) => {
         match.score[1] === value[1]
       );
     case 'Ж':
-      console.log('Ж');
-      console.log('match', match.yellowCards);
-      console.log('value', value);
       return (
         match.yellowCards !== undefined &&
         value !== undefined &&
-        match.yellowCards >= value
+        +match.yellowCards >= value
       );
     case 'К':
-      console.log('К');
-      console.log('match', match.redCards);
-      console.log('value', value);
       return (
         match.redCards !== undefined &&
         value !== undefined &&
-        match.redCards >= value
+        +match.redCards >= value
       );
     default:
       return;
