@@ -25,7 +25,7 @@ export default async function MainPage() {
   return (
     <>
       <MainIntro />
-      <NextMatch match={nextMatch} />
+      {nextMatch && <NextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} />
       <TeamSlider players={players} />
     </>
