@@ -69,7 +69,9 @@ export const BetEventItem = ({
     <li className={s.item}>
       <div className={s.header}>
         <h3 className={s.itemTitle}>{name}</h3>
-        <span className={s.ratio}>x{getCoef(ratio, +qty)}</span>
+        <span className={s.ratio}>
+          {ratio?.length < 2 || qty ? `x${getCoef(ratio, +qty)}` : `до x10`}
+        </span>
       </div>
       <ul className={s.usersList}>
         {bets.map((bet) => {
