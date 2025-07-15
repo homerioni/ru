@@ -1,24 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GamesTableTabs } from 'src/components/client/GamesTableTabs';
 import { MatchType } from '@prisma/client';
-import { getMatchTypes } from '@/services/matchTypes';
 import { GamesTable } from '@/components/client/GamesTable';
 
-export const GamesTableWrapper = () => {
-  const [tables, setTables] = useState<MatchType[]>([]);
+type GamesTableWrapperProps = {
+  tables: MatchType[];
+};
+
+export const GamesTableWrapper = ({ tables }: GamesTableWrapperProps) => {
   const [activeTab, setActiveTab] = useState(0);
-
-  useEffect(() => {
-    getMatchTypes().then((res) => {
-      setTables(res.filter((type) => !type.isArchive && type.isLeague));
-    });
-  }, []);
-
-  if (!tables.length) {
-    return;
-  }
 
   return (
     <>

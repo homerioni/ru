@@ -1,7 +1,6 @@
 'use client';
 
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
-import { deleteMatches } from '@/services/matches';
 import { useQuery } from '@tanstack/react-query';
 import { modals } from '@mantine/modals';
 import { Stack, Text } from '@mantine/core';
@@ -9,7 +8,7 @@ import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { MatchType } from '@prisma/client';
-import { getMatchTypes } from '@/services/matchTypes';
+import { deleteMatchTypes, getMatchTypes } from '@/services/matchTypes';
 import { ModalMatchType } from '@/components/admin/modals/ModalMatchType';
 
 const columns = [
@@ -45,7 +44,7 @@ export default function AdminTypesPage() {
       labels: { confirm: 'Да, удалить', cancel: 'Отменить' },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deleteMatches(selectedItems.map((type) => type.id)).then(() =>
+        deleteMatchTypes(selectedItems.map((type) => type.id)).then(() =>
           refetch()
         );
         setSelectedItems([]);

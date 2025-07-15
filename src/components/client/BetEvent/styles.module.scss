@@ -1,0 +1,22 @@
+.main {
+  padding: 0 10rem;
+  margin-top: 8rem;
+  margin-bottom: 8rem;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4rem;
+}
+
+@media (max-width: 48em) {
+  .main {
+    padding: 0 4rem;
+  }
+
+  .list {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}

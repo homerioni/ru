@@ -8,5 +8,6 @@ module.exports = {
         hostname: '**.public.blob.vercel-storage.com',
       },
     ],
+    domains: ['lh3.googleusercontent.com'],
   },
 };

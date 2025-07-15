@@ -4,8 +4,9 @@ import { useMediaQuery } from '@mantine/hooks';
 import { Player, Match, Club, MatchType } from '@prisma/client';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import s from './styles.module.scss';
+import { TGetBetEvents } from '@/services/bets';
 
-export type TEditableItem = Player | Match | Club | MatchType;
+export type TEditableItem = Player | Match | Club | MatchType | TGetBetEvents;
 
 type TEditableListProps = {
   selectedItems: TEditableItem[];

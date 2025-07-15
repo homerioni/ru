@@ -182,6 +182,7 @@ export const GamesTable = ({ id, title, name }: TGamesTableProps) => {
               return (
                 <MatchItem
                   key={match.id}
+                  id={match.id}
                   clubs={[match.homeClub, match.awayClub]}
                   type={name}
                   date={`${matchDate.day}, ${matchDate.time}`}

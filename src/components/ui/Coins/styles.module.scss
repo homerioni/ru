@@ -1,0 +1,38 @@
+.main {
+  display: flex;
+  align-items: flex-end;
+  font-size: 2rem;
+
+  > img {
+    width: 3rem;
+    object-fit: contain;
+  }
+
+  &.increment {
+    color: green;
+
+    &:before {
+      content: '+';
+    }
+  }
+
+  &.decrement {
+    color: var(--red);
+
+    &:before {
+      content: '-';
+    }
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    font-weight: 700;
+    font-size: 3.4rem;
+
+    > img {
+      width: 4.6rem;
+      object-fit: contain;
+    }
+  }
+}

@@ -14,8 +14,15 @@ export const nextAuthConfig: AuthOptions = {
   ],
   callbacks: {
     async session({ session, user }) {
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { points: true, role: true }, // можно выбрать любые поля
+      });
+
       if (user?.role && session.user) {
+        session.user.id = user.id;
         session.user.role = user.role;
+        session.user.points = dbUser?.points;
       }
       return session;
     },

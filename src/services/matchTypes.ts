@@ -5,7 +5,7 @@ import { axiosInstance } from './index';
 import { TTeamStats } from '@/services/matches';
 
 export const getMatchTypes = async () => {
-  const { data } = await axiosInstance.get<MatchType[]>(apiRoutes.matchTypes);
+  const { data } = await axiosInstance.get<MatchType[]>(apiRoutes.matchType);
 
   return data;
 };
@@ -27,7 +27,7 @@ export const getMatchType = async (id: number | string) => {
 };
 
 export const deleteMatchTypes = async (ids: number[]) => {
-  const { data } = await axiosInstance.delete(apiRoutes.matchTypes, {
+  const { data } = await axiosInstance.delete(apiRoutes.matchType, {
     params: { ids: ids.join(',') },
   });
 
@@ -60,10 +60,7 @@ export const updateMatchType = async (
     isLeague: matchType.isLeague,
   };
 
-  const { data } = await axiosInstance.post(
-    apiRoutes.updateMatchType,
-    newMatchType
-  );
+  const { data } = await axiosInstance.post(apiRoutes.matchType, newMatchType);
 
   return data;
 };

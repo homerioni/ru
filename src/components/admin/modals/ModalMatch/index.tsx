@@ -59,10 +59,9 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
           ? [submitData.goals, submitData.missed]
           : [],
       round: submitData.round,
+      yellowCards: submitData.yellowCards,
+      redCards: submitData.redCards,
     };
-
-    console.log('match', match);
-    console.log('submitData', submitData);
 
     const players: PlayerFormData[] | null = isMyClub
       ? Object.values(submitData.team)
@@ -203,6 +202,26 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
                 placeholder="Время"
                 type="time"
                 {...register('time', { required: true })}
+              />
+            </Input.Wrapper>
+          </Grid.Col>
+          <Grid.Col span={{ base: 4, sm: 2 }}>
+            <Input.Wrapper label="Желтых карт">
+              <Input
+                placeholder="Желтых"
+                type="number"
+                step={1}
+                {...register('yellowCards', { valueAsNumber: true })}
+              />
+            </Input.Wrapper>
+          </Grid.Col>
+          <Grid.Col span={{ base: 4, sm: 2 }}>
+            <Input.Wrapper label="Красных карт">
+              <Input
+                placeholder="Красных"
+                type="number"
+                step={1}
+                {...register('redCards', { valueAsNumber: true })}
               />
             </Input.Wrapper>
           </Grid.Col>

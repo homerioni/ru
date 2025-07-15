@@ -1,26 +1,12 @@
-'use client';
-
 import { TeamCard } from '@/components/client/TeamCard';
-import { getPlayers } from '@/services';
-import s from './styles.module.scss';
-import { useEffect, useState } from 'react';
 import { TGetPlayer } from '@/types';
+import s from './styles.module.scss';
 
-export const Team = () => {
-  const [players, setPlayers] = useState<TGetPlayer[]>();
+type TeamProps = {
+  players: TGetPlayer[];
+};
 
-  useEffect(() => {
-    getPlayers().then((res) =>
-      setPlayers(
-        res.players.sort((a, b) => b.playedIn.length - a.playedIn.length)
-      )
-    );
-  }, []);
-
-  if (!players) {
-    return null;
-  }
-
+export const Team = ({ players }: TeamProps) => {
   return (
     <section className={`${s.main} container`}>
       {players.map((player) => {

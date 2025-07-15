@@ -133,38 +133,40 @@ export default function AdminMatchesPage() {
         onEdit={onEdit}
         onDel={onDel}
       >
-        {matchTypesData && (
-          <Flex align="center" gap={4}>
-            <Select
-              data={matchTypesData.map((item) => ({
-                value: String(item.id),
-                label: item.year ? `${item.name} ${item.year}` : item.name,
-              }))}
-              placeholder="Тип матча"
-              maxDropdownHeight={200}
-              searchable
-              allowDeselect={false}
-              onChange={setTypeId}
-              value={typeId}
-            />
-            {typeId && <CloseButton onClick={() => setTypeId(null)} />}
-          </Flex>
-        )}
-        {clubsData && (
-          <Flex align="center" gap={4}>
-            <Select
-              data={clubsData.clubs.map((item) => ({
-                value: String(item.id),
-                label: item.name,
-              }))}
-              placeholder="Команда"
-              maxDropdownHeight={200}
-              searchable
-              allowDeselect={false}
-              onChange={setClubId}
-              value={clubId}
-            />
-            {clubId && <CloseButton onClick={() => setClubId(null)} />}
+        {(matchTypesData || clubsData) && (
+          <Flex gap={10}>
+            {matchTypesData && (
+              <Flex align="center" gap={4}>
+                <Select
+                  data={matchTypesData.map((item) => ({
+                    value: String(item.id),
+                    label: item.year ? `${item.name} ${item.year}` : item.name,
+                  }))}
+                  placeholder="Тип матча"
+                  maxDropdownHeight={200}
+                  allowDeselect={false}
+                  onChange={setTypeId}
+                  value={typeId}
+                />
+                {typeId && <CloseButton onClick={() => setTypeId(null)} />}
+              </Flex>
+            )}
+            {clubsData && (
+              <Flex align="center" gap={4}>
+                <Select
+                  data={clubsData.clubs.map((item) => ({
+                    value: String(item.id),
+                    label: item.name,
+                  }))}
+                  placeholder="Команда"
+                  maxDropdownHeight={200}
+                  allowDeselect={false}
+                  onChange={setClubId}
+                  value={clubId}
+                />
+                {clubId && <CloseButton onClick={() => setClubId(null)} />}
+              </Flex>
+            )}
           </Flex>
         )}
       </ListControlPanel>
@@ -177,7 +179,7 @@ export default function AdminMatchesPage() {
           }
           columns={columns}
           data={matchesList}
-          stickyHeaderOffset={{ mobile: 300 }}
+          stickyHeaderOffset={{ mobile: 250 }}
         />
       )}
       {data?.totalPages && data?.totalPages > 1 && (

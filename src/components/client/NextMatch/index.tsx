@@ -1,23 +1,14 @@
-'use client';
-
 import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
 import { NextMatchTimer } from '@/components/client/NextMatch/NextMatchTimer';
-import { getNextMatch, TGetMatch } from '@/services/matches';
+import { TGetMatch } from '@/services/matches';
 import { getMatchDate } from '@/utils/getMatchDate';
 import s from './styles.module.scss';
-import { useEffect, useState } from 'react';
 
-export const NextMatch = () => {
-  const [match, setMatch] = useState<Omit<TGetMatch, 'players'>>();
+type NextMatchProps = {
+  match: Omit<TGetMatch, 'players'>;
+};
 
-  useEffect(() => {
-    getNextMatch().then((res) => setMatch(res));
-  }, []);
-
-  if (!match) {
-    return;
-  }
-
+export const NextMatch = ({ match }: NextMatchProps) => {
   const matchDate = getMatchDate(match.date);
 
   return (

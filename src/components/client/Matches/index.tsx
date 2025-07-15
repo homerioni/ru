@@ -1,42 +1,27 @@
-'use client';
-
 import { MatchItem } from '@/components/client/MatchItem';
 import s from './styles.module.scss';
 import { getMatches } from '@/services';
 import { getMatchDate } from '@/utils/getMatchDate';
 import { MY_CLUB_ID } from '@/constants';
-import { useEffect, useState } from 'react';
-import { TGetMatch } from '@/services/matches';
 
-type TMatches = {
-  oldMatches: TGetMatch[];
-  newMatches: TGetMatch[];
-};
+export const Matches = async () => {
+  const matches = await getMatches({ clubId: MY_CLUB_ID }).then((res) => {
+    const dateNow = Date.now();
 
-export const Matches = () => {
-  const [matches, setMatches] = useState<TMatches>();
+    const oldMatches = res.matches.filter(
+      (match) =>
+        new Date(match.date).getTime() <= dateNow && match.score.length > 1
+    );
 
-  useEffect(() => {
-    getMatches({ clubId: MY_CLUB_ID }).then((res) => {
-      const dateNow = Date.now();
+    const newMatches = res.matches
+      .filter((match) => new Date(match.date).getTime() > dateNow)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-      const oldMatches = res.matches.filter(
-        (match) =>
-          new Date(match.date).getTime() <= dateNow && match.score.length > 1
-      );
-
-      const newMatches = res.matches
-        .filter((match) => new Date(match.date).getTime() > dateNow)
-        .sort(
-          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-        );
-
-      setMatches({
-        oldMatches,
-        newMatches,
-      });
-    });
-  }, []);
+    return {
+      oldMatches,
+      newMatches,
+    };
+  });
 
   return (
     <section className={`${s.main} container`}>
@@ -50,6 +35,7 @@ export const Matches = () => {
               return (
                 <li key={match.id}>
                   <MatchItem
+                    id={match.id}
                     clubs={[match.homeClub, match.awayClub]}
                     type={match.type.name}
                     date={`${matchDate.day}, ${matchDate.time}`}
@@ -80,6 +66,7 @@ export const Matches = () => {
           return (
             <li key={match.id}>
               <MatchItem
+                id={match.id}
                 clubs={[match.homeClub, match.awayClub]}
                 type={match.type.name}
                 date={`${day}, ${time}`}

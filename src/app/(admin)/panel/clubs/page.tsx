@@ -32,8 +32,6 @@ export default function AdminClubsPage() {
       getClubs({ qty: 50, search: searchDebounce || undefined, page }),
   });
 
-  console.log(data);
-
   const clubsList = useMemo(
     () =>
       data?.clubs.map((club) => ({

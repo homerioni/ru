@@ -1,8 +1,8 @@
-'use client';
-
 import { Matches } from '@/components/client/Matches';
 
-export default function MatchesPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function MatchesPage() {
   return (
     <>
       <Matches />

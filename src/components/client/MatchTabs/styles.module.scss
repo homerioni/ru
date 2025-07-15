@@ -1,0 +1,60 @@
+@media (min-width: 48.01em) {
+  .main {
+    display: none;
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    padding: 0 4rem;
+    margin-top: 16rem;
+    margin-bottom: -8rem;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 17.8rem;
+      top: calc(100% + 1rem);
+      width: 23.6rem;
+      height: .6rem;
+      border-radius: 1rem;
+      background-color: var(--red);
+      transition: transform .15s ease-in-out, width .15s ease-in-out;
+    }
+
+    &.tab0 {
+      & + * + * {
+        display: none;
+      }
+    }
+
+    &.tab1 {
+      margin-bottom: 0;
+
+      & + * {
+        display: none;
+      }
+
+      &:before {
+        width: 13rem;
+        transform: translateX(27rem);
+      }
+    }
+  }
+
+  .tab {
+    font-size: 4rem;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+
+    &.active {
+      font-weight: 700;
+      color: var(--red);
+    }
+  }
+}

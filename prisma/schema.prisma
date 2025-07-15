@@ -52,6 +52,9 @@ model User {
   accounts      Account[]
   sessions      Session[]
   role          ROLE      @default(USER)
+  points        Int       @default(1000)
+
+  bets UserBet[]
 
   @@map("users")
 }
@@ -91,12 +94,16 @@ model Player {
 }
 
 model Match {
-  id    Int      @id @default(autoincrement())
-  date  DateTime
-  score Int[]    @default([])
-  round Int?
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  score       Int[]    @default([])
+  round       Int?
+  yellowCards Int?     @default(0)
+  redCards    Int?     @default(0)
 
   players MatchPlayer[]
+
+  betEvent BetEvent?
 
   type   MatchType @relation(fields: [typeId], references: [id])
   typeId Int
@@ -134,4 +141,50 @@ model MatchType {
   isLeague  Boolean @default(false)
 
   matches Match[]
+}
+
+model BetType {
+  id   Int    @id @default(autoincrement())
+  name String
+  code String @unique
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+model BetOption {
+  id    Int    @id @default(autoincrement())
+  name  String
+  code  String
+  ratio Int[]
+
+  betEvent   BetEvent @relation(fields: [betEventId], references: [id], onDelete: Cascade)
+  betEventId Int
+
+  bets UserBet[]
+}
+
+model UserBet {
+  id     Int   @id @default(autoincrement())
+  points Int
+  value  Json?
+
+  betOption BetOption @relation(fields: [betId], references: [id], onDelete: Cascade)
+  betId     Int
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+}
+
+model BetEvent {
+  id          Int     @id @default(autoincrement())
+  isCompleted Boolean @default(false)
+
+  events BetOption[]
+
+  match   Match @relation(fields: [matchId], references: [id])
+  matchId Int   @unique
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
 }

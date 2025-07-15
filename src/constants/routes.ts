@@ -15,6 +15,10 @@ export const ROUTES = {
     name: 'Турниры',
     href: '/tables',
   },
+  tops: {
+    name: 'Лидеры ставок',
+    href: '/tops',
+  },
 } as const;
 
 export const LINKS = {
@@ -30,6 +34,7 @@ export const adminRoutes = {
   team: `${adminRoute}/team`,
   clubs: `${adminRoute}/clubs`,
   types: `${adminRoute}/types`,
+  bets: `${adminRoute}/bets`,
 } as const;
 
 export const apiRoutes = {
@@ -38,13 +43,15 @@ export const apiRoutes = {
   clubs: '/clubs',
   match: '/match',
   nextMatch: '/match/next',
-  updateMatch: '/match/update',
-  matches: '/matches',
+  nextMatches: '/match/allNext',
   matchType: '/match/type',
-  updateMatchType: '/match/type/update',
-  matchTypes: '/match/types',
   player: '/player',
   updatePlayer: '/player/update',
   players: '/players',
+  betEvent: '/bets',
+  betType: '/bets/type',
+  addBet: '/bets/add',
+  completedBetEvent: '/bets/complete',
+  top: '/top',
   upload: '/upload',
 } as const;

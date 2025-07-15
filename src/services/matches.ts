@@ -1,7 +1,8 @@
-import { Club, Match, MatchPlayer, MatchType } from '@prisma/client';
+import { BetEvent, Club, Match, MatchPlayer, MatchType } from '@prisma/client';
 import { apiRoutes } from '@/constants';
 import { TCreateMatchData } from '@/types';
 import { axiosInstance } from './index';
+import { TGetBetOption } from '@/services/bets';
 
 type TGetMatchProps = {
   qty?: number;
@@ -33,7 +34,7 @@ type TGetMatchesResponse = {
 
 export const getMatches = async (params?: TGetMatchProps) => {
   const { data } = await axiosInstance.get<TGetMatchesResponse>(
-    apiRoutes.matches,
+    apiRoutes.match,
     { params }
   );
 
@@ -41,7 +42,9 @@ export const getMatches = async (params?: TGetMatchProps) => {
 };
 
 export const getMatch = async (id: number | string) => {
-  const { data } = await axiosInstance.get<TGetMatch>(apiRoutes.match, {
+  const { data } = await axiosInstance.get<
+    TGetMatch & { betEvent: BetEvent & { events: TGetBetOption[] } }
+  >(apiRoutes.match, {
     params: { id },
   });
 
@@ -56,8 +59,16 @@ export const getNextMatch = async () => {
   return data;
 };
 
+export const getNextMatches = async () => {
+  const { data } = await axiosInstance.get<Omit<TGetMatch, 'players'>[]>(
+    apiRoutes.nextMatches
+  );
+
+  return data;
+};
+
 export const deleteMatches = async (ids: number[]) => {
-  const { data } = await axiosInstance.delete(apiRoutes.matches, {
+  const { data } = await axiosInstance.delete(apiRoutes.match, {
     params: { ids: ids.join(',') },
   });
 
@@ -91,7 +102,7 @@ export const updateMatch = async (match: TCreateMatchData & { id: number }) => {
     players: match.players,
     round: match.round,
   };
-  const { data } = await axiosInstance.post(apiRoutes.updateMatch, newMatch);
+  const { data } = await axiosInstance.post(apiRoutes.match, newMatch);
 
   return data;
 };

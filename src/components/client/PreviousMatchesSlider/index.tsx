@@ -1,37 +1,22 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { MatchItem } from '@/components/client/MatchItem';
 import s from './styles.module.scss';
 import { SliderTitleBox } from '@ui/SliderTitleBox';
-import { getMatches } from '@/services';
 import { getMatchDate } from '@/utils/getMatchDate';
 import { TGetMatch } from '@/services/matches';
-import { MY_CLUB_ID } from '@/constants';
 
-export const PreviousMatchesSlider = () => {
-  const [matches, setMatches] = useState<TGetMatch[]>();
+type PreviousMatchesSliderProps = {
+  matches: TGetMatch[];
+};
 
+export const PreviousMatchesSlider = ({
+  matches,
+}: PreviousMatchesSliderProps) => {
   const swiperRef = useRef<SwiperType>(null);
-
-  useEffect(() => {
-    getMatches({ clubId: MY_CLUB_ID }).then((res) => {
-      const dateNow = Date.now();
-
-      const oldMatches = res.matches.filter(
-        (match) =>
-          new Date(match.date).getTime() <= dateNow && match.score.length > 1
-      );
-
-      setMatches(oldMatches);
-    });
-  }, []);
-
-  if (!matches) {
-    return null;
-  }
 
   return (
     <section className={`${s.main} container`}>
@@ -54,6 +39,7 @@ export const PreviousMatchesSlider = () => {
           return (
             <SwiperSlide key={match.id}>
               <MatchItem
+                id={match.id}
                 clubs={[match.homeClub, match.awayClub]}
                 type={match.type.name}
                 score={match.score}
