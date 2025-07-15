@@ -15,7 +15,9 @@ export const ModalBetEvent = ({ data, refetch }: TModalBetEventProps) => {
       ? {
           id: data.id,
           matchId: data.match.id,
-          events: data.events.map((item) => JSON.stringify(item.ratio)),
+          events: data.events.map((item) =>
+            JSON.stringify(item.ratio.map((x) => x / 100))
+          ),
         }
       : {},
   });
