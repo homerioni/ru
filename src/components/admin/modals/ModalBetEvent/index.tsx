@@ -42,7 +42,9 @@ export const ModalBetEvent = ({ data, refetch }: TModalBetEventProps) => {
             data: {
               name: event.name,
               code: event.code,
-              ratio: JSON.parse(submitData.events[i]),
+              ratio: (JSON.parse(submitData.events[i]) as number[]).map((x) =>
+                Math.floor(x * 100)
+              ),
             },
           })),
         },
@@ -57,7 +59,9 @@ export const ModalBetEvent = ({ data, refetch }: TModalBetEventProps) => {
           create: betTypes?.map((type, i) => ({
             name: type.name,
             code: type.code,
-            ratio: JSON.parse(submitData.events[i]),
+            ratio: (JSON.parse(submitData.events[i]) as number[]).map((x) =>
+              Math.floor(x * 100)
+            ),
           })),
         },
       };

@@ -77,7 +77,7 @@ export const BetEventContent = ({
             key={event.id}
             betId={event.id}
             name={event.name}
-            ratio={event.ratio}
+            ratio={event.ratio.map((x) => x / 100)}
             code={event.code}
             bets={event.bets}
             handleBetAction={handleBet}

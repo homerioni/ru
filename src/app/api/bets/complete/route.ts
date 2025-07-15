@@ -43,11 +43,11 @@ export async function POST(req: NextRequest) {
                       bet.points *
                         (betOption.ratio.length > 1
                           ? getCustomExponentialCoefficient(
-                              betOption.ratio[0],
-                              betOption.ratio[1],
+                              betOption.ratio[0] / 100,
+                              betOption.ratio[1] / 100,
                               JSON.parse(bet.value as string)
                             )
-                          : betOption.ratio[0])
+                          : betOption.ratio[0] / 100)
                     ),
                   },
                 },
