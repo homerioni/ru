@@ -2,6 +2,7 @@ import { MatchInfo } from '@/components/client/MatchInfo';
 import { BetEvent } from '@/components/client/BetEvent';
 import { MatchTabs } from '@/components/client/MatchTabs';
 import { getMatch } from '@/services';
+import { redirect } from 'next/navigation';
 export default async function MatchPage({
   params,
 }: {
@@ -10,6 +11,10 @@ export default async function MatchPage({
   const { id } = await params;
 
   const match = await getMatch(id);
+
+  if (!match) {
+    redirect('/');
+  }
 
   return (
     <>

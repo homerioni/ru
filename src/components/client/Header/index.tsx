@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '@/assets/img/logo.svg';
 import tg from '@/assets/img/tg.svg';
 import inst from '@/assets/img/inst.svg';
@@ -14,6 +14,8 @@ import { LoginBtn } from '@/components/client/LoginBtn';
 import { UserInfo } from '@/components/client/UserInfo';
 import { useMediaQuery } from '@mantine/hooks';
 import { Coins } from '@ui/Coins';
+
+const body = document.getElementsByTagName('body')[0];
 
 export const Header = () => (
   <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
@@ -28,6 +30,14 @@ export const HeaderContent = () => {
   const { data, status } = useSession();
 
   const onBurgerClick = () => setMenuIsOpen((prev) => !prev);
+
+  useEffect(() => {
+    if (menuIsOpen) {
+      body.style.overflow = 'hidden';
+    } else {
+      body.style.overflow = '';
+    }
+  }, [menuIsOpen]);
 
   return (
     <header className={`${s.main} container`}>
