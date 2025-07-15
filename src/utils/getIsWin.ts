@@ -39,14 +39,16 @@ export const getIsWin = (code: string, match: Match, value?: any) => {
     case 'Ж':
       return (
         match.yellowCards !== undefined &&
+        match.yellowCards !== null &&
         value !== undefined &&
-        +match.yellowCards >= value
+        match.yellowCards >= value
       );
     case 'К':
       return (
         match.redCards !== undefined &&
+        match.redCards !== null &&
         value !== undefined &&
-        +match.redCards >= value
+        match.redCards >= value
       );
     default:
       return;
