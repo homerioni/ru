@@ -94,6 +94,19 @@ export const getBetEvent = async (id: number | string) => {
 };
 
 export const deleteBetEvent = async (ids: number[]) => {
+  for (const id of ids) {
+    const { data: betEvent } = await axiosInstance.get<TGetBetEvent>(
+      apiRoutes.betEvent,
+      {
+        params: { id: +id },
+      }
+    );
+
+    const bets = betEvent.events.map((event) => event.bets).flat();
+
+    await axiosInstance.post(apiRoutes.refund, bets);
+  }
+
   const { data } = await axiosInstance.delete(apiRoutes.betEvent, {
     params: { ids: ids.join(',') },
   });

@@ -52,6 +52,7 @@ export const apiRoutes = {
   betType: '/bets/type',
   addBet: '/bets/add',
   completedBetEvent: '/bets/complete',
+  refund: '/bets/refund',
   top: '/top',
   upload: '/upload',
 } as const;
