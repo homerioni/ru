@@ -15,8 +15,6 @@ import { UserInfo } from '@/components/client/UserInfo';
 import { useMediaQuery } from '@mantine/hooks';
 import { Coins } from '@ui/Coins';
 
-const body = document.getElementsByTagName('body')[0];
-
 export const Header = () => (
   <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
     <HeaderContent />
@@ -32,6 +30,8 @@ export const HeaderContent = () => {
   const onBurgerClick = () => setMenuIsOpen((prev) => !prev);
 
   useEffect(() => {
+    const body = document.getElementsByTagName('body')[0];
+
     if (menuIsOpen) {
       body.style.overflow = 'hidden';
     } else {
