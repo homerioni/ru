@@ -1,9 +1,9 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { Coins } from '@ui/Coins';
 import s from './styles.module.scss';
 
 type UserInfoProps = {
-  img: string;
+  img: string | StaticImageData;
   name: string;
   points?: number;
 };
