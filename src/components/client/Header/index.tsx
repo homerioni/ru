@@ -39,6 +39,9 @@ export const HeaderContent = () => {
     }
   }, [menuIsOpen]);
 
+  console.log('data', data);
+  console.log('status', status);
+
   return (
     <header className={`${s.main} container`}>
       <BurgerBtn isActive={false} onClick={onBurgerClick} />

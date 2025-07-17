@@ -74,16 +74,6 @@ export const BetEventContent = ({
     };
   }, [message]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      update().then(console.log);
-    }, 5000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [update]);
-
   return (
     <section className={`${s.main} container`}>
       <ul className={s.list}>
