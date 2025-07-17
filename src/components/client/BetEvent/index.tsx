@@ -29,7 +29,7 @@ export const BetEventContent = ({
   isCompleted,
 }: BetEventProps) => {
   const [message, setMessage] = useState('');
-  const { data, status } = useSession();
+  const { data, status, update } = useSession();
 
   console.log('data1', data);
   console.log('status', status);
@@ -52,7 +52,7 @@ export const BetEventContent = ({
         if (!res) {
           setMessage('У вас недостаточно монет');
         } else {
-          location.reload();
+          update();
         }
 
         return !!res;
@@ -73,6 +73,16 @@ export const BetEventContent = ({
       clearTimeout(timer);
     };
   }, [message]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      update();
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [update]);
 
   return (
     <section className={`${s.main} container`}>
