@@ -17,7 +17,7 @@ type BetEventProps = {
 
 export const BetEvent = (props: BetEventProps) => {
   return (
-    <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
+    <SessionProvider>
       <BetEventContent {...props} />
     </SessionProvider>
   );
