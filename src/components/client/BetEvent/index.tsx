@@ -31,6 +31,8 @@ export const BetEventContent = ({
   const [message, setMessage] = useState('');
   const { data, status } = useSession();
 
+  console.log(data);
+
   const handleBet = async (points: number, betId: number, value?: unknown) => {
     console.log(data);
 
