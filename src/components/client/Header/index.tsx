@@ -39,8 +39,9 @@ export const HeaderContent = () => {
     }
   }, [menuIsOpen]);
 
-  console.log('data', data);
-  console.log('status', status);
+  useEffect(() => {
+    if (data?.user?.id) sessionStorage.setItem('userId', data.user.id);
+  }, [data]);
 
   return (
     <header className={`${s.main} container`}>

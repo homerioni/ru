@@ -7,7 +7,6 @@ import { BetEventItem } from '@/components/client/BetEvent/BetEventItem';
 import { useEffect, useState } from 'react';
 import { Alert } from '@/components/client/modals/Alert';
 import { TGetMatch } from '@/services/matches';
-import { SessionProvider, useSession } from 'next-auth/react';
 
 type BetEventProps = {
   match: TGetMatch & { betEvent: TBetEvent & { events: TGetBetOption[] } };
@@ -15,49 +14,31 @@ type BetEventProps = {
   isCompleted?: boolean;
 };
 
-export const BetEvent = (props: BetEventProps) => {
-  return (
-    <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
-      <BetEventContent {...props} />
-    </SessionProvider>
-  );
-};
-
-export const BetEventContent = ({
-  match,
-  events,
-  isCompleted,
-}: BetEventProps) => {
+export const BetEvent = ({ match, events, isCompleted }: BetEventProps) => {
   const [message, setMessage] = useState('');
-  const { data, status, update } = useSession();
-
-  console.log('data1', data);
-  console.log('status', status);
 
   const handleBet = async (points: number, betId: number, value?: unknown) => {
-    console.log('data2', data);
+    const userId = sessionStorage.getItem('userId');
 
-    if (status !== 'authenticated') {
+    if (!userId) {
       setMessage('Вы не авторизованы');
       return;
     }
 
-    if (data?.user?.id) {
-      return await addBet({
-        points,
-        betId,
-        userId: data?.user?.id,
-        value: JSON.stringify(value),
-      }).then((res) => {
-        if (!res) {
-          setMessage('У вас недостаточно монет');
-        } else {
-          update();
-        }
+    return await addBet({
+      points,
+      betId,
+      userId: userId,
+      value: JSON.stringify(value),
+    }).then((res) => {
+      if (!res) {
+        setMessage('У вас недостаточно монет');
+      } else {
+        location.reload();
+      }
 
-        return !!res;
-      });
-    }
+      return !!res;
+    });
   };
 
   useEffect(() => {

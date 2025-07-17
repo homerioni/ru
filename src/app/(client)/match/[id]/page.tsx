@@ -3,6 +3,7 @@ import { BetEvent } from '@/components/client/BetEvent';
 import { MatchTabs } from '@/components/client/MatchTabs';
 import { getMatch } from '@/services';
 import { redirect } from 'next/navigation';
+
 export default async function MatchPage({
   params,
 }: {
