@@ -32,6 +32,8 @@ export const BetEventContent = ({
   const { data, status } = useSession();
 
   const handleBet = async (points: number, betId: number, value?: unknown) => {
+    console.log(data);
+
     if (status !== 'authenticated') {
       setMessage('Вы не авторизованы');
       return;

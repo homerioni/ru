@@ -51,12 +51,12 @@ export const BetEventItem = ({
     if (!isLoading) {
       const minValue = getMinValue(code);
 
-      if (+qty < minValue) {
+      if (getIsQtyInput(code) && !qty) {
+        addAlertAction('Нужно указать значение на которое вы делаете ставку!');
+      } else if (+qty < minValue) {
         addAlertAction(
           `Значение "${name}" не может быть меньше чем ${minValue}`
         );
-      } else if (getIsQtyInput(code) && !qty) {
-        addAlertAction('Нужно указать значение на которое выделаете ставку!');
       } else if (+points < 1) {
         addAlertAction('Укажите размер вашей ставки!');
       } else {
@@ -65,10 +65,6 @@ export const BetEventItem = ({
         handleBetAction(+points, betId, qty ? +qty : undefined).then(
           (res) => res === false && setIsLoading(false)
         );
-      }
-
-      if (getIsQtyInput(code) && !qty) {
-        addAlertAction('Нужно указать значение на которое выделаете ставку!');
       }
     }
   };
