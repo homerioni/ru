@@ -77,7 +77,7 @@ export const BetEventContent = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       update().then(console.log);
-    }, 1000);
+    }, 5000);
 
     return () => {
       clearTimeout(timer);
