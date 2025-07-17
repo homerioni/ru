@@ -16,7 +16,11 @@ export const LoginBtn = ({ status, isDesktop, isMobile }: LoginBtnProps) => {
     return (
       <button
         className={`${s.loginBtn} ${s.logout} ${isDesktop ? s.desktop : ''}`}
-        onClick={() => signOut()}
+        onClick={() => {
+          signOut().then(() => {
+            sessionStorage.removeItem('userId');
+          });
+        }}
       >
         Выйти
       </button>
