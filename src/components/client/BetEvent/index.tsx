@@ -32,6 +32,7 @@ export const BetEventContent = ({
   const { data, status } = useSession();
 
   console.log('data1', data);
+  console.log('status', status);
 
   const handleBet = async (points: number, betId: number, value?: unknown) => {
     console.log('data2', data);
