@@ -9,6 +9,9 @@ type THeaderProps = {
 const LoginComponent = () => {
   const { data, status } = useSession();
 
+  console.log('dataHeader', data);
+  console.log('statusHeader', status);
+
   if (status === 'loading') {
     return (
       <Flex align="center" gap={16}>
