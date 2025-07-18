@@ -45,7 +45,14 @@ export default function RootLayout({
         />
         <meta property="og:image" content="https://rechutd.ru/logo.png" />
         <meta property="og:url" content="https://rechutd.ru/" />
+        <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Речичане United" />
+        <meta
+          name="twitter:description"
+          content="Любительская футбольная команда города Речица"
+        />
+        <meta name="twitter:image" content="https://rechutd.ru/logo.png" />
       </Head>
       <body className={`${oswaldSans.variable} ${rubikFont.variable}`}>
         {children}
