@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       {
         chat_id: CHAT_ID,
         text: `📥 Новая заявка:\n\nКто: ${data.type}\nИмя: ${data.name}\nКонтакт для связи: ${data.contact}${
-          data.message && `Сообщение: ${data.message}`
+          data.message && `\nСообщение: ${data.message}`
         }`,
       }
     );
