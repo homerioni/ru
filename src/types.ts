@@ -48,3 +48,10 @@ export type TUpdateBetEvent = Omit<BetEvent, 'createdAt' | 'updateAt'> & {
 export type TCreateBetType = Omit<BetType, 'id' | 'createdAt' | 'updateAt'>;
 
 export type TCreateBet = Omit<UserBet, 'id'>;
+
+export type TMessageTg = {
+  name: string;
+  type: string;
+  contact: string;
+  message?: string;
+};

@@ -1,4 +1,5 @@
 import { signIn, signOut } from 'next-auth/react';
+import { Button } from '@ui/Button';
 import s from './styles.module.scss';
 
 type LoginBtnProps = {
@@ -14,8 +15,9 @@ export const LoginBtn = ({ status, isDesktop, isMobile }: LoginBtnProps) => {
 
   if (status === 'authenticated') {
     return (
-      <button
-        className={`${s.loginBtn} ${s.logout} ${isDesktop ? s.desktop : ''}`}
+      <Button
+        className={isDesktop ? s.desktop : ''}
+        variant="secondary"
         onClick={() => {
           signOut().then(() => {
             sessionStorage.removeItem('userId');
@@ -23,16 +25,16 @@ export const LoginBtn = ({ status, isDesktop, isMobile }: LoginBtnProps) => {
         }}
       >
         Выйти
-      </button>
+      </Button>
     );
   }
 
   return (
-    <button
-      className={`${s.loginBtn} ${isMobile ? s.mobile : ''}`}
+    <Button
+      className={isMobile ? s.mobile : ''}
       onClick={() => signIn('google')}
     >
       Войти
-    </button>
+    </Button>
   );
 };

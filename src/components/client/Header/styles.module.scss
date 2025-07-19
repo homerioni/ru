@@ -103,7 +103,7 @@
 }
 
 @media (min-width: 48.01em) {
-  .menuItem.mobile {
+  .menuItem.mobile, .menuBg {
     display: none;
   }
 }
@@ -159,14 +159,27 @@
 
     &.open {
       transform: translateX(0);
-      box-shadow: 70vw 0 0 100vw rgb(0,0,0,.5);
+
+      .menuBg {
+        display: block;
+      }
     }
+  }
+
+  .menuBg {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 200vw;
+    height: 110vh;
+    background-color: rgb(0,0,0,.5);
   }
 
   .menuList {
     flex-direction: column;
-    gap: 2rem;
-    padding-top: 10rem;
+    gap: 1rem;
+    padding-top: 6rem;
     text-align: center;
   }
 

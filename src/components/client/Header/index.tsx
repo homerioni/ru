@@ -91,9 +91,9 @@ export const HeaderContent = () => {
             <LoginBtn status={status} isMobile />
           </li>
         </ul>
+        <div className={s.menuBg} onClick={() => setMenuIsOpen(false)} />
       </nav>
       <div className={s.socials}>
-        <LoginBtn status={status} isDesktop />
         {status === 'unauthenticated' && (
           <>
             <Link
@@ -124,6 +124,7 @@ export const HeaderContent = () => {
             <Coins id="coins" qty={data?.user?.points ?? 0} />
           )}
         </div>
+        <LoginBtn status={status} isDesktop />
       </div>
     </header>
   );
