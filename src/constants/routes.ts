@@ -15,10 +15,6 @@ export const ROUTES = {
     name: 'Турниры',
     href: '/tables',
   },
-  tops: {
-    name: 'Лидеры ставок',
-    href: '/tops',
-  },
 } as const;
 
 export const LINKS = {

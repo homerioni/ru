@@ -61,6 +61,13 @@ export const HeaderContent = () => {
               </Link>
             </li>
           ))}
+          {status === 'authenticated' && (
+            <li className={s.menuItem}>
+              <Link href="/tops" onClick={() => setMenuIsOpen(false)}>
+                Лидеры ставок
+              </Link>
+            </li>
+          )}
           <li className={`${s.menuItem} ${s.mobile}`}>
             <Link
               href={LINKS.telegram}
