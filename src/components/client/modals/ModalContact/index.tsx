@@ -68,7 +68,7 @@ export const ModalContact = ({ closeAction }: ModalContact) => {
         </label>
         <label className={s.label}>
           <p className={s.labelName}>
-            Контакт для связи (telegram или любая другая соц сеть) *
+            Ссылка на соцсеть, для связи (Telegram предпочителен) *
           </p>
           <div className={s.inputWrapper}>
             <input
