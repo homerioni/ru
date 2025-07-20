@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import Head from 'next/head';
 import { Oswald, Rubik } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import '../assets/Circe/stylesheet.css';
 
 const oswaldSans = Oswald({
@@ -33,7 +34,6 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <Head>
-        <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/logo180.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/logo32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/logo192.png" />
@@ -56,6 +56,7 @@ export default function RootLayout({
       </Head>
       <body className={`${oswaldSans.variable} ${rubikFont.variable}`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
