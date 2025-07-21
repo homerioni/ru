@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import logo from '@/assets/img/logo.svg';
+import logo from '@/assets/img/logo.webp';
 import tg from '@/assets/img/tg.svg';
 import inst from '@/assets/img/inst.svg';
 import { LINKS, ROUTES } from '@/constants/routes';
