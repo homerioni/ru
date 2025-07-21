@@ -6,7 +6,7 @@ import { getMatches, getNextMatch } from '@/services/matches';
 import { MY_CLUB_ID } from '@/constants';
 import { getPlayers } from '@/services';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 1800;
 
 export default async function MainPage() {
   const [nextMatch, matches, players] = await Promise.all([
@@ -19,7 +19,7 @@ export default async function MainPage() {
           new Date(match.date).getTime() <= dateNow && match.score.length > 1
       );
     }),
-    getPlayers().then((res) => res.players.sort(() => Math.random() - 0.5)),
+    getPlayers().then((res) => res.players),
   ]);
 
   return (

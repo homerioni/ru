@@ -3,10 +3,13 @@ import { getMatchTypes } from '@/services/matchTypes';
 
 export const dynamic = 'force-dynamic';
 
+export const metadata = {
+  title: 'Турниры | Речичане United',
+  description: 'Турниры в которых учавствует клуб Речичане United',
+};
+
 export default async function TablesPage() {
-  const tables = await getMatchTypes().then((res) =>
-    res.filter((type) => !type.isArchive && type.isLeague)
-  );
+  const tables = await getMatchTypes();
 
   return (
     <>

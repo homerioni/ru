@@ -1,35 +1,31 @@
 import { MatchItem } from '@/components/client/MatchItem';
 import s from './styles.module.scss';
-import { getMatches } from '@/services';
 import { getMatchDate } from '@/utils/getMatchDate';
-import { MY_CLUB_ID } from '@/constants';
+import { TGetMatch } from '@/services/matches';
 
-export const Matches = async () => {
-  const matches = await getMatches({ clubId: MY_CLUB_ID }).then((res) => {
-    const dateNow = Date.now();
+type MatchesProps = {
+  matches: TGetMatch[];
+};
 
-    const oldMatches = res.matches.filter(
-      (match) =>
-        new Date(match.date).getTime() <= dateNow && match.score.length > 1
-    );
+export const Matches = ({ matches }: MatchesProps) => {
+  const dateNow = Date.now();
 
-    const newMatches = res.matches
-      .filter((match) => new Date(match.date).getTime() > dateNow)
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const oldMatches = matches.filter(
+    (match) =>
+      new Date(match.date).getTime() <= dateNow && match.score.length > 1
+  );
 
-    return {
-      oldMatches,
-      newMatches,
-    };
-  });
+  const newMatches = matches
+    .filter((match) => new Date(match.date).getTime() > dateNow)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return (
     <section className={`${s.main} container`}>
-      {matches?.newMatches.length && (
+      {newMatches.length && (
         <>
           <h1 className={s.title}>Будущие матчи</h1>
           <ul className={s.list}>
-            {matches.newMatches.map((match) => {
+            {newMatches.map((match) => {
               const matchDate = getMatchDate(match.date);
 
               return (
@@ -52,7 +48,7 @@ export const Matches = async () => {
       )}
       <h2 className={s.title}>Сыгранные матчи</h2>
       <ul className={s.list}>
-        {matches?.oldMatches.map((match) => {
+        {oldMatches.map((match) => {
           const matchDate = new Date(match.date);
           const day = matchDate.toLocaleDateString('ru-RU', {
             month: 'long',

@@ -12,19 +12,21 @@ type GamesTableWrapperProps = {
 export const GamesTableWrapper = ({ tables }: GamesTableWrapperProps) => {
   const [activeTab, setActiveTab] = useState(0);
 
+  const data = tables.filter((type) => !type.isArchive && type.isLeague);
+
   return (
     <>
-      {tables.length > 1 && (
+      {data.length > 1 && (
         <GamesTableTabs
-          items={tables}
+          items={data}
           setter={(id) => setActiveTab(id)}
           activeTab={activeTab}
         />
       )}
       <GamesTable
-        id={tables[activeTab].id}
-        title={tables[activeTab].fullName}
-        name={tables[activeTab].name}
+        id={data[activeTab].id}
+        title={data[activeTab].fullName}
+        name={data[activeTab].name}
       />
     </>
   );

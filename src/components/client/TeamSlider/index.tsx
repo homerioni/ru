@@ -38,18 +38,20 @@ export const TeamSlider = ({ players }: TeamSliderProps) => {
           },
         }}
       >
-        {players.map((player) => (
-          <SwiperSlide key={player.id}>
-            <TeamCard
-              small
-              number={player.number}
-              matches={player.playedIn.length}
-              name={player.name}
-              position={player.position}
-              photo={player.photo}
-            />
-          </SwiperSlide>
-        ))}
+        {players
+          .sort(() => Math.random() - 0.5)
+          .map((player) => (
+            <SwiperSlide key={player.id}>
+              <TeamCard
+                small
+                number={player.number}
+                matches={player.playedIn.length}
+                name={player.name}
+                position={player.position}
+                photo={player.photo}
+              />
+            </SwiperSlide>
+          ))}
       </Swiper>
     </section>
   );

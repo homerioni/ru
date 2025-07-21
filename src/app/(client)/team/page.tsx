@@ -5,10 +5,13 @@ import { getPlayers } from '@/services';
 
 export const dynamic = 'force-dynamic';
 
+export const metadata = {
+  title: 'Игроки | Речичане United',
+  description: 'Список игроков клуба Речичане United',
+};
+
 export default async function TeamPage() {
-  const players = await getPlayers().then((res) =>
-    res.players.sort((a, b) => b.playedIn.length - a.playedIn.length)
-  );
+  const { players } = await getPlayers();
 
   return (
     <>
