@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Header } from '@/components/client/Header';
 import { Footer } from '@/components/client/Footer';
 import 'swiper/css';
@@ -12,7 +13,9 @@ export default function ClientLayout({
     <>
       <Header />
       <main>{children}</main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </>
   );
 }
