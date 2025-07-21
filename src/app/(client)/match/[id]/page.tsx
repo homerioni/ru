@@ -4,12 +4,14 @@ import { MatchTabs } from '@/components/client/MatchTabs';
 import { getMatch } from '@/services';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function MatchPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
 
   const match = await getMatch(id);
 
