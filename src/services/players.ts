@@ -50,7 +50,7 @@ export const createPlayer = async (player: TCreatePlayerData) => {
 export const updatePlayer = async (player: Player) => {
   const newData = {
     id: player.id,
-    number: player.number,
+    number: +player.number,
     name: player.name,
     photo: player.photo,
     position: player.position,
