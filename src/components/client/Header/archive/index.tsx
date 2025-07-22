@@ -9,9 +9,23 @@ import inst from '@/assets/img/inst.svg';
 import { LINKS, ROUTES } from '@/constants/routes';
 import s from './styles.module.scss';
 import { BurgerBtn } from '@ui/BurgerBtn';
+import { SessionProvider, useSession } from 'next-auth/react';
+import { LoginBtn } from '@/components/client/LoginBtn';
+import { UserInfo } from '@/components/client/UserInfo';
+import { useMediaQuery } from '@mantine/hooks';
+import { Coins } from '@ui/Coins';
 
-export const Header = () => {
+export const Header = () => (
+  <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
+    <HeaderContent />
+  </SessionProvider>
+);
+
+export const HeaderContent = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const { data, status } = useSession();
 
   const onBurgerClick = () => setMenuIsOpen((prev) => !prev);
 
@@ -24,6 +38,10 @@ export const Header = () => {
       body.style.overflow = '';
     }
   }, [menuIsOpen]);
+
+  useEffect(() => {
+    if (data?.user?.id) sessionStorage.setItem('userId', data.user.id);
+  }, [data]);
 
   return (
     <header className={`${s.main} container`}>
@@ -43,6 +61,13 @@ export const Header = () => {
               </Link>
             </li>
           ))}
+          {status === 'authenticated' && (
+            <li className={s.menuItem}>
+              <Link href="/tops" onClick={() => setMenuIsOpen(false)}>
+                Лидеры ставок
+              </Link>
+            </li>
+          )}
           <li className={`${s.menuItem} ${s.mobile}`}>
             <Link
               href={LINKS.telegram}
@@ -63,16 +88,50 @@ export const Header = () => {
               Instagram
             </Link>
           </li>
+          <li className={`${s.menuItem} ${s.mobile} ${s.userMob}`}>
+            {status === 'authenticated' && isMobile && (
+              <UserInfo
+                img={data?.user?.image ?? logo}
+                name={data?.user?.name ?? 'Тестовый юзер'}
+              />
+            )}
+            <LoginBtn status={status} isMobile />
+          </li>
         </ul>
         <div className={s.menuBg} onClick={() => setMenuIsOpen(false)} />
       </nav>
       <div className={s.socials}>
-        <Link href={LINKS.telegram} className={s.socialLink} target="_blank">
-          <Image src={tg} alt="Telegram" />
-        </Link>
-        <Link href={LINKS.instagram} className={s.socialLink} target="_blank">
-          <Image src={inst} alt="Instagram" />
-        </Link>
+        {status === 'unauthenticated' && (
+          <>
+            <Link
+              href={LINKS.telegram}
+              className={s.socialLink}
+              target="_blank"
+            >
+              <Image src={tg} alt="Telegram" />
+            </Link>
+            <Link
+              href={LINKS.instagram}
+              className={s.socialLink}
+              target="_blank"
+            >
+              <Image src={inst} alt="Instagram" />
+            </Link>
+          </>
+        )}
+        <div className={s.user}>
+          {status === 'authenticated' && !isMobile && (
+            <UserInfo
+              img={data?.user?.image ?? ''}
+              name={data?.user?.name ?? ''}
+              points={data?.user?.points ?? 0}
+            />
+          )}
+          {status === 'authenticated' && isMobile && (
+            <Coins id="coins" qty={data?.user?.points ?? 0} />
+          )}
+        </div>
+        <LoginBtn status={status} isDesktop />
       </div>
     </header>
   );
