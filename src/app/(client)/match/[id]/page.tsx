@@ -1,6 +1,7 @@
 import { MatchInfo } from '@/components/client/MatchInfo';
 import { getMatch } from '@/services';
 import { redirect } from 'next/navigation';
+import { MyMap } from '@/components/client/Map';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,7 @@ export default async function MatchPage({
   return (
     <>
       <MatchInfo data={match} />
+      <MyMap />
     </>
   );
 }

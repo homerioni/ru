@@ -5,6 +5,7 @@ import { TeamSlider } from '@/components/client/TeamSlider';
 import { getMatches, getNextMatch } from '@/services/matches';
 import { MY_CLUB_ID } from '@/constants';
 import { getPlayers } from '@/services';
+import { MyMap } from '@/components/client/Map';
 
 export const revalidate = 1800;
 
@@ -28,6 +29,7 @@ export default async function MainPage() {
       {nextMatch && <NextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} />
       <TeamSlider players={players} />
+      <MyMap />
     </>
   );
 }
