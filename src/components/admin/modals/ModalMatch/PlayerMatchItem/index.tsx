@@ -19,7 +19,7 @@ export const PlayerMatchItem = ({
   return (
     <Grid gutter={10}>
       {players
-        .sort((a, b) => a.playedIn.length - b.playedIn.length)
+        .sort((a, b) => b.playedIn.length - a.playedIn.length)
         .map((player, i) => (
           <Grid.Col span={{ base: 12, sm: 12 }} key={player.id}>
             <Grid gutter={10} className={s.team}>
