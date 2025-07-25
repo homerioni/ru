@@ -34,26 +34,32 @@ export const MatchInfo = ({ data }: MatchInfoProps) => {
         />
       </div>
       <div className={s.team}>
-        {data.players.map((item) => (
-          <div key={item.id} className={s.teamItem}>
-            <span className={s.number}>{item.player.number}</span>
-            <span className={s.name}>{item.player.name}</span>
-            <span className={s.stats}>
-              {item.goals > 0 && (
-                <span>
-                  {item.goals}
-                  {getEndingByAmount(item.goals, [' гол', ' гола', ' голов'])}
-                </span>
-              )}
-              {item.assists > 0 && (
-                <span>
-                  {item.assists}
-                  {getEndingByAmount(item.assists, [' пас', ' паса', ' пасов'])}
-                </span>
-              )}
-            </span>
-          </div>
-        ))}
+        {data.players
+          .sort((a, b) => a.player.number - b.player.number)
+          .map((item) => (
+            <div key={item.id} className={s.teamItem}>
+              <span className={s.number}>{item.player.number}</span>
+              <span className={s.name}>{item.player.name}</span>
+              <span className={s.stats}>
+                {item.goals > 0 && (
+                  <span>
+                    {item.goals}
+                    {getEndingByAmount(item.goals, [' гол', ' гола', ' голов'])}
+                  </span>
+                )}
+                {item.assists > 0 && (
+                  <span>
+                    {item.assists}
+                    {getEndingByAmount(item.assists, [
+                      ' пас',
+                      ' паса',
+                      ' пасов',
+                    ])}
+                  </span>
+                )}
+              </span>
+            </div>
+          ))}
       </div>
     </section>
   );
