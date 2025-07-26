@@ -2,31 +2,29 @@
 
 import { useState } from 'react';
 import { GamesTableTabs } from 'src/components/client/GamesTableTabs';
-import { MatchType } from '@prisma/client';
 import { GamesTable } from '@/components/client/GamesTable';
+import { TMatchGroups } from '@/app/(client)/tables/page';
 
 type GamesTableWrapperProps = {
-  tables: MatchType[];
+  matches: TMatchGroups;
 };
 
-export const GamesTableWrapper = ({ tables }: GamesTableWrapperProps) => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const data = tables.filter((type) => !type.isArchive && type.isLeague);
+export const GamesTableWrapper = ({ matches }: GamesTableWrapperProps) => {
+  const [activeTab, setActiveTab] = useState(matches.types[0].id);
 
   return (
     <>
-      {data.length > 1 && (
-        <GamesTableTabs
-          items={data}
-          setter={(id) => setActiveTab(id)}
-          activeTab={activeTab}
-        />
-      )}
+      <GamesTableTabs
+        items={matches.types}
+        setter={(id) => setActiveTab(id)}
+        activeTab={activeTab}
+      />
       <GamesTable
-        id={data[activeTab].id}
-        title={data[activeTab].fullName}
-        name={data[activeTab].name}
+        table={matches[activeTab].table}
+        matches={matches[activeTab].matches}
+        title={matches[activeTab].type.fullName}
+        name={matches[activeTab].type.name}
+        isLeague={matches[activeTab].type.isLeague}
       />
     </>
   );

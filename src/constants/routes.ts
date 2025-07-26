@@ -41,6 +41,7 @@ export const apiRoutes = {
   nextMatch: '/match/next',
   nextMatches: '/match/allNext',
   matchType: '/match/type',
+  matchTypeGetAll: '/match/type/getAll',
   player: '/player',
   updatePlayer: '/player/update',
   players: '/players',

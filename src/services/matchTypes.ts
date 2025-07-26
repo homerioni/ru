@@ -26,6 +26,20 @@ export const getMatchType = async (id: number | string) => {
   return data;
 };
 
+export const getAllMatchesTypes = async () => {
+  const { data } = await axiosInstance.get<
+    (MatchType & {
+      matches: (Match & {
+        homeClub: Club;
+        awayClub: Club;
+        players: TTeamStats[];
+      })[];
+    })[]
+  >(apiRoutes.matchTypeGetAll);
+
+  return data;
+};
+
 export const deleteMatchTypes = async (ids: number[]) => {
   const { data } = await axiosInstance.delete(apiRoutes.matchType, {
     params: { ids: ids.join(',') },
