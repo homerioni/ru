@@ -1,7 +1,7 @@
 'use client';
 
 import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
-import { SIZES } from '@/constants';
+import { MY_CLUB_ID, SIZES } from '@/constants';
 import { TTeamStats } from '@/services/matches';
 import s from './styles.module.scss';
 import Link from 'next/link';
@@ -9,6 +9,7 @@ import Link from 'next/link';
 type TMatchItemProps = {
   id: number;
   clubs: {
+    id: number;
     logoSrc: string;
     name: string;
   }[];
@@ -18,6 +19,24 @@ type TMatchItemProps = {
   players?: TTeamStats[];
 };
 
+const MatchItemWrapper = ({
+  id,
+  isMyClub,
+  children,
+}: {
+  id: number;
+  isMyClub: boolean;
+  children: React.ReactNode;
+}) => {
+  return isMyClub ? (
+    <Link href={`/match/${id}`} className={s.main}>
+      {children}
+    </Link>
+  ) : (
+    <div className={s.main}>{children}</div>
+  );
+};
+
 export const MatchItem = ({
   id,
   clubs,
@@ -25,8 +44,10 @@ export const MatchItem = ({
   score,
   type,
 }: TMatchItemProps) => {
+  const isMyClub = clubs[0].id === MY_CLUB_ID || clubs[1].id === MY_CLUB_ID;
+
   return (
-    <Link href={`/match/${id}`} className={s.main}>
+    <MatchItemWrapper id={id} isMyClub={isMyClub}>
       <ClubLogo
         logoSrc={clubs[0].logoSrc}
         name={clubs[0].name}
@@ -46,10 +67,12 @@ export const MatchItem = ({
         namePosition={NAME_POSITION.BOTTOM}
         size={SIZES.s}
       />
-      <div className={s.showBtn}>
-        <span>Подробнее о матче</span>
-        <span className={s.btnArrow}></span>
-      </div>
-    </Link>
+      {isMyClub && (
+        <div className={s.showBtn}>
+          <span>Подробнее о матче</span>
+          <span className={s.btnArrow}></span>
+        </div>
+      )}
+    </MatchItemWrapper>
   );
 };
