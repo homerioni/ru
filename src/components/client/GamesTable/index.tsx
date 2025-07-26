@@ -71,7 +71,11 @@ export const GamesTable = ({
       )}
       <div className={s.games}>
         {matches?.map((round, i) => (
-          <div key={Math.random()} className={s.round}>
+          <div
+            key={Math.random()}
+            className={s.round}
+            style={{ order: i === 0 ? '1' : '' }}
+          >
             {i !== 0 && <h3 className={s.roundTitle}>Тур {i}</h3>}
             {round.map((match) => {
               const matchDate = getMatchDate(match.date);
