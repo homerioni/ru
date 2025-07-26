@@ -1,8 +1,17 @@
+import Image from 'next/image';
+import bgImage from '@/assets/img/bg.jpg';
 import s from './styles.module.scss';
 
 export const MainIntro = () => {
   return (
     <section className={s.main}>
+      <Image
+        className={s.video}
+        src={bgImage}
+        alt={'Команда'}
+        width={1000}
+        height={1000}
+      />
       <video autoPlay muted playsInline loop className={s.video}>
         <source src="/team.mp4" type="video/mp4" />
       </video>
