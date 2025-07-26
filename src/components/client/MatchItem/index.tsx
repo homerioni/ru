@@ -3,8 +3,8 @@
 import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
 import { MY_CLUB_ID, SIZES } from '@/constants';
 import { TTeamStats } from '@/services/matches';
-import s from './styles.module.scss';
 import Link from 'next/link';
+import s from './styles.module.scss';
 
 type TMatchItemProps = {
   id: number;
