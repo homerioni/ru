@@ -77,23 +77,28 @@ export const GamesTable = ({
             style={{ order: i === 0 ? '1' : '' }}
           >
             {i !== 0 && <h3 className={s.roundTitle}>Тур {i}</h3>}
-            {round.map((match) => {
-              const matchDate = getMatchDate(match.date);
+            {round
+              .sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              )
+              .map((match) => {
+                const matchDate = getMatchDate(match.date);
 
-              return (
-                <MatchItem
-                  key={match.id}
-                  id={match.id}
-                  clubs={[match.homeClub, match.awayClub]}
-                  type={name}
-                  date={`${matchDate.day}, ${matchDate.time}`}
-                  score={match.score}
-                  players={match.players.sort(
-                    (a, b) => a.player.number - b.player.number
-                  )}
-                />
-              );
-            })}
+                return (
+                  <MatchItem
+                    key={match.id}
+                    id={match.id}
+                    clubs={[match.homeClub, match.awayClub]}
+                    type={name}
+                    date={`${matchDate.day}, ${matchDate.time}`}
+                    score={match.score}
+                    players={match.players.sort(
+                      (a, b) => a.player.number - b.player.number
+                    )}
+                  />
+                );
+              })}
           </div>
         ))}
       </div>
