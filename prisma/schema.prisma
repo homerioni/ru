@@ -86,7 +86,7 @@ model Player {
   photo    String
   position String
   number   Int
-  isShow   Boolean @default(true)
+  isShow   Boolean
 
   playedIn MatchPlayer[]
 

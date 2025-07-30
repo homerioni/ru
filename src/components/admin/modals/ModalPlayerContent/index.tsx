@@ -107,7 +107,7 @@ export const ModalPlayerContent = ({
               />
             </Input.Wrapper>
           </Grid.Col>
-          <Grid.Col span={{ base: 3, sm: 2 }}>
+          <Grid.Col span={{ base: 6, sm: 3 }}>
             <Input.Wrapper label="Показывать?">
               <Flex align="center" h={36}>
                 <Switch
