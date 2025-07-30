@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
-import { Grid, Input, Text } from '@mantine/core';
+import { Flex, Grid, Input, Switch, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { Player } from '@prisma/client';
 import { IconPhoto } from '@tabler/icons-react';
@@ -16,7 +16,9 @@ type TModalPlayerContentProps = {
   refetch: () => void;
 };
 
-type TForm = Omit<Player, 'createdAt' | 'updateAt' | 'id'>;
+type TForm = Omit<Player, 'createdAt' | 'updateAt' | 'id'> & {
+  isShow: boolean;
+};
 
 export const ModalPlayerContent = ({
   data,
@@ -103,6 +105,17 @@ export const ModalPlayerContent = ({
                 step={1}
                 {...register('number', { required: true })}
               />
+            </Input.Wrapper>
+          </Grid.Col>
+          <Grid.Col span={{ base: 3, sm: 2 }}>
+            <Input.Wrapper label="Показывать?">
+              <Flex align="center" h={36}>
+                <Switch
+                  {...register('isShow')}
+                  color="violet"
+                  defaultChecked={data?.isShow ?? false}
+                />
+              </Flex>
             </Input.Wrapper>
           </Grid.Col>
         </Grid>

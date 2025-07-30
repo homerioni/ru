@@ -81,11 +81,12 @@ model Club {
 }
 
 model Player {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   name     String
   photo    String
   position String
   number   Int
+  isShow   Boolean @default(true)
 
   playedIn MatchPlayer[]
 

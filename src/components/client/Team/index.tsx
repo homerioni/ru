@@ -10,6 +10,7 @@ export const Team = ({ players }: TeamProps) => {
   return (
     <section className={`${s.main} container`}>
       {players
+        .filter((player) => player.isShow)
         .sort((a, b) => b.playedIn.length - a.playedIn.length)
         .map((player) => {
           const matches = player.playedIn.length;
