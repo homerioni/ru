@@ -39,6 +39,7 @@ export const TeamSlider = ({ players }: TeamSliderProps) => {
         }}
       >
         {players
+          .filter((player) => player.isShow)
           .sort(() => Math.random() - 0.5)
           .map((player) => (
             <SwiperSlide key={player.id}>
