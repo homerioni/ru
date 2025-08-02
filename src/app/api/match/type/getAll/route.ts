@@ -16,6 +16,9 @@ export async function GET() {
         },
       },
     },
+    orderBy: {
+      id: 'asc',
+    },
   });
 
   return NextResponse.json(types);
