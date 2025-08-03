@@ -3,16 +3,26 @@
 import Image from 'next/image';
 import { MatchItem } from '@/components/client/MatchItem';
 import { getMatchDate } from '@/utils/getMatchDate';
-import s from './styles.module.scss';
 import { ClubStats, TMatchNotType } from '@/app/(client)/tables/page';
+import { useState } from 'react';
+import { GamesTableTabs } from '@/components/client/GamesTableTabs';
+import s from './styles.module.scss';
 
 type TGamesTableProps = {
-  matches?: TMatchNotType[][];
+  matches?: {
+    played: TMatchNotType[][];
+    future: TMatchNotType[][];
+  };
   table?: ClubStats[];
   title: string;
   name: string;
   isLeague: boolean;
 };
+
+const matchesTabs = [
+  { id: 0, name: 'Сыгранные матчи' },
+  { id: 1, name: 'Будущие матчи' },
+];
 
 export const GamesTable = ({
   matches,
@@ -21,6 +31,10 @@ export const GamesTable = ({
   name,
   isLeague,
 }: TGamesTableProps) => {
+  const [activeTab, setActiveTab] = useState(0);
+
+  const selectedMatches = activeTab === 0 ? matches?.played : matches?.future;
+
   return (
     <section className={`${s.main} container`}>
       <h1 className={s.title}>{title}</h1>
@@ -69,8 +83,14 @@ export const GamesTable = ({
           </table>
         </div>
       )}
+      <GamesTableTabs
+        items={matchesTabs}
+        activeTab={activeTab}
+        setter={(id) => setActiveTab(id)}
+        className={s.tabs}
+      />
       <div className={s.games}>
-        {matches?.map((round, i) => (
+        {selectedMatches?.map((round, i) => (
           <div
             key={Math.random()}
             className={s.round}
@@ -78,9 +98,10 @@ export const GamesTable = ({
           >
             {i !== 0 && <h3 className={s.roundTitle}>Тур {i}</h3>}
             {round
-              .sort(
-                (a, b) =>
-                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              .sort((a, b) =>
+                activeTab === 0
+                  ? new Date(b.date).getTime() - new Date(a.date).getTime()
+                  : new Date(a.date).getTime() - new Date(b.date).getTime()
               )
               .map((match) => {
                 const matchDate = getMatchDate(match.date);

@@ -30,7 +30,10 @@ export type TMatchGroups = {
 } & {
   [id: number]: {
     type: MatchType;
-    matches?: TMatchNotType[][];
+    matches?: {
+      played: TMatchNotType[][];
+      future: TMatchNotType[][];
+    };
     table?: ClubStats[];
   };
 };
@@ -55,25 +58,30 @@ export default async function TablesPage() {
         },
       };
 
-      groupedMatches[type.id].matches = type.matches.reduce<TMatchNotType[][]>(
+      groupedMatches[type.id].matches = type.matches.reduce<{
+        played: TMatchNotType[][];
+        future: TMatchNotType[][];
+      }>(
         (acc, item) => {
+          const matchKey = item.score.length ? 'played' : 'future';
+
           if (item.round) {
-            if (acc[item.round]) {
-              acc[item.round].push(item);
+            if (acc[matchKey][item.round]) {
+              acc[matchKey][item.round].push(item);
             } else {
-              acc[item.round] = [item];
+              acc[matchKey][item.round] = [item];
             }
           } else {
-            if (acc[0]) {
-              acc[0].push(item);
+            if (acc[matchKey][0]) {
+              acc[matchKey][0].push(item);
             } else {
-              acc[0] = [item];
+              acc[matchKey][0] = [item];
             }
           }
 
           return acc;
         },
-        []
+        { played: [], future: [] }
       );
 
       if (type.isLeague) {
