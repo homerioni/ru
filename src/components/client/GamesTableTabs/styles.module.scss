@@ -9,6 +9,7 @@
   white-space: nowrap;
 
   &.active {
+    border-bottom: .4rem solid var(--red);
     font-weight: 700;
     color: var(--red);
   }
@@ -26,10 +27,5 @@
 
   .tab {
     font-size: 3.4rem;
-
-    &.active {
-      font-weight: 700;
-      color: var(--red);
-    }
   }
 }
