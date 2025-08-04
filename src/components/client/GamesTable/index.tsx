@@ -7,6 +7,7 @@ import { ClubStats, TMatchNotType } from '@/app/(client)/tables/page';
 import { useState } from 'react';
 import { GamesTableTabs } from '@/components/client/GamesTableTabs';
 import s from './styles.module.scss';
+import { useSearchParams } from 'next/navigation';
 
 type TGamesTableProps = {
   matches?: {
@@ -31,7 +32,10 @@ export const GamesTable = ({
   name,
   isLeague,
 }: TGamesTableProps) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const searchParams = useSearchParams();
+  const defaultId = searchParams.get('tabId') ?? 0;
+
+  const [activeTab, setActiveTab] = useState(+defaultId);
 
   const selectedMatches = activeTab === 0 ? matches?.played : matches?.future;
 
