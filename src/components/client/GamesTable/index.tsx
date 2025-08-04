@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { MatchItem } from '@/components/client/MatchItem';
 import { getMatchDate } from '@/utils/getMatchDate';
 import { ClubStats, TMatchNotType } from '@/app/(client)/tables/page';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GamesTableTabs } from '@/components/client/GamesTableTabs';
 import s from './styles.module.scss';
 import { useSearchParams } from 'next/navigation';
@@ -33,16 +33,11 @@ export const GamesTable = ({
   isLeague,
 }: TGamesTableProps) => {
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
   const defaultId = searchParams.get('tabId') ?? 0;
 
   const [activeTab, setActiveTab] = useState(+defaultId);
 
   const selectedMatches = activeTab === 0 ? matches?.played : matches?.future;
-
-  useEffect(() => {
-    params.set('tabId', String(activeTab));
-  }, [activeTab]);
 
   return (
     <section className={`${s.main} container`}>
