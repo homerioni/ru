@@ -30,7 +30,6 @@ export const adminRoutes = {
   team: `${adminRoute}/team`,
   clubs: `${adminRoute}/clubs`,
   types: `${adminRoute}/types`,
-  bets: `${adminRoute}/bets`,
 } as const;
 
 export const apiRoutes = {
@@ -45,11 +44,6 @@ export const apiRoutes = {
   player: '/player',
   updatePlayer: '/player/update',
   players: '/players',
-  betEvent: '/bets',
-  betType: '/bets/type',
-  addBet: '/bets/add',
-  completedBetEvent: '/bets/complete',
-  refund: '/bets/refund',
   top: '/top',
   tg: '/tg',
   upload: '/upload',

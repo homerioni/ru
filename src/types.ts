@@ -1,13 +1,9 @@
 import {
-  BetEvent,
-  BetOption,
-  BetType,
   Club,
   Match,
   MatchPlayer,
   MatchType,
   Player,
-  UserBet,
 } from '@prisma/client';
 
 export type TCreateClubData = Omit<Club, 'id' | 'createdAt' | 'updateAt'>;
@@ -26,28 +22,6 @@ export type TGetPlayer = Player & {
 };
 
 export type TCreateMatchType = Omit<MatchType, 'id'>;
-
-export type TCreateBetEvent = Omit<
-  BetEvent,
-  'id' | 'createdAt' | 'updateAt'
-> & {
-  events?: {
-    create?: Omit<BetOption, 'id' | 'betEventId'>[];
-  };
-};
-
-export type TUpdateBetEvent = Omit<BetEvent, 'createdAt' | 'updateAt'> & {
-  events?: {
-    updateMany?: {
-      where: { id: number };
-      data: Partial<Omit<BetOption, 'id' | 'betEventId'>>;
-    }[];
-  };
-};
-
-export type TCreateBetType = Omit<BetType, 'id' | 'createdAt' | 'updateAt'>;
-
-export type TCreateBet = Omit<UserBet, 'id'>;
 
 export type TMessageTg = {
   name: string;

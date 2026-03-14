@@ -27,11 +27,6 @@ export const Navbar = () => {
         href={adminRoutes.types}
         active={pathname === adminRoutes.types}
       />
-      <NavLink
-        label="Ставки"
-        href={adminRoutes.bets}
-        active={pathname === adminRoutes.bets}
-      />
     </>
   );
 };

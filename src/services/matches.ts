@@ -1,8 +1,7 @@
-import { BetEvent, Club, Match, MatchPlayer, MatchType } from '@prisma/client';
+import { Club, Match, MatchPlayer, MatchType } from '@prisma/client';
 import { apiRoutes } from '@/constants';
 import { TCreateMatchData } from '@/types';
 import { axiosInstance } from './index';
-import { TGetBetOption } from '@/services/bets';
 
 type TGetMatchProps = {
   qty?: number;
@@ -42,9 +41,7 @@ export const getMatches = async (params?: TGetMatchProps) => {
 };
 
 export const getMatch = async (id: number | string) => {
-  const { data } = await axiosInstance.get<
-    TGetMatch & { betEvent: BetEvent & { events: TGetBetOption[] } }
-  >(apiRoutes.match, {
+  const { data } = await axiosInstance.get<TGetMatch>(apiRoutes.match, {
     params: { id },
   });
 

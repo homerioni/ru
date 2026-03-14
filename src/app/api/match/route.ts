@@ -16,33 +16,8 @@ export async function GET(req: NextRequest) {
           },
         },
         type: true,
-        betEvent: {
-          include: {
-            events: {
-              include: {
-                bets: {
-                  include: {
-                    user: {
-                      select: {
-                        name: true,
-                        image: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
       },
     });
-
-    if (match?.betEvent) {
-      match.betEvent.events = match.betEvent.events.map((e) => ({
-        ...e,
-        bets: e.bets.sort((a, b) => b.points - a.points),
-      }));
-    }
 
     return NextResponse.json(match);
   } else {
