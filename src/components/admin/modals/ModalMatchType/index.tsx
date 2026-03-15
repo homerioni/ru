@@ -91,7 +91,7 @@ export const ModalMatchType = ({ data, refetch }: TModalMatchTypeProps) => {
           onChange={(_, option) =>
             setValue('type', option.value as TForm['type'])
           }
-          defaultValue={TYPES[0].id}
+          defaultValue={data?.type ?? TYPES[0].id}
         />
       </Grid.Col>
       <Grid.Col span={{ base: 6, sm: 2 }}>

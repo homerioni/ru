@@ -138,7 +138,7 @@ enum MatchTypes {
 
 model MatchType {
   id        Int     @id @default(autoincrement())
-  type      MatchTypes
+  type      MatchTypes @default(any)
   name      String
   fullName  String
   year      Int?
