@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
             },
           },
         },
+        clubs: true,
       },
     });
 
@@ -33,7 +34,12 @@ export async function GET(req: NextRequest) {
       },
     } as const;
 
-    const types = await prisma.matchType.findMany({ where });
+    const types = await prisma.matchType.findMany({
+      where,
+      include: {
+        clubs: true,
+      },
+    });
 
     return NextResponse.json(types);
   }

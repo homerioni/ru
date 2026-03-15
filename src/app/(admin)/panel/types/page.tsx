@@ -12,13 +12,16 @@ import { deleteMatchTypes, getMatchTypes } from '@/services/matchTypes';
 import { ModalMatchType } from '@/components/admin/modals/ModalMatchType';
 
 const columns = [
+  { name: 'Отображается?', width: 60, minWidth: 60 },
   { name: 'Год', width: 60, minWidth: 60 },
   { name: 'Название', width: 100, minWidth: 180 },
   { name: 'Полное название', width: '100%', minWidth: 200 },
 ] as const;
 
 export default function AdminTypesPage() {
-  const [selectedItems, setSelectedItems] = useState<MatchType[]>([]);
+  const [selectedItems, setSelectedItems] = useState<
+    (MatchType & { clubs: { id: number }[] })[]
+  >([]);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['types'],
@@ -27,10 +30,17 @@ export default function AdminTypesPage() {
 
   const matchesList = useMemo(
     () =>
-      data?.map((type) => ({
-        data: type,
-        tableData: [type.year, type.name, type.fullName],
-      })),
+      data
+        ?.map((type) => ({
+          data: type,
+          tableData: [
+            type.isArchive ? 'Нет' : 'Да',
+            type.year,
+            type.name,
+            type.fullName,
+          ],
+        }))
+        .sort((a, b) => +a.data.isArchive - +b.data.isArchive),
     [data]
   );
 
@@ -62,7 +72,15 @@ export default function AdminTypesPage() {
     modals.open({
       title: `Редактирование типа матча`,
       size: 'xl',
-      children: <ModalMatchType data={selectedItems[0]} refetch={refetch} />,
+      children: (
+        <ModalMatchType
+          data={{
+            ...selectedItems[0],
+            clubs: selectedItems[0].clubs.map((club) => String(club.id)),
+          }}
+          refetch={refetch}
+        />
+      ),
     });
     setSelectedItems([]);
   };

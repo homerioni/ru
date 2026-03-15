@@ -15,6 +15,7 @@ export async function GET() {
           },
         },
       },
+      clubs: true,
     },
     orderBy: {
       id: 'asc',

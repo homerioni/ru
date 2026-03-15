@@ -70,6 +70,7 @@ model Club {
   id      Int    @id @default(autoincrement())
   name    String @unique
   logoSrc String
+  tournirs MatchType[]
 
   homeMatches Match[] @relation("HomeClubMatches")
   awayMatches Match[] @relation("AwayClubMatches")
@@ -129,14 +130,20 @@ model MatchPlayer {
   @@unique([matchId, playerId])
 }
 
+enum MatchTypes {
+  cup
+  league
+  any
+}
+
 model MatchType {
   id        Int     @id @default(autoincrement())
+  type      MatchTypes
   name      String
   fullName  String
   year      Int?
   isArchive Boolean @default(false)
-  isLeague  Boolean @default(false)
-  isCup     Boolean @default(false)
 
+  clubs   Club[]
   matches Match[]
 }

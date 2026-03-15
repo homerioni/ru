@@ -5,7 +5,9 @@ import { axiosInstance } from './index';
 import { TTeamStats } from '@/services/matches';
 
 export const getMatchTypes = async () => {
-  const { data } = await axiosInstance.get<MatchType[]>(apiRoutes.matchType);
+  const { data } = await axiosInstance.get<(MatchType & { clubs: Club[] })[]>(
+    apiRoutes.matchType
+  );
 
   return data;
 };
@@ -34,7 +36,7 @@ export const getAllMatchesTypes = async () => {
         awayClub: Club;
         players: TTeamStats[];
       })[];
-    })[]
+    } & { clubs: Club[] })[]
   >(apiRoutes.matchTypeGetAll);
 
   return data;
@@ -52,9 +54,12 @@ export const createMatchType = async (matchType: TCreateMatchType) => {
   const newMatchType = {
     name: matchType.name,
     fullName: matchType.fullName,
+    type: matchType.type,
     year: matchType.year,
+    clubs: {
+      connect: matchType.clubs?.map((clubId) => ({ id: +clubId })),
+    },
     isArchive: matchType.isArchive,
-    isLeague: matchType.isLeague,
   };
 
   const { data } = await axiosInstance.post(apiRoutes.matchType, newMatchType);
@@ -69,9 +74,12 @@ export const updateMatchType = async (
     id: matchType.id,
     name: matchType.name,
     fullName: matchType.fullName,
+    type: matchType.type,
     year: matchType.year,
+    clubs: {
+      set: matchType.clubs?.map((clubId) => ({ id: +clubId })),
+    },
     isArchive: matchType.isArchive,
-    isLeague: matchType.isLeague,
   };
 
   const { data } = await axiosInstance.post(apiRoutes.matchType, newMatchType);

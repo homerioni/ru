@@ -45,6 +45,10 @@ export default async function TablesPage() {
     };
 
     res.forEach((type) => {
+      if (type.isArchive) {
+        return;
+      }
+
       groupedMatches.types.push({ id: type.id, name: type.name });
 
       groupedMatches[type.id] = {
@@ -53,7 +57,7 @@ export default async function TablesPage() {
           name: type.name,
           fullName: type.fullName,
           year: type.year,
-          isLeague: type.isLeague,
+          type: type.type,
           isArchive: type.isArchive,
         },
       };
@@ -84,8 +88,27 @@ export default async function TablesPage() {
         { played: [], future: [] }
       );
 
-      if (type.isLeague) {
+      if (!type.clubs?.length || type.type === 'any') {
+        return;
+      }
+
+      if (type.type === 'league') {
         const clubMap = new Map<number, ClubStats>();
+
+        type.clubs.forEach((club) => {
+          clubMap.set(club.id, {
+            club,
+            matches: [],
+            played: 0,
+            wins: 0,
+            draws: 0,
+            losses: 0,
+            goals: 0,
+            missed: 0,
+            goalDifference: 0,
+            points: 0,
+          });
+        });
 
         for (const match of type.matches) {
           const { homeClub, awayClub, score } = match;
@@ -98,21 +121,6 @@ export default async function TablesPage() {
             [homeClub, true],
             [awayClub, false],
           ] as const) {
-            if (!clubMap.has(club.id)) {
-              clubMap.set(club.id, {
-                club,
-                matches: [],
-                played: 0,
-                wins: 0,
-                draws: 0,
-                losses: 0,
-                goals: 0,
-                missed: 0,
-                goalDifference: 0,
-                points: 0,
-              });
-            }
-
             const stats = clubMap.get(club.id)!;
 
             stats.matches.push(match);

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { GamesTableTabs } from '@/components/client/GamesTableTabs';
 import s from './styles.module.scss';
 import { useSearchParams } from 'next/navigation';
+import { MatchType } from '@prisma/client';
 
 type TGamesTableProps = {
   matches?: {
@@ -17,7 +18,7 @@ type TGamesTableProps = {
   table?: ClubStats[];
   title: string;
   name: string;
-  isLeague: boolean;
+  type: MatchType['type'];
 };
 
 const matchesTabs = [
@@ -30,7 +31,7 @@ export const GamesTable = ({
   table,
   title,
   name,
-  isLeague,
+  type,
 }: TGamesTableProps) => {
   const searchParams = useSearchParams();
   const defaultId = searchParams.get('tabId') ?? 0;
@@ -42,7 +43,7 @@ export const GamesTable = ({
   return (
     <section className={`${s.main} container`}>
       <h1 className={s.title}>{title}</h1>
-      {isLeague && (
+      {type === 'league' && table?.length && (
         <div className={s.tableWrapper}>
           <table className={s.table}>
             <thead>
