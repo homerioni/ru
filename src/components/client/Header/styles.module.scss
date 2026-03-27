@@ -15,7 +15,7 @@
   z-index: 5;
   width: 100%;
   padding: 1rem 1rem 2.4rem 1rem;
-  background-color: rgb(236, 236, 236);
+  background-color: var(--bg-2);
   box-shadow: .4rem 0 1rem rgb(0,0,0,.4);
 
   > img {
@@ -35,17 +35,17 @@
 
   &:before {
     left: 0;
-    border-left: 3.75rem solid rgb(236, 236, 236);
+    border-left: 3.75rem solid var(--bg-2);
     border-right: 3.75rem solid transparent;
-    border-top: 1rem solid rgb(236, 236, 236);
+    border-top: 1rem solid var(--bg-2);
     border-bottom: 1rem solid transparent;
   }
 
   &:after {
     right: 0;
-    border-right: 3.75rem solid rgb(236, 236, 236);
+    border-right: 3.75rem solid var(--bg-2);
     border-left: 3.75rem solid transparent;
-    border-top: 1rem solid rgb(236, 236, 236);
+    border-top: 1rem solid var(--bg-2);
     border-bottom: 1rem solid transparent;
   }
 }
@@ -132,17 +132,21 @@
 
   .logo {
     &:before {
-      border-left: 5rem solid rgb(236, 236, 236);
+      border-left: 5rem solid var(--bg-2);
       border-right: 5rem solid transparent;
-      border-top: 1.5rem solid rgb(236, 236, 236);
+      border-top: 1.5rem solid var(--bg-2);
       border-bottom: 1.5rem solid transparent;
     }
 
     &:after {
-      border-right: 5rem solid rgb(236, 236, 236);
+      border-right: 5rem solid var(--bg-2);
       border-left: 5rem solid transparent;
-      border-top: 1.5rem solid rgb(236, 236, 236);
+      border-top: 1.5rem solid var(--bg-2);
       border-bottom: 1.5rem solid transparent;
+    }
+
+    .otherLogo {
+      padding: 1rem 1rem 0;
     }
   }
 
@@ -154,7 +158,7 @@
     width: 70vw;
     height: 110vh;
     transform: translateX(-100vw);
-    background-color: var(--background);
+    background-color: var(--bg-2);
     transition: transform .3s ease;
 
     &.open {
@@ -210,6 +214,10 @@
     width: 5rem;
     height: 5rem;
     transition: opacity .2s ease;
+
+    &.desktop {
+      display: none;
+    }
 
     > img {
       width: 100%;

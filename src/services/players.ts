@@ -1,16 +1,17 @@
 import { Player } from '@prisma/client';
 import { apiRoutes } from '@/constants';
-import { TCreatePlayerData, TGetPlayer } from '@/types';
+import { TCreatePlayerData, TGetPlayer, TGetPlayers } from '@/types';
 import { axiosInstance } from './index';
 
 type TGetPlayerProps = {
   search?: string;
   qty?: number;
   page?: string | number;
+  clubId?: string;
 };
 
 type TGetPlayersResponse = {
-  players: TGetPlayer[];
+  players: TGetPlayers[];
   totalCount: number;
   activePage: number;
   totalPages: number;
@@ -26,7 +27,7 @@ export const getPlayers = async (params?: TGetPlayerProps) => {
 };
 
 export const getPlayer = async (id: number | string) => {
-  const { data } = await axiosInstance.get<Player>(apiRoutes.player, {
+  const { data } = await axiosInstance.get<TGetPlayer>(apiRoutes.player, {
     params: { id },
   });
 
@@ -50,11 +51,30 @@ export const createPlayer = async (player: TCreatePlayerData) => {
 export const updatePlayer = async (player: Player) => {
   const newData = {
     id: player.id,
-    number: +player.number,
+    number: player.number,
     name: player.name,
     photo: player.photo,
     position: player.position,
     isShow: player.isShow,
+    username: player.username?.startsWith('@')
+      ? player.username.slice(1)
+      : player.username,
+  };
+
+  const { data } = await axiosInstance.post(apiRoutes.updatePlayer, newData);
+
+  return data;
+};
+
+export const updateProfilePlayer = async (player: Player) => {
+  const newData = {
+    id: player.id,
+    photo: player.photo,
+    instagram: player.instagram,
+    telegram: player.telegram,
+    tiktok: player.tiktok,
+    vk: player.vk,
+    youtube: player.youtube,
   };
 
   const { data } = await axiosInstance.post(apiRoutes.updatePlayer, newData);

@@ -13,6 +13,7 @@ type TNextMatchClubProps = {
   name: string;
   namePosition?: NAME_POSITION;
   size?: SIZES;
+  background?: boolean;
 };
 
 export const ClubLogo = ({
@@ -20,10 +21,11 @@ export const ClubLogo = ({
   name,
   namePosition = NAME_POSITION.RIGHT,
   size = SIZES.m,
+  background,
 }: TNextMatchClubProps) => {
   return (
     <div className={`${s.main} ${s[namePosition]} ${s[size]}`}>
-      <div className={s.logo}>
+      <div className={`${s.logo} ${background ? s.bg : ''}`}>
         <Image src={logoSrc} alt={`Логотип ${name}`} width={500} height={500} />
       </div>
       <h2 className={s.name}>{name}</h2>

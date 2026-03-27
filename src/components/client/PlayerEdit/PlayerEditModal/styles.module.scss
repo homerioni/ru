@@ -1,0 +1,77 @@
+.title {
+  margin-bottom: 4rem;
+  font-size: 4rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.photo {
+  width: 100%;
+}
+
+.imageUpload {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 20 / 21;
+  border-radius: 2rem;
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  background-color: rgba(255, 255, 255, .1);
+  overflow: hidden;
+
+  > input {
+    display: none;
+  }
+
+  > img {
+    width: 100%;
+    aspect-ratio: 20 / 21;
+    object-fit: cover;
+  }
+}
+
+.editIcon {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  z-index: 1;
+  width: 8rem;
+  height: 8rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+
+  > img {
+    flex: none;
+  }
+
+  > input {
+    flex: auto;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    border-bottom: 1px solid var(--border-primary);
+    background-color: rgba(255, 255, 255, .1);
+    font-size: 3rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 3rem;
+  margin-top: auto;
+}

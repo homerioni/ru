@@ -1,7 +1,7 @@
 import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
 import { TGetMatch } from '@/services/matches';
 import { getMatchDate } from '@/utils/getMatchDate';
-import { getEndingByAmount } from '@/utils/getEndingByAmount';
+import { MatchTeams } from './MatchTeams';
 import s from './styles.module.scss';
 
 type MatchInfoProps = {
@@ -14,7 +14,11 @@ export const MatchInfo = ({ data }: MatchInfoProps) => {
   return (
     <section className={`${s.main} container`}>
       <div className={s.match}>
-        <ClubLogo logoSrc={data.homeClub.logoSrc} name={data.homeClub.name} />
+        <ClubLogo
+          logoSrc={data.homeClub.logoSrc}
+          name={data.homeClub.name}
+          background
+        />
         <div className={s.infoWrapper}>
           <p className={s.infoTitle}>
             {data.type.name}
@@ -31,36 +35,10 @@ export const MatchInfo = ({ data }: MatchInfoProps) => {
           logoSrc={data.awayClub.logoSrc}
           name={data.awayClub.name}
           namePosition={NAME_POSITION.LEFT}
+          background
         />
       </div>
-      <div className={s.team}>
-        {data.players
-          .sort((a, b) => a.player.number - b.player.number)
-          .map((item) => (
-            <div key={item.id} className={s.teamItem}>
-              <span className={s.number}>{item.player.number}</span>
-              <span className={s.name}>{item.player.name}</span>
-              <span className={s.stats}>
-                {item.goals > 0 && (
-                  <span>
-                    {item.goals}
-                    {getEndingByAmount(item.goals, [' гол', ' гола', ' голов'])}
-                  </span>
-                )}
-                {item.assists > 0 && (
-                  <span>
-                    {item.assists}
-                    {getEndingByAmount(item.assists, [
-                      ' пас',
-                      ' паса',
-                      ' пасов',
-                    ])}
-                  </span>
-                )}
-              </span>
-            </div>
-          ))}
-      </div>
+      <MatchTeams data={data} />
     </section>
   );
 };

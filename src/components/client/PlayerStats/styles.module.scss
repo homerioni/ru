@@ -1,0 +1,42 @@
+.main {
+  width: 100%;
+  padding: 2rem;
+  border-radius: 2rem;
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  backdrop-filter: blur(3px) brightness(1.5);
+  background-color: rgba(255, 255, 255, .05);
+}
+
+.title {
+  margin-bottom: 4rem;
+  font-size: 5rem;
+  text-align: center;
+}
+
+.header, .content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 2rem 1rem;
+  font-size: 3rem;
+  text-align: center;
+
+  > p {
+    border-right: 1px solid var(--border-primary);
+
+    &:first-child {
+      border-left: 1px solid var(--border-primary);
+    }
+  }
+}
+
+.header {
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  color: var(--brand);
+}
+
+.content {
+  border-bottom: 1px solid var(--border-primary);
+  font-family: 'Momo Trust Display', sans-serif;
+}

@@ -1,20 +1,32 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { SliderTitleBox } from '@ui/SliderTitleBox';
 import s from './styles.module.scss';
 import { TeamCard } from '@/components/client/TeamCard';
-import { TGetPlayer } from '@/types';
+import { TGetPlayers } from '@/types';
+import Link from 'next/link';
 
 type TeamSliderProps = {
-  players: TGetPlayer[];
+  players: TGetPlayers[];
+  clubId?: number | string;
 };
 
-export const TeamSlider = ({ players }: TeamSliderProps) => {
+export const TeamSlider = ({ players, clubId }: TeamSliderProps) => {
   const swiperRef = useRef<SwiperType>(null);
+  const [playerList, setPlayerList] = useState(
+    players.filter(
+      (player) =>
+        player.isShow && (player.type === 'player' || player.type === 'team')
+    )
+  );
+
+  useEffect(() => {
+    setPlayerList((prev) => prev.sort(() => Math.random() - 0.5));
+  }, []);
 
   return (
     <section className={`${s.main} container`}>
@@ -38,22 +50,25 @@ export const TeamSlider = ({ players }: TeamSliderProps) => {
           },
         }}
       >
-        {players
-          .filter((player) => player.isShow)
-          .sort(() => Math.random() - 0.5)
-          .map((player) => (
-            <SwiperSlide key={player.id}>
-              <TeamCard
-                small
-                number={player.number}
-                matches={player.playedIn.length}
-                name={player.name}
-                position={player.position}
-                photo={player.photo}
-              />
-            </SwiperSlide>
-          ))}
+        {playerList.map((player) => (
+          <SwiperSlide key={player.id}>
+            <TeamCard
+              small
+              id={player.id}
+              number={player.number}
+              matches={player.playedIn.length}
+              name={player.name}
+              position={player.position}
+              photo={player.photo}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
+      {clubId && (
+        <Link className={s.button} href={`/club/${clubId}/team`}>
+          Смотреть весь состав
+        </Link>
+      )}
     </section>
   );
 };

@@ -1,7 +1,7 @@
-import img from 'src/assets/img/team.jpg';
 import { Team } from '@/components/client/Team';
-import { Intro } from '@/components/client/Intro';
-import { getPlayers } from '@/services';
+import { getPlayers, getTransfers } from '@/services';
+import { getMatchTypes } from '@/services/matchTypes';
+import { MY_CLUB_ID } from '@/constants';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,12 +11,15 @@ export const metadata = {
 };
 
 export default async function TeamPage() {
-  const { players } = await getPlayers();
+  const [players, matchTypes, transfers] = await Promise.all([
+    getPlayers().then((res) => res.players),
+    getMatchTypes(),
+    getTransfers({ clubId: MY_CLUB_ID }).then((res) => res.transfers),
+  ]);
 
   return (
     <>
-      <Intro imgSrc={img.src} alt={'Состав'} title={'Состав нашей команды'} />
-      <Team players={players} />
+      <Team players={players} matchTypes={matchTypes} transfers={transfers} />
     </>
   );
 }

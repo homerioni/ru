@@ -1,40 +1,38 @@
-import { signIn, signOut } from 'next-auth/react';
-import { Button } from '@ui/Button';
+'use client';
+
+import { LoginButton } from '@telegram-auth/react';
+import { signIn } from 'next-auth/react';
+import { UserAvatar } from '@/components/client/UserAvatar';
 import s from './styles.module.scss';
+import { Button } from '@ui/Button';
 
 type LoginBtnProps = {
   status: 'authenticated' | 'loading' | 'unauthenticated';
-  isDesktop?: boolean;
-  isMobile?: boolean;
 };
 
-export const LoginBtn = ({ status, isDesktop, isMobile }: LoginBtnProps) => {
+export const LoginBtn = ({ status }: LoginBtnProps) => {
   if (status === 'loading') {
     return null;
   }
 
   if (status === 'authenticated') {
-    return (
-      <Button
-        className={isDesktop ? s.desktop : ''}
-        variant="secondary"
-        onClick={() => {
-          signOut().then(() => {
-            sessionStorage.removeItem('userId');
-          });
-        }}
-      >
-        Выйти
-      </Button>
-    );
+    return <UserAvatar />;
   }
 
   return (
-    <Button
-      className={isMobile ? s.mobile : ''}
-      onClick={() => signIn('google')}
-    >
-      Войти
-    </Button>
+    <div className={s.main}>
+      <Button className={s.btn}>Войти</Button>
+      <div className={s.login}>
+        <LoginButton
+          buttonSize={'small'}
+          lang={'ru'}
+          showAvatar={false}
+          botUsername="rechutd_bot"
+          onAuthCallback={(data) => {
+            signIn('telegram-login', { callbackUrl: '/' }, data as any);
+          }}
+        />
+      </div>
+    </div>
   );
 };

@@ -33,6 +33,10 @@
     height: 100%;
     object-fit: contain;
   }
+
+  &.bg {
+    backdrop-filter: blur(3px) brightness(1.5);
+  }
 }
 
 .name {

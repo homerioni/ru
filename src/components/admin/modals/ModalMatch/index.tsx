@@ -8,7 +8,6 @@ import { AdminEditModal } from '@/components/admin/modals/AdminEditModal';
 import { PlayerMatchItem } from '@/components/admin/modals/ModalMatch/PlayerMatchItem';
 import { PlayerFormData, TForm, TModalPlayerProps } from './types';
 import { PlayersSkeleton } from '@/components/admin/modals/ModalMatch/PlayersSkeleton';
-import { MY_CLUB_ID } from '@/constants';
 
 export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
   const { register, handleSubmit, setValue, watch } = useForm<TForm>({
@@ -26,8 +25,8 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
       : {},
   });
 
-  const isMyClub =
-    watch('homeClubId') === MY_CLUB_ID || watch('awayClubId') === MY_CLUB_ID;
+  const homeClubId = watch('homeClubId');
+  const awayClubId = watch('awayClubId');
 
   const registerPlayerField = (playerId: number, field: keyof PlayerFormData) =>
     register(`team.p${playerId}.${field}` as Path<TForm>);
@@ -37,10 +36,16 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
     queryFn: () => getClubs(),
   });
 
-  const { data: playersData, isLoading: playersIsLoading } = useQuery({
-    queryKey: ['players'],
-    queryFn: () => getPlayers(),
-    enabled: isMyClub,
+  const { data: homePlayersData, isLoading: homePlayersIsLoading } = useQuery({
+    queryKey: ['homePlayers', homeClubId],
+    queryFn: () => getPlayers({ clubId: `${homeClubId}` }),
+    enabled: !!homeClubId,
+  });
+
+  const { data: awayPlayersData, isLoading: awayPlayersIsLoading } = useQuery({
+    queryKey: ['awayPlayers', awayClubId],
+    queryFn: () => getPlayers({ clubId: `${awayClubId}` }),
+    enabled: !!awayClubId,
   });
 
   const { data: matchTypesData } = useQuery({
@@ -63,18 +68,18 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
       redCards: submitData.redCards,
     };
 
-    const players: PlayerFormData[] | null = isMyClub
-      ? Object.values(submitData.team)
-          .filter((item) => item.playerId)
-          .map(
-            (item) =>
-              item && {
-                playerId: +item.playerId,
-                goals: item.goals ? +item.goals : 0,
-                assists: item.assists ? +item.assists : 0,
-              }
-          )
-      : null;
+    const players: PlayerFormData[] = Object.values(submitData.team)
+      .filter((item) => item.playerId)
+      .map(
+        (item) =>
+          item && {
+            playerId: +item.playerId,
+            goals: item.goals ? +item.goals : 0,
+            assists: item.assists ? +item.assists : 0,
+            playerNumber: +item.playerNumber,
+            club: item.club,
+          }
+      );
 
     if (data) {
       updateMatch({
@@ -86,6 +91,7 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
       createMatch({
         ...match,
         players: players ? { create: players } : undefined,
+        voteStatus: 'init',
       }).then(() => refetch());
     }
 
@@ -225,11 +231,22 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
               />
             </Input.Wrapper>
           </Grid.Col>
-          {playersIsLoading && <PlayersSkeleton />}
-          {isMyClub && playersData && (
+          {homePlayersIsLoading && <PlayersSkeleton />}
+          {homePlayersData && (
             <Grid.Col span={{ base: 12, sm: 12 }}>
               <PlayerMatchItem
-                players={playersData.players}
+                players={homePlayersData.players}
+                homeClubId={watch('homeClubId')}
+                registerPlayerField={registerPlayerField}
+              />
+            </Grid.Col>
+          )}
+          {awayPlayersIsLoading && <PlayersSkeleton />}
+          {awayPlayersData && (
+            <Grid.Col span={{ base: 12, sm: 12 }}>
+              <PlayerMatchItem
+                players={awayPlayersData.players}
+                homeClubId={watch('homeClubId')}
                 registerPlayerField={registerPlayerField}
               />
             </Grid.Col>

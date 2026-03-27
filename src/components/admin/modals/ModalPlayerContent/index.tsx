@@ -1,15 +1,16 @@
 import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
-import { Flex, Grid, Input, Switch, Text } from '@mantine/core';
+import { Flex, Grid, Input, Select, Switch, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Player } from '@prisma/client';
+import { Player, PLAYER_TYPE } from '@prisma/client';
 import { IconPhoto } from '@tabler/icons-react';
 import { getImagePreview } from '@/utils/getImagePreview';
-import { createPlayer, updatePlayer } from '@/services';
+import { createPlayer, getClubs, updatePlayer } from '@/services';
 import { getSrcUploadImage } from '@/utils/getSrcUploadImage';
 import { AdminEditModal } from '@/components/admin/modals/AdminEditModal';
 import s from './styles.module.scss';
+import { useQuery } from '@tanstack/react-query';
 
 type TModalPlayerContentProps = {
   data?: Player;
@@ -20,23 +21,26 @@ type TForm = Omit<Player, 'createdAt' | 'updateAt' | 'id'> & {
   isShow: boolean;
 };
 
+const playerTypes: PLAYER_TYPE[] = ['player', 'old_player', 'team'];
+
 export const ModalPlayerContent = ({
   data,
   refetch,
 }: TModalPlayerContentProps) => {
-  const { register, handleSubmit } = useForm<TForm>({
+  const { register, handleSubmit, setValue } = useForm<TForm>({
     defaultValues: data ?? {},
   });
   const [preview, setPreview] = useState<string | null>(data?.photo || null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { data: clubsData } = useQuery({
+    queryKey: ['clubs'],
+    queryFn: () => getClubs(),
+  });
+
   const onSubmit: SubmitHandler<TForm> = async (player) => {
     const imageFile = fileInputRef.current?.files?.[0];
-
-    if (!imageFile && !data?.photo) {
-      return;
-    }
 
     const photo = await getSrcUploadImage(imageFile, setIsUploading);
 
@@ -44,12 +48,15 @@ export const ModalPlayerContent = ({
       updatePlayer({
         ...data,
         ...player,
-        photo: photo ?? data.photo,
+        photo: photo,
+        number: player.number ? +player.number : null,
       }).then(() => refetch());
     } else {
-      createPlayer({ ...player, photo: photo!, number: +player.number }).then(
-        () => refetch()
-      );
+      createPlayer({
+        ...player,
+        photo: photo,
+        number: player.number ? +player.number : null,
+      }).then(() => refetch());
     }
 
     modals.closeAll();
@@ -63,7 +70,7 @@ export const ModalPlayerContent = ({
     >
       <Grid.Col span={{ base: 12, sm: 3 }}>
         <Text fw={500} fz="sm" lh={1.7} display="block">
-          Фото *
+          Фото
         </Text>
         <label className={`${s.imageUpload} ${preview ? s.active : ''}`}>
           <input
@@ -97,13 +104,49 @@ export const ModalPlayerContent = ({
               />
             </Input.Wrapper>
           </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 3 }}>
-            <Input.Wrapper label="Номер игрока" withAsterisk>
+          <Grid.Col span={{ base: 12, sm: 4 }}>
+            {clubsData && (
+              <Select
+                data={clubsData.clubs.map((item) => ({
+                  value: String(item.id),
+                  label: item.name,
+                }))}
+                label="Команда"
+                withAsterisk
+                placeholder="Команда"
+                maxDropdownHeight={200}
+                searchable
+                allowDeselect={false}
+                {...register('clubId', { required: true })}
+                onChange={(_, option) => setValue('clubId', +option.value)}
+                defaultValue={data ? String(data?.clubId) : undefined}
+              />
+            )}
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, sm: 4 }}>
+            <Select
+              data={playerTypes.map((type) => ({
+                value: type,
+                label: type,
+              }))}
+              label="Тип"
+              withAsterisk
+              maxDropdownHeight={200}
+              allowDeselect={false}
+              {...register('type', { required: true })}
+              onChange={(_, option) =>
+                setValue('type', option.value as PLAYER_TYPE)
+              }
+              defaultValue={data?.type ?? playerTypes[0]}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, sm: 4 }}>
+            <Input.Wrapper label="Номер игрока">
               <Input
                 placeholder="Номер"
                 type="number"
                 step={1}
-                {...register('number', { required: true })}
+                {...register('number')}
               />
             </Input.Wrapper>
           </Grid.Col>
@@ -113,7 +156,7 @@ export const ModalPlayerContent = ({
                 <Switch
                   {...register('isShow')}
                   color="violet"
-                  defaultChecked={data?.isShow ?? false}
+                  defaultChecked={data?.isShow ?? true}
                 />
               </Flex>
             </Input.Wrapper>

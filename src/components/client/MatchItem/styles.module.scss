@@ -7,9 +7,9 @@
   width: 100%;
   padding: 3rem;
   border-radius: 1rem;
-  border-left: 1px solid rgba(0, 0, 0, 0.15);
-  border-right: 1px solid rgba(0, 0, 0, 0.15);
-  background: linear-gradient(to left, #EAEAEAB2 0%, transparent 40%, transparent 60%, #EAEAEAB2 100%);
+  border-left: 1px solid var(--border-primary);
+  border-right: 1px solid var(--border-primary);
+  backdrop-filter: blur(5px) brightness(1.6);
 
   &.active {
     z-index: 2;
@@ -66,7 +66,7 @@
   padding-top: .4rem;
   border-radius: .4rem;
   background-color: var(--red);
-  color: var(--background);
+  color: var(--bg);
 }
 
 .name {
@@ -109,13 +109,41 @@
   transition: transform .2s ease;
 }
 
+.result {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 2rem;
+
+  &:before {
+    content: '';
+    display: block;
+    width: 1.4rem;
+    height: 1.4rem;
+    transform: translateY(.1rem);
+    background-color: rgb(150,150,150);
+  }
+
+  &.win {
+    &:before {
+      background-color: rgb(42, 182, 13);
+    }
+  }
+
+  &.lose {
+    &:before {
+      background-color: var(--red);
+    }
+  }
+}
+
 @media (max-width: 48em) {
   .main {
     width: 100%;
     grid-template-rows: 35rem auto;
     grid-template-columns: auto 1fr auto;
-    padding: 2rem 2rem 4rem 2rem;
-    border-radius: 1rem;
+    padding: 3rem 2rem;
+    border-radius: 2rem;
   }
 
   .infoBox {
@@ -131,7 +159,6 @@
     display: flex;
     justify-content: center;
     width: 1px;
-    margin-top: 2rem;
     white-space: nowrap;
     font-weight: 700;
     font-size: 3.6rem;
@@ -146,7 +173,6 @@
     display: flex;
     justify-content: center;
     width: 1px;
-    margin-bottom: 3rem;
     white-space: nowrap;
     font-size: 3.6rem;
     color: var(--gray);
@@ -171,7 +197,7 @@
     padding-top: .6rem;
     border-radius: .6rem;
     background-color: var(--red);
-    color: var(--background);
+    color: var(--bg);
   }
 
   .name {
@@ -194,5 +220,18 @@
     border-bottom: .6rem solid black;
     border-radius: .4rem;
     transform: translate(1.4rem, -.4rem) rotate(45deg);
+  }
+
+  .result {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 2.8rem;
+
+    &:before {
+      width: 2rem;
+      height: 2rem;
+      transform: translateY(.2rem);
+    }
   }
 }

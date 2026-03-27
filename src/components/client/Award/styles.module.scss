@@ -1,0 +1,50 @@
+.award {
+  position: relative;
+  width: fit-content;
+
+  &.active {
+    .awardInfo {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &:hover, &:focus, &:active {
+    z-index: 1;
+
+    .awardInfo {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.awardImg {
+  width: 8rem;
+  height: 8rem;
+  object-fit: contain;
+}
+
+.awardInfo {
+  position: fixed;
+  left: 0;
+  right: 2rem;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  width: max-content;
+  padding: 2rem 3rem;
+  margin: 0 auto;
+  border-radius: 2rem;
+  transform: translateY(-50%);
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  backdrop-filter: blur(5px) brightness(2);
+  background-color: rgba(0, 0, 0, .75);
+  font-size: 3rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .15s ease-in-out;
+}

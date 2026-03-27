@@ -5,6 +5,10 @@
   margin: 0 auto;
 }
 
+:global(.dark-theme .ymaps-2-1-79-ground-pane) {
+  filter: invert(100%) hue-rotate(180deg) contrast(90%);
+}
+
 @media (max-width: 48em) {
   .main {
     height: 60vh;

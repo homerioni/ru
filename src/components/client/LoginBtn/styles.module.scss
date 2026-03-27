@@ -1,9 +1,14 @@
+
 @media (max-width: 48em) {
-  .desktop {
-    display: none;
+  .main {
+    position: relative;
   }
 
-  .mobile {
-    display: none;
+  .login {
+    position: absolute;
+    right: -5rem;
+    top: 1rem;
+    transform: scaleY(2) scaleX(.7);
+    opacity: 0;
   }
 }

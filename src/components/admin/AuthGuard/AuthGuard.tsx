@@ -1,22 +1,43 @@
-import { useEffect } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { LoginButton } from '@telegram-auth/react';
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const { status, data } = useSession();
 
+  // Проверяем, что у пользователя роль ADMIN
   const isAdmin = data?.user?.role === 'ADMIN';
-
-  const isUnauthenticated = status === 'unauthenticated';
 
   const isLoading = status === 'loading' || status === 'unauthenticated';
 
-  useEffect(() => {
-    if (isUnauthenticated) {
-      signIn('google');
-    } else if (!isLoading && !isAdmin) {
-      signOut().then(() => signIn('google'));
-    }
-  }, [isUnauthenticated, isAdmin, isLoading]);
+  if (status === 'unauthenticated') {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100vw',
+          height: '100vh',
+        }}
+      >
+        <LoginButton
+          lang="ru"
+          botUsername="rechutd_bot"
+          onAuthCallback={(authData) => {
+            signIn(
+              'telegram-login',
+              { callbackUrl: '/panel' },
+              authData as any
+            );
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (data?.user && !isAdmin) {
+    signOut();
+  }
 
   return (
     <>

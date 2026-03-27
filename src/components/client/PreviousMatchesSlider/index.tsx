@@ -8,13 +8,17 @@ import s from './styles.module.scss';
 import { SliderTitleBox } from '@ui/SliderTitleBox';
 import { getMatchDate } from '@/utils/getMatchDate';
 import { TGetMatch } from '@/services/matches';
+import Link from 'next/link';
+import { MY_CLUB_ID } from '@/constants';
 
 type PreviousMatchesSliderProps = {
   matches: TGetMatch[];
+  clubId: number;
 };
 
 export const PreviousMatchesSlider = ({
   matches,
+  clubId,
 }: PreviousMatchesSliderProps) => {
   const swiperRef = useRef<SwiperType>(null);
 
@@ -40,6 +44,7 @@ export const PreviousMatchesSlider = ({
             <SwiperSlide key={match.id}>
               <MatchItem
                 id={match.id}
+                myClubId={clubId}
                 clubs={[match.homeClub, match.awayClub]}
                 type={match.type.name}
                 score={match.score}
@@ -49,6 +54,11 @@ export const PreviousMatchesSlider = ({
           );
         })}
       </Swiper>
+      {clubId !== MY_CLUB_ID && (
+        <Link className={s.button} href={`/club/${clubId}/matches`}>
+          Смотреть все матчи
+        </Link>
+      )}
     </section>
   );
 };

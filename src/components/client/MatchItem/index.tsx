@@ -1,13 +1,12 @@
-'use client';
-
-import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
-import { MY_CLUB_ID, SIZES } from '@/constants';
-import { TTeamStats } from '@/services/matches';
 import Link from 'next/link';
+import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
+import { SIZES } from '@/constants';
+import { TTeamStats } from '@/services/matches';
 import s from './styles.module.scss';
 
 type TMatchItemProps = {
   id: number;
+  myClubId: number;
   clubs: {
     id: number;
     logoSrc: string;
@@ -19,35 +18,40 @@ type TMatchItemProps = {
   players?: TTeamStats[];
 };
 
-const MatchItemWrapper = ({
-  id,
-  isMyClub,
-  children,
-}: {
-  id: number;
-  isMyClub: boolean;
-  children: React.ReactNode;
-}) => {
-  return isMyClub ? (
-    <Link href={`/match/${id}`} className={s.main}>
-      {children}
-    </Link>
-  ) : (
-    <div className={s.main}>{children}</div>
-  );
-};
-
 export const MatchItem = ({
   id,
+  myClubId,
   clubs,
   date,
   score,
   type,
 }: TMatchItemProps) => {
-  const isMyClub = clubs[0].id === MY_CLUB_ID || clubs[1].id === MY_CLUB_ID;
+  const getResultContent = () => {
+    let result = score[0] - score[1];
+
+    if (clubs[1].id !== myClubId && clubs[0].id !== myClubId) {
+      return;
+    }
+
+    if (result === 0) {
+      return {
+        text: 'Ничья',
+      };
+    }
+
+    if (clubs[0].id !== myClubId) {
+      result = -1 * result;
+    }
+
+    return result > 0
+      ? { text: 'Победа', className: s.win }
+      : { text: 'Поражение', className: s.lose };
+  };
+
+  const result = getResultContent();
 
   return (
-    <MatchItemWrapper id={id} isMyClub={isMyClub}>
+    <Link href={`/match/${id}`} className={s.main}>
       <ClubLogo
         logoSrc={clubs[0].logoSrc}
         name={clubs[0].name}
@@ -57,7 +61,12 @@ export const MatchItem = ({
       <div className={s.infoBox}>
         <p className={s.infoTitle}>{type}</p>
         <p className={s.score}>
-          {score.length ? `${score[0]} - ${score[1]}` : 'VS'}
+          <span>{score.length ? `${score[0]} - ${score[1]}` : 'VS'}</span>
+          {!!score.length && result && (
+            <span className={`${s.result} ${result.className}`}>
+              {result.text}
+            </span>
+          )}
         </p>
         <p className={s.date}>{date}</p>
       </div>
@@ -67,12 +76,6 @@ export const MatchItem = ({
         namePosition={NAME_POSITION.BOTTOM}
         size={SIZES.s}
       />
-      {isMyClub && (
-        <div className={s.showBtn}>
-          <span>Подробнее о матче</span>
-          <span className={s.btnArrow}></span>
-        </div>
-      )}
-    </MatchItemWrapper>
+    </Link>
   );
 };

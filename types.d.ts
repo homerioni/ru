@@ -9,20 +9,23 @@ declare module '*.mp4' {
   const src: string;
   export default src;
 }
+
 declare module 'next-auth' {
   interface User {
     role?: ROLE;
-    points?: number;
+    username?: string;
+    clubAdminId: number | null;
   }
 
   interface Session {
-    user?: {
-      id?: string;
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-      role?: ROLE;
-      points?: number;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      image: string;
+      role: ROLE;
+      clubAdminId: number | null;
+      username: string;
     };
   }
 }

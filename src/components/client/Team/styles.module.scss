@@ -1,14 +1,36 @@
 .main {
+  margin: 10rem auto;
+}
+
+.list {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 4rem;
-  margin: 10rem auto;
+  gap: 3rem;
+}
+
+.tabs {
+  margin-bottom: 6rem;
+}
+
+.select {
+  margin-bottom: 3rem;
 }
 
 @media (max-width: 48em) {
   .main {
+    margin: 15rem auto;
+  }
+
+  .list {
     grid-template-columns: 1fr;
     gap: 6rem;
-    margin: 15rem auto;
+  }
+
+  .tabs {
+    margin-bottom: 4rem;
+  }
+
+  .select {
+    margin-bottom: 4rem;
   }
 }

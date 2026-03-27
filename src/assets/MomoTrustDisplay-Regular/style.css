@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Momo Trust Display';
+    src: local('Momo Trust Display Regular'), local('Momo-Trust-Display-Regular'),
+        url('MomoTrustDisplay-Regular.woff2') format('woff2'),
+        url('MomoTrustDisplay-Regular.woff') format('woff'),
+        url('MomoTrustDisplay-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }

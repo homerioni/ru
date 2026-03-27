@@ -1,4 +1,11 @@
-import { Club, Match, MatchPlayer, MatchType } from '@prisma/client';
+import {
+  Club,
+  Match,
+  MatchPlayer,
+  MatchType,
+  MatchVote,
+  Player,
+} from '@prisma/client';
 import { apiRoutes } from '@/constants';
 import { TCreateMatchData } from '@/types';
 import { axiosInstance } from './index';
@@ -11,10 +18,9 @@ type TGetMatchProps = {
 };
 
 export type TTeamStats = MatchPlayer & {
-  player: {
-    name: string;
-    number: number;
-  };
+  player: Player;
+  playerNumber?: number;
+  club: 'homeClub' | 'awayClub';
 };
 
 export type TGetMatch = Match & {
@@ -22,6 +28,7 @@ export type TGetMatch = Match & {
   homeClub: Club;
   players: TTeamStats[];
   type: MatchType;
+  votes: MatchVote[];
 };
 
 type TGetMatchesResponse = {
@@ -48,9 +55,12 @@ export const getMatch = async (id: number | string) => {
   return data;
 };
 
-export const getNextMatch = async () => {
+export const getNextMatch = async (id?: string) => {
   const { data } = await axiosInstance.get<Omit<TGetMatch, 'players'>>(
-    apiRoutes.nextMatch
+    apiRoutes.nextMatch,
+    {
+      params: { id },
+    }
   );
 
   return data;

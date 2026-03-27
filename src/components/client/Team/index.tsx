@@ -1,37 +1,114 @@
+'use client';
+
+import { MatchType } from '@prisma/client';
 import { TeamCard } from '@/components/client/TeamCard';
-import { TGetPlayer } from '@/types';
+import { TGetPlayers } from '@/types';
+import { Tabs } from '@/components/client/Tabs';
+import { useState } from 'react';
 import s from './styles.module.scss';
+import { Select } from '@ui/Select';
+import { TGetTransfer } from '@/services/transfers';
 
 type TeamProps = {
-  players: TGetPlayer[];
+  players: TGetPlayers[];
+  matchTypes: MatchType[];
+  transfers: TGetTransfer[];
 };
 
-export const Team = ({ players }: TeamProps) => {
+const tabList = [
+  { id: 0, name: 'Команда', type: 'player' },
+  { id: 1, name: 'Представители', type: 'team' },
+  { id: 2, name: 'Бывшие игроки', type: 'old_player' },
+  { id: 3, name: 'Трансферы' },
+];
+
+export const Team = ({ players, matchTypes, transfers }: TeamProps) => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [activeType, setActiveType] = useState('');
+
+  const options = [
+    { value: '', label: 'Все матчи' },
+    ...matchTypes.map((type) => ({
+      value: type.id.toString(),
+      label: `${type.name} ${type.year ?? ''}`,
+    })),
+  ];
+
   return (
     <section className={`${s.main} container`}>
-      {players
-        .filter((player) => player.isShow)
-        .sort((a, b) => b.playedIn.length - a.playedIn.length)
-        .map((player) => {
-          const matches = player.playedIn.length;
-          const [goals, assists] = player.playedIn.reduce(
-            (acc, item) => [acc[0] + item.goals, acc[1] + item.assists],
-            [0, 0]
-          );
+      <Tabs
+        notContainer
+        className={s.tabs}
+        items={tabList}
+        activeTab={activeTab}
+        setter={setActiveTab}
+      />
+      {activeTab !== 3 && (
+        <Select
+          className={s.select}
+          options={options}
+          value={activeType}
+          onChange={(value) => setActiveType(value)}
+        />
+      )}
+      <div className={s.list}>
+        {activeTab !== 3 &&
+          players
+            .filter(
+              (player) =>
+                player.isShow && player.type === tabList[activeTab].type
+            )
+            .map((player) => ({
+              ...player,
+              playedIn: activeType
+                ? player.playedIn.filter(
+                    (item) => item.match.type.id === +activeType
+                  )
+                : player.playedIn,
+            }))
+            .sort((a, b) => {
+              return b.playedIn.length - a.playedIn.length;
+            })
+            .map((player) => {
+              const matches = player.playedIn.length;
+              const [goals, assists] = player.playedIn.reduce(
+                (acc, item) => [acc[0] + item.goals, acc[1] + item.assists],
+                [0, 0]
+              );
 
-          return (
+              return (
+                <TeamCard
+                  key={player.id}
+                  id={player.id}
+                  number={player.number}
+                  photo={player.photo}
+                  name={player.name}
+                  position={player.position}
+                  matches={matches}
+                  goals={goals}
+                  assists={assists}
+                  isTeam={player.type === 'team'}
+                />
+              );
+            })}
+
+        {activeTab === 3 &&
+          transfers.map((transfer) => (
             <TeamCard
-              key={player.id}
-              number={player.number}
-              photo={player.photo}
-              name={player.name}
-              position={player.position}
-              matches={matches}
-              goals={goals}
-              assists={assists}
+              key={transfer.id}
+              id={transfer.player.id}
+              name={transfer.player.name}
+              position={transfer.player.position}
+              number={transfer.player.number}
+              photo={transfer.player.photo}
+              transfer={{
+                from: transfer.fromClub,
+                to: transfer.toClub,
+                date: transfer.date,
+              }}
             />
-          );
-        })}
+          ))}
+      </div>
     </section>
   );
 };

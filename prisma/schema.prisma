@@ -48,11 +48,12 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
+  username      String?
   image         String?
   accounts      Account[]
   sessions      Session[]
   role          ROLE      @default(USER)
-  points        Int       @default(1000)
+  clubAdminId   Int?
 
   @@map("users")
 }
@@ -67,41 +68,110 @@ model VerificationToken {
 }
 
 model Club {
-  id      Int    @id @default(autoincrement())
-  name    String @unique
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
   logoSrc String
+  isShow  Boolean @default(true)
+
   tournirs MatchType[]
 
   homeMatches Match[] @relation("HomeClubMatches")
   awayMatches Match[] @relation("AwayClubMatches")
+
+  players Player[]
+
+  transfersFrom Transfer[] @relation("TransferFromClub")
+  transfersTo Transfer[] @relation("TransferToClub")
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+enum PLAYER_TYPE {
+  player
+  old_player
+  team
+}
+
+enum AWARD_TYPE {
+  match
+  month
+  year
+}
+
+model Award {
+  id         String @id @default(cuid())
+  type       AWARD_TYPE
+  clubImgSrc String
+  clubName   String
+  matchType  String?
+  matchName  String?
+
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId Int
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }
 
 model Player {
-  id       Int     @id @default(autoincrement())
-  name     String
-  photo    String
-  position String
-  number   Int
-  isShow   Boolean
+  id        Int     @id @default(autoincrement())
+  name      String
+  type      PLAYER_TYPE @default(player)
+  photo     String?
+  position  String
+  number    Int?
+  isShow    Boolean
+  username  String?
+  telegram  String?
+  instagram String?
+  vk        String?
+  tiktok    String?
+  youtube   String?
+
+  club   Club @relation(fields: [clubId], references: [id])
+  clubId Int
 
   playedIn MatchPlayer[]
+
+  transfers Transfer[]
+
+  awards Award[]
 
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }
 
+model MatchVote {
+  id       String @id @default(cuid())
+  username String
+  playerId Int
+
+  match   Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  matchId Int
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+enum VOTE_STATUS {
+  init
+  started
+  closed
+}
+
 model Match {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   date        DateTime
-  score       Int[]    @default([])
+  score       Int[]       @default([])
   round       Int?
-  yellowCards Int?     @default(0)
-  redCards    Int?     @default(0)
+  yellowCards Int?        @default(0)
+  redCards    Int?        @default(0)
+  voteStatus  VOTE_STATUS @default(init)
 
   players MatchPlayer[]
+
+  votes MatchVote[]
 
   type   MatchType @relation(fields: [typeId], references: [id])
   typeId Int
@@ -116,10 +186,17 @@ model Match {
   updateAt  DateTime @updatedAt
 }
 
+enum MatchPlayerClub {
+  homeClub
+  awayClub
+}
+
 model MatchPlayer {
-  id      Int @id @default(autoincrement())
-  goals   Int @default(0)
-  assists Int @default(0)
+  id           Int @id @default(autoincrement())
+  goals        Int @default(0)
+  assists      Int @default(0)
+  playerNumber Int?
+  club         MatchPlayerClub
 
   match   Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
   matchId Int
@@ -146,4 +223,21 @@ model MatchType {
 
   clubs   Club[]
   matches Match[]
+}
+
+model Transfer {
+  id   Int @id @default(autoincrement())
+  date DateTime
+
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId Int
+
+  fromClub   Club? @relation("TransferFromClub", fields: [fromClubId], references: [id])
+  fromClubId Int?
+
+  toClub   Club? @relation("TransferToClub", fields: [toClubId], references: [id])
+  toClubId Int?
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
 }

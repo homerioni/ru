@@ -1,0 +1,41 @@
+.main {
+  margin-top: 16rem;
+  padding: 0 4rem;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.item {
+  height: 100%;
+
+  > a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    height: 100%;
+    padding: 2rem;
+    border-radius: 2rem;
+    border-top: 1px solid var(--border-primary);
+    border-bottom: 1px solid var(--border-primary);
+    backdrop-filter: blur(3px) brightness(1.5);
+    background-color: rgba(255,255,255, .05);
+    font-size: 4rem;
+
+    > img {
+      flex: auto;
+      width: 14rem;
+      object-fit: contain;
+    }
+
+    > h2 {
+      flex: none;
+      margin-top: auto;
+      font-family: "Oswald", sans-serif;
+    }
+  }
+}

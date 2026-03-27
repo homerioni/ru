@@ -5,6 +5,7 @@ export async function GET(req: NextRequest) {
   const search = req.nextUrl.searchParams.get('search') || undefined;
   const qty = req.nextUrl.searchParams.get('qty');
   const page = req.nextUrl.searchParams.get('page');
+  const clubId = req.nextUrl.searchParams.get('clubId');
 
   const takeQty = qty ? +qty : 100;
 
@@ -19,6 +20,7 @@ export async function GET(req: NextRequest) {
       contains: search,
       mode: 'insensitive',
     },
+    clubId: clubId ? +clubId : undefined,
   } as const;
 
   const players = await prisma.player.findMany({
@@ -31,10 +33,20 @@ export async function GET(req: NextRequest) {
     take: takeQty,
     skip: skipQty,
     include: {
+      club: true,
       playedIn: {
         select: {
           goals: true,
           assists: true,
+          match: {
+            select: {
+              type: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -43,7 +55,12 @@ export async function GET(req: NextRequest) {
   const totalCount = await prisma.player.count({ where });
   const totalPages = Math.ceil(totalCount / takeQty);
 
-  return NextResponse.json({ players, totalCount, activePage, totalPages });
+  return NextResponse.json({
+    players,
+    totalCount,
+    activePage,
+    totalPages,
+  });
 }
 
 export async function DELETE(req: NextRequest) {

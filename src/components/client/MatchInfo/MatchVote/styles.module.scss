@@ -1,0 +1,67 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 8rem;
+  padding: 3rem;
+  border-radius: 2rem;
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  backdrop-filter: blur(10px) brightness(1.5);
+}
+
+.title {
+  margin-bottom: 3rem;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.textWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.description {
+  color: var(--text-secondary);
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: .8rem;
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  font-size: 3.6rem;
+  background-color: rgba(0,0,0,.2);
+}
+
+.number {
+  background-color: var(--red-2);
+  color: var(--text-primary);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius: .8rem;
+  width: 7rem;
+  height: 5.4rem;
+  padding-top: .4rem;
+}
+
+.name {}
+
+.button {
+  margin-top: 3rem;
+}
+
+.auth {
+  font-size: 3.4rem;
+  color: var(--text-secondary);
+  text-align: center;
+}

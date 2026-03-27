@@ -2,27 +2,45 @@
 
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { Center, Pagination, Stack, Text } from '@mantine/core';
+import {
+  Center,
+  CloseButton,
+  Flex,
+  Pagination,
+  Select,
+  Stack,
+  Text,
+} from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Player } from '@prisma/client';
+import { Player, PLAYER_TYPE } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { ModalPlayerContent } from 'src/components/admin/modals/ModalPlayerContent';
 import { useDebounce } from '@/hooks/useDebounce';
-import { deletePlayers, getPlayers } from '@/services';
+import { deletePlayers, getClubs, getPlayers } from '@/services';
+import defaultPlayerImg from '@/assets/img/player-default.webp';
 
 const columns = [
   { name: 'Фото', width: '0%' },
   { name: 'Номер', width: '0%' },
+  { name: 'Клуб', width: '0%' },
+  { name: 'Тип', width: '0%' },
   { name: 'Имя', width: 0 },
   { name: 'Позиция', width: 0 },
 ] as const;
 
+const playerTypeName: { [key in PLAYER_TYPE]: string } = {
+  player: 'Игрок',
+  old_player: 'Бывший игрок',
+  team: 'Представитель',
+};
+
 export default function AdminTeamPage() {
   const [selectedItems, setSelectedItems] = useState<Player[]>([]);
 
+  const [clubId, setClubId] = useState<string | null>();
   const [search, setSearch] = useState('');
   const searchDebounce = useDebounce(search, 350);
 
@@ -34,27 +52,42 @@ export default function AdminTeamPage() {
       getPlayers({ qty: 50, search: searchDebounce || undefined, page }),
   });
 
+  const { data: clubsData } = useQuery({
+    queryKey: ['clubs'],
+    queryFn: () => getClubs(),
+  });
+
   const playersList = useMemo(
     () =>
       data?.players
-        .sort((a, b) => a.number - b.number)
+        .filter((player) => !clubId || player.clubId === +clubId)
+        .sort((a, b) => (a.number ?? 9999) - (b.number ?? 9999))
         .map((player) => ({
           data: player,
           tableData: [
             <Image
               key={player.id}
-              src={player.photo}
+              src={player.photo ?? defaultPlayerImg}
               alt=""
               width={64}
               height={64}
               style={{ objectFit: 'cover' }}
             />,
             player.number,
+            <Image
+              key={player.clubId}
+              src={player.club.logoSrc}
+              alt=""
+              width={40}
+              height={40}
+              style={{ objectFit: 'cover' }}
+            />,
+            playerTypeName[player.type],
             player.name,
             player.position,
           ],
         })),
-    [data]
+    [data, clubId]
   );
 
   const onDel = () =>
@@ -100,7 +133,24 @@ export default function AdminTeamPage() {
         onAdd={onAdd}
         onEdit={onEdit}
         onDel={onDel}
-      />
+      >
+        {clubsData && (
+          <Flex align="center" gap={4}>
+            <Select
+              data={clubsData.clubs.map((item) => ({
+                value: String(item.id),
+                label: item.name,
+              }))}
+              placeholder="Команда"
+              maxDropdownHeight={200}
+              allowDeselect={false}
+              onChange={setClubId}
+              value={clubId}
+            />
+            {clubId && <CloseButton onClick={() => setClubId(null)} />}
+          </Flex>
+        )}
+      </ListControlPanel>
       {isLoading && <EditableListSkeleton />}
       {!isLoading && playersList && (
         <EditableList

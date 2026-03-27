@@ -3,6 +3,8 @@ import Head from 'next/head';
 import { Oswald, Rubik } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import '../assets/Circe/stylesheet.css';
+import '../assets/MomoTrustDisplay-Regular/style.css';
+import '../assets/VintageJersey-Regular/style.css';
 
 const oswaldSans = Oswald({
   variable: '--fat-font',
@@ -54,7 +56,9 @@ export default function RootLayout({
         />
         <meta name="twitter:image" content="https://rechutd.ru/logo.png" />
       </Head>
-      <body className={`${oswaldSans.variable} ${rubikFont.variable}`}>
+      <body
+        className={`${oswaldSans.variable} ${rubikFont.variable} dark-theme`}
+      >
         {children}
         <Analytics />
       </body>

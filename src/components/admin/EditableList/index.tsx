@@ -1,11 +1,11 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Center, Checkbox, Table } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { Player, Match, Club, MatchType } from '@prisma/client';
+import { Player, Match, Club, MatchType, Transfer } from '@prisma/client';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import s from './styles.module.scss';
 
-export type TEditableItem = Player | Match | Club | MatchType;
+export type TEditableItem = Player | Match | Club | MatchType | Transfer;
 
 type TEditableListProps = {
   selectedItems: TEditableItem[];
@@ -16,7 +16,7 @@ type TEditableListProps = {
     name: string;
     style?: React.CSSProperties;
   }[];
-  data: { data: TEditableItem; tableData: React.ReactNode[] }[];
+  data: { data: TEditableItem; tableData: React.ReactNode[] | string[] }[];
   stickyHeaderOffset?: { mobile?: number; desktop?: number };
 };
 

@@ -20,7 +20,7 @@ export const getMatchType = async (id: number | string) => {
         awayClub: Club;
         players: TTeamStats[];
       })[];
-    }
+    } & { clubs: Club[] }
   >(apiRoutes.matchType, {
     params: { id },
   });

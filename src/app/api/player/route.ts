@@ -4,7 +4,16 @@ import { prisma } from '../../../../prisma/prisma-client';
 export async function GET(req: NextRequest) {
   const id = req.nextUrl.searchParams.get('id') || '';
 
-  const player = await prisma.player.findUnique({ where: { id: +id } });
+  const player = await prisma.player.findUnique({
+    where: { id: +id },
+    include: {
+      club: true,
+      playedIn: {
+        include: { match: { include: { type: true } } },
+      },
+      transfers: true,
+    },
+  });
 
   return NextResponse.json(player);
 }

@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Image from 'next/image';
 import {
+  Button,
   Center,
   CloseButton,
   Flex,
@@ -16,7 +17,13 @@ import { useQuery } from '@tanstack/react-query';
 import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
-import { deleteMatches, getClubs, getMatches } from '@/services';
+import {
+  closeVote,
+  deleteMatches,
+  getClubs,
+  getMatches,
+  startVote,
+} from '@/services';
 import { TGetMatch } from '@/services/matches';
 import { ModalMatch } from 'src/components/admin/modals/ModalMatch';
 import { getMatchTypes } from '@/services/matchTypes';
@@ -27,7 +34,31 @@ const columns = [
   { name: '', width: '0%' },
   { name: 'Вид матча', width: 200, minWidth: 200 },
   { name: 'Дата', width: 1000, minWidth: 200 },
+  { name: '', width: '0%' },
 ] as const;
+
+const matchesVoteStatus = (
+  id: number,
+  status: string,
+  refetch?: () => void
+) => {
+  switch (status) {
+    case 'init':
+      return {
+        text: 'Начать голосование',
+        onClick: () => startVote(id).then(refetch),
+      };
+    case 'started':
+      return {
+        text: 'Закрыть голосование',
+        onClick: () => closeVote(id).then(refetch),
+      };
+    default:
+      return {
+        text: 'Голосование закончено',
+      };
+  }
+};
 
 export default function AdminMatchesPage() {
   const [selectedItems, setSelectedItems] = useState<TGetMatch[]>([]);
@@ -87,9 +118,20 @@ export default function AdminMatchesPage() {
             hour: '2-digit',
             minute: '2-digit',
           }),
+          <Button
+            key={match.id}
+            color={match.voteStatus === 'started' ? 'red' : undefined}
+            disabled={match.voteStatus === 'closed'}
+            onClick={
+              matchesVoteStatus(match.id, match.voteStatus, () => refetch())
+                .onClick
+            }
+          >
+            {matchesVoteStatus(match.id, match.voteStatus).text}
+          </Button>,
         ],
       })),
-    [data]
+    [data, refetch]
   );
 
   const onDel = () =>

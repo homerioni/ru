@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
           },
         },
         type: true,
+        votes: true,
       },
     });
 
@@ -55,16 +56,10 @@ export async function GET(req: NextRequest) {
         homeClub: true,
         type: true,
         players: {
-          select: {
-            id: true,
-            goals: true,
-            assists: true,
-            playerId: true,
-            matchId: true,
+          include: {
             player: {
-              select: {
-                name: true,
-                number: true,
+              include: {
+                playedIn: true,
               },
             },
           },
@@ -90,6 +85,34 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(match);
   } else {
+    const matchDate = new Date(data.date);
+
+    const startOfDay = new Date(matchDate);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(matchDate);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const existingMatch = await prisma.match.findFirst({
+      where: {
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+        OR: [
+          { homeClubId: data.homeClubId, awayClubId: data.awayClubId },
+          { homeClubId: data.awayClubId, awayClubId: data.homeClubId },
+        ],
+      },
+    });
+
+    if (existingMatch) {
+      return NextResponse.json(
+        { error: 'Матч между этими клубами в этот день уже существует.' },
+        { status: 409 }
+      );
+    }
+
     const match = await prisma.match.create({ data });
 
     return NextResponse.json(match);

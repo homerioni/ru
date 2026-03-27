@@ -20,7 +20,8 @@
     width: 5rem;
     height: 5rem;
     border-radius: 1rem;
-    background-color: #eaeaeab2;
+    border-top: 1px solid var(--border-primary);
+    backdrop-filter: blur(3px) brightness(1.5);
 
     &:before, &:after {
       content: '';
@@ -31,7 +32,7 @@
       height: .2rem;
       border-radius: 1rem;
       transform-origin: 0 0;
-      background-color: black;
+      background-color: var(--fill-primary);
     }
 
     &:before {
@@ -51,7 +52,7 @@
         background-color: var(--red);
 
         &:before, &:after {
-          background-color: var(--background);
+          background-color: var(--bg);
         }
       }
     }

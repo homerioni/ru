@@ -15,6 +15,10 @@ export const ROUTES = {
     name: 'Турниры',
     href: '/tables',
   },
+  clubs: {
+    name: 'Другие команды',
+    href: '/clubs',
+  },
 } as const;
 
 export const LINKS = {
@@ -23,6 +27,7 @@ export const LINKS = {
 } as const;
 
 const adminRoute = '/panel';
+const clubAdminRoute = '/admin';
 
 export const adminRoutes = {
   main: adminRoute,
@@ -30,6 +35,16 @@ export const adminRoutes = {
   team: `${adminRoute}/team`,
   clubs: `${adminRoute}/clubs`,
   types: `${adminRoute}/types`,
+  transfers: `${adminRoute}/transfers`,
+} as const;
+
+export const clubAdminRoutes = {
+  main: clubAdminRoute,
+  games: `${clubAdminRoute}/matches`,
+  team: `${clubAdminRoute}/team`,
+  clubs: `${clubAdminRoute}/clubs`,
+  types: `${clubAdminRoute}/types`,
+  transfers: `${clubAdminRoute}/transfers`,
 } as const;
 
 export const apiRoutes = {
@@ -41,10 +56,13 @@ export const apiRoutes = {
   nextMatches: '/match/allNext',
   matchType: '/match/type',
   matchTypeGetAll: '/match/type/getAll',
+  matchVote: '/match/vote',
   player: '/player',
   updatePlayer: '/player/update',
   players: '/players',
   top: '/top',
   tg: '/tg',
   upload: '/upload',
+  transfers: '/transfers',
+  userPlayer: '/user-player',
 } as const;
