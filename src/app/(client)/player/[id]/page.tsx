@@ -47,6 +47,13 @@ export default async function MatchPage({
         photo={player.photo}
         number={player.number}
         club={player.club}
+        socials={{
+          vk: player.vk,
+          youtube: player.youtube,
+          tiktok: player.tiktok,
+          instagram: player.instagram,
+          telegram: player.telegram,
+        }}
       />
       <AwardList data={player.awards ?? []} />
       <PlayerStatsList playedIn={player.playedIn} />

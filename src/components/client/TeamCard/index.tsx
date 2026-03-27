@@ -32,11 +32,11 @@ type TTeamCardProps = {
   club?: Club;
   className?: string;
   socials?: {
-    telegram?: string;
-    instagram?: string;
-    tiktok?: string;
-    youtube?: string;
-    vk?: string;
+    telegram?: string | null;
+    instagram?: string | null;
+    tiktok?: string | null;
+    youtube?: string | null;
+    vk?: string | null;
   };
 };
 
