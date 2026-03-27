@@ -162,6 +162,10 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+.dark-theme .ymaps-2-1-79-ground-pane {
+    filter: invert(100%) hue-rotate(180deg) contrast(90%);
+}
+
 @media (min-width: 1920px) {
   html {
     font-size: 10px;

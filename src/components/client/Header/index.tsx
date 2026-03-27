@@ -28,8 +28,6 @@ export const HeaderContent = () => {
   const pathname = usePathname();
   const params = useParams();
 
-  console.log('1', data);
-
   const isPlayerPage =
     pathname === '/player' || pathname.startsWith('/player/');
   const isClubPage = pathname.startsWith('/club/');

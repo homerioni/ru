@@ -17,8 +17,6 @@ export default async function MatchesPage({
 }) {
   const { clubId } = await params;
 
-  console.log('clubId', clubId);
-
   const { matches } = await getMatches({ clubId: +clubId });
 
   return (
