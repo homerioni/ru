@@ -168,7 +168,13 @@ export const TeamCardContent = ({
             <div className={s.socials}>
               {socials.telegram && (
                 <Link
-                  href={socials.telegram}
+                  href={
+                    socials.telegram.startsWith('http')
+                      ? socials.telegram
+                      : socials.telegram.startsWith('t.me')
+                        ? `https://${socials.telegram}`
+                        : `https://t.me/${socials.telegram}`
+                  }
                   className={s.link}
                   target={'_blank'}
                 >
@@ -177,7 +183,11 @@ export const TeamCardContent = ({
               )}
               {socials.instagram && (
                 <Link
-                  href={socials.instagram}
+                  href={
+                    socials.instagram.startsWith('http')
+                      ? socials.instagram
+                      : `https://${socials.instagram}`
+                  }
                   className={s.link}
                   target={'_blank'}
                 >
@@ -186,7 +196,11 @@ export const TeamCardContent = ({
               )}
               {socials.tiktok && (
                 <Link
-                  href={socials.tiktok}
+                  href={
+                    socials.tiktok.startsWith('http')
+                      ? socials.tiktok
+                      : `https://${socials.tiktok}`
+                  }
                   className={s.link}
                   target={'_blank'}
                 >
@@ -195,7 +209,11 @@ export const TeamCardContent = ({
               )}
               {socials.youtube && (
                 <Link
-                  href={socials.youtube}
+                  href={
+                    socials.youtube.startsWith('http')
+                      ? socials.youtube
+                      : `https://${socials.youtube}`
+                  }
                   className={s.link}
                   target={'_blank'}
                 >
@@ -203,7 +221,15 @@ export const TeamCardContent = ({
                 </Link>
               )}
               {socials.vk && (
-                <Link href={socials.vk} className={s.link} target={'_blank'}>
+                <Link
+                  href={
+                    socials.vk.startsWith('http')
+                      ? socials.vk
+                      : `https://${socials.vk}`
+                  }
+                  className={s.link}
+                  target={'_blank'}
+                >
                   <VkIcon />
                 </Link>
               )}
