@@ -43,7 +43,12 @@ export const deletePlayers = async (ids: number[]) => {
 };
 
 export const createPlayer = async (player: TCreatePlayerData) => {
-  const { data } = await axiosInstance.post(apiRoutes.player, player);
+  const { data } = await axiosInstance.post(apiRoutes.player, {
+    ...player,
+    username: player.username?.startsWith('@')
+      ? player.username.slice(1)
+      : player.username,
+  });
 
   return data;
 };

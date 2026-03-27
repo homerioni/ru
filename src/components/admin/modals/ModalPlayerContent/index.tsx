@@ -154,6 +154,11 @@ export const ModalPlayerContent = ({
               />
             </Input.Wrapper>
           </Grid.Col>
+          <Grid.Col span={{ base: 12, sm: 4 }}>
+            <Input.Wrapper label="Телеграм владельца">
+              <Input placeholder="telegram" {...register('username')} />
+            </Input.Wrapper>
+          </Grid.Col>
           <Grid.Col span={{ base: 6, sm: 3 }}>
             <Input.Wrapper label="Показывать?">
               <Flex align="center" h={36}>
