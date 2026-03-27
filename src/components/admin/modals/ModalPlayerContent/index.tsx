@@ -21,7 +21,14 @@ type TForm = Omit<Player, 'createdAt' | 'updateAt' | 'id'> & {
   isShow: boolean;
 };
 
-const playerTypes: PLAYER_TYPE[] = ['player', 'old_player', 'team'];
+const playerTypes = [
+  {
+    label: 'Игрок',
+    value: 'player',
+  },
+  { label: 'Бывший игрок', value: 'old_player' },
+  { label: 'Представитель', value: 'team' },
+];
 
 export const ModalPlayerContent = ({
   data,
@@ -48,7 +55,7 @@ export const ModalPlayerContent = ({
       updatePlayer({
         ...data,
         ...player,
-        photo: photo,
+        photo: imageFile ? photo : data.photo,
         number: player.number ? +player.number : null,
       }).then(() => refetch());
     } else {
@@ -125,10 +132,7 @@ export const ModalPlayerContent = ({
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 4 }}>
             <Select
-              data={playerTypes.map((type) => ({
-                value: type,
-                label: type,
-              }))}
+              data={playerTypes}
               label="Тип"
               withAsterisk
               maxDropdownHeight={200}
@@ -137,7 +141,7 @@ export const ModalPlayerContent = ({
               onChange={(_, option) =>
                 setValue('type', option.value as PLAYER_TYPE)
               }
-              defaultValue={data?.type ?? playerTypes[0]}
+              defaultValue={data?.type ?? playerTypes[0].value}
             />
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 4 }}>

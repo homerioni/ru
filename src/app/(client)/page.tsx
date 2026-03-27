@@ -23,7 +23,7 @@ export default async function MainPage() {
           new Date(match.date).getTime() <= dateNow && match.score.length > 1
       );
     }),
-    getPlayers({ clubId: `${MY_CLUB_ID}` }).then((res) => res.players),
+    getPlayers({ clubId: String(MY_CLUB_ID) }).then((res) => res.players),
     getMatchType(2),
   ]);
 
