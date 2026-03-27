@@ -49,7 +49,7 @@ export const GamesTable = ({
 
       if (!acc.has(stats.player.name)) {
         acc.set(stats.player.name, {
-          clubImgSrc: match.homeClub.logoSrc,
+          clubImgSrc: match[stats.club].logoSrc,
           name: stats.player.name,
           qty: stats.goals,
         });
