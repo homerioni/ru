@@ -85,7 +85,7 @@ export const PlayerEditModal = ({
               accept="image/*"
             />
             {preview ? (
-              <Image src={testImage} alt="Preview" width={360} height={360} />
+              <Image src={preview} alt="Preview" width={360} height={360} />
             ) : (
               <IconPhoto size={64} stroke={1} color="var(--text-primary)" />
             )}
