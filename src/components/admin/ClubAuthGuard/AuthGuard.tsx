@@ -29,7 +29,7 @@ export const ClubAuthGuard = ({ children }: { children: React.ReactNode }) => {
             signIn(
               'telegram-login',
               { callbackUrl: clubAdminRoutes.games },
-              authData as any
+              authData as never
             );
           }}
         />

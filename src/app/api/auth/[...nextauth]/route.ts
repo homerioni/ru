@@ -65,8 +65,8 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = (token.id as string) || session.user.email;
         session.user.username = token.username as string;
-        session.user.role = token.role as any;
-        session.user.clubAdminId = token.clubAdminId as any;
+        session.user.role = token.role as never;
+        session.user.clubAdminId = token.clubAdminId as never;
       }
       return session;
     },

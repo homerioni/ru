@@ -27,7 +27,7 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
             signIn(
               'telegram-login',
               { callbackUrl: '/panel' },
-              authData as any
+              authData as never
             );
           }}
         />

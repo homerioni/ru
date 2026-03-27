@@ -20,16 +20,6 @@ const getClubMatchType = (clubId: string) => {
   }
 };
 
-const clubsMatchType = {
-  '4': 2,
-  '5': 2,
-  '6': 2,
-  '7': 8,
-  '9': null,
-  '11': null,
-  '12': 8,
-};
-
 export default async function ClubPage({
   params,
 }: {
