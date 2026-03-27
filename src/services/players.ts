@@ -53,6 +53,7 @@ export const updatePlayer = async (player: Player) => {
     id: player.id,
     number: player.number,
     name: player.name,
+    type: player.type,
     photo: player.photo,
     position: player.position,
     isShow: player.isShow,
