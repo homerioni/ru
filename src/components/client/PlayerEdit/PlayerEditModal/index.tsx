@@ -11,8 +11,6 @@ import { getSrcUploadImage } from '@/utils/getSrcUploadImage';
 import { updateProfilePlayer } from '@/services';
 import { TGetPlayer } from '@/types';
 import { Button } from '@ui/Button';
-
-import testImage from '@/assets/img/bg.jpg';
 import {
   InstagramIcon,
   TelegramIcon,
