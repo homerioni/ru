@@ -11,7 +11,7 @@ import { PlayersSkeleton } from '@/components/admin/modals/ModalMatch/PlayersSke
 import { notifications } from '@mantine/notifications';
 import { useSession } from 'next-auth/react';
 
-export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
+export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
   const { data: userData } = useSession();
 
   const { register, handleSubmit, setValue, watch } = useForm<TForm>({

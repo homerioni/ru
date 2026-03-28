@@ -18,7 +18,7 @@ import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { closeVote, getClubs, getMatches, startVote } from '@/services';
 import { TGetMatch } from '@/services/matches';
-import { ModalMatch } from 'src/components/admin/modals/ModalClubAdminMatch';
+import { ModalClubAdminMatch } from 'src/components/admin/modals/ModalClubAdminMatch';
 import { getMatchTypes } from '@/services/matchTypes';
 import { useSession } from 'next-auth/react';
 
@@ -133,14 +133,16 @@ export default function ClubAdminMatchesPage() {
     modals.open({
       title: 'Новый матч',
       size: 'xl',
-      children: <ModalMatch refetch={refetch} />,
+      children: <ModalClubAdminMatch refetch={refetch} />,
     });
 
   const onEdit = () => {
     modals.open({
       title: `Редактирование матча`,
       size: 'xl',
-      children: <ModalMatch data={selectedItems[0]} refetch={refetch} />,
+      children: (
+        <ModalClubAdminMatch data={selectedItems[0]} refetch={refetch} />
+      ),
     });
     setSelectedItems([]);
   };

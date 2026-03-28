@@ -10,6 +10,7 @@ import {
 } from '@/services';
 import { AdminEditModal } from '@/components/admin/modals/AdminEditModal';
 import { TGetTransfer } from '@/services/transfers';
+import { useSession } from 'next-auth/react';
 
 type TModalTransferProps = {
   data?: TGetTransfer;
@@ -23,7 +24,9 @@ type TForm = {
   date: string;
 };
 
-export const ModalTransfer = ({ data, refetch }: TModalTransferProps) => {
+export const ModalClubTransfer = ({ data, refetch }: TModalTransferProps) => {
+  const { data: userData } = useSession();
+
   const { register, handleSubmit, setValue } = useForm<TForm>({
     defaultValues: data
       ? {
@@ -57,10 +60,13 @@ export const ModalTransfer = ({ data, refetch }: TModalTransferProps) => {
       updateTransfer({
         id: data.id,
         ...transfer,
-        clubAdminId: null,
+        clubAdminId: userData!.user.clubAdminId!,
       }).then(() => refetch());
     } else {
-      createTransfer({ ...transfer, clubAdminId: null }).then(() => refetch());
+      createTransfer({
+        ...transfer,
+        clubAdminId: userData!.user.clubAdminId!,
+      }).then(() => refetch());
     }
 
     modals.closeAll();

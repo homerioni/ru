@@ -6,6 +6,7 @@ type TGetTransfersProps = {
   qty?: number;
   page?: string | number;
   clubId?: number;
+  clubAdminId?: number;
 };
 
 export type TGetTransfer = Transfer & {

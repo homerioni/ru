@@ -8,10 +8,11 @@ import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { deleteTransfers, getTransfers } from '@/services';
-import { ModalTransfer } from '@/components/admin/modals/ModalTransfer';
 import { TGetTransfer } from '@/services/transfers';
 import Image from 'next/image';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
+import { ModalClubTransfer } from '@/components/admin/modals/ModalClubTransfer';
+import { useSession } from 'next-auth/react';
 
 const columns = [
   { name: 'Фото', width: 0 },
@@ -25,9 +26,12 @@ export default function AdminTransfersPage() {
   const [selectedItems, setSelectedItems] = useState<TGetTransfer[]>([]);
   const [page, setPage] = useState(1);
 
+  const { data: userData } = useSession();
+
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['transfers', page],
-    queryFn: () => getTransfers({ qty: 50, page }),
+    queryFn: () =>
+      getTransfers({ qty: 50, page, clubAdminId: userData!.user.clubAdminId! }),
   });
 
   const transfersList = useMemo(
@@ -71,14 +75,14 @@ export default function AdminTransfersPage() {
     modals.open({
       title: 'Новый трансфер',
       size: 'xl',
-      children: <ModalTransfer refetch={refetch} />,
+      children: <ModalClubTransfer refetch={refetch} />,
     });
 
   const onEdit = () => {
     modals.open({
       title: `Редактирование трансфера`,
       size: 'xl',
-      children: <ModalTransfer data={selectedItems[0]} refetch={refetch} />,
+      children: <ModalClubTransfer data={selectedItems[0]} refetch={refetch} />,
     });
     setSelectedItems([]);
   };
