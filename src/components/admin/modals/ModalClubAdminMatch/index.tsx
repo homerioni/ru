@@ -166,10 +166,12 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
           <Grid.Col span={{ base: 8, sm: 4 }}>
             {clubsData && (
               <Select
-                data={clubsData.clubs.map((item) => ({
-                  value: String(item.id),
-                  label: item.name,
-                }))}
+                data={clubsData.clubs
+                  .sort((a) => (a.id === userData!.user.clubAdminId! ? 1 : -1))
+                  .map((item) => ({
+                    value: String(item.id),
+                    label: item.name,
+                  }))}
                 label="Команда"
                 withAsterisk
                 placeholder="Команда"
