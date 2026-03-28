@@ -50,13 +50,13 @@ export const UserAvatar = () => {
       </div>
       <div className={`${s.list} ${isOpen ? s.active : ''}`}>
         {data.user.clubAdminId && (
-          <Link
+          <a
             href={clubAdminRoutes.games}
             className={s.item}
             onClick={() => setIsOpen(false)}
           >
             Панель управления клубом
-          </Link>
+          </a>
         )}
         {player && (
           <Link
