@@ -184,7 +184,7 @@ export default function ClubAdminMatchesPage() {
           }
           columns={columns}
           data={matchesList}
-          stickyHeaderOffset={{ mobile: 250 }}
+          stickyHeaderOffset={{ mobile: 205 }}
         />
       )}
       {data?.totalPages && data?.totalPages > 1 && (

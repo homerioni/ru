@@ -73,6 +73,7 @@ export default function ClubAdminClubsPage() {
           }
           columns={columns}
           data={[club]}
+          stickyHeaderOffset={{ mobile: 100 }}
         />
       )}
     </Stack>
