@@ -43,6 +43,7 @@
 }
 
 .item {
+  display: block;
   padding: 1.6rem 3rem;
 
   &:not(:last-child) {
@@ -67,6 +68,7 @@
   }
 
   .item {
+    display: block;
     padding: 2.4rem 3.4rem;
   }
 }

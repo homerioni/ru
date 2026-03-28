@@ -5,13 +5,11 @@ import { signOut, useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
 import { getUserPlayer } from '@/services/userPlayer';
 import { Player } from '@prisma/client';
-import { useRouter } from 'next/navigation';
 import { clubAdminRoutes } from '@/constants/routes';
+import Link from 'next/link';
 
 export const UserAvatar = () => {
   const { data } = useSession();
-  const router = useRouter();
-
   const [player, setPlayer] = useState<Player>();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,26 +50,22 @@ export const UserAvatar = () => {
       </div>
       <div className={`${s.list} ${isOpen ? s.active : ''}`}>
         {data.user.clubAdminId && (
-          <div
+          <Link
+            href={clubAdminRoutes.games}
             className={s.item}
-            onClick={() => {
-              router.push(clubAdminRoutes.games);
-              setIsOpen(false);
-            }}
+            onClick={() => setIsOpen(false)}
           >
             Панель управления клубом
-          </div>
+          </Link>
         )}
         {player && (
-          <div
+          <Link
             className={s.item}
-            onClick={() => {
-              router.push(`/player/${player.id}`);
-              setIsOpen(false);
-            }}
+            href={`/player/${player.id}`}
+            onClick={() => setIsOpen(false)}
           >
             Мой профиль
-          </div>
+          </Link>
         )}
         <div className={s.item} onClick={() => signOut()}>
           Выйти
