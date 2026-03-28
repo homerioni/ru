@@ -14,6 +14,7 @@ import { deletePlayers, getPlayers } from '@/services';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
 import { useSession } from 'next-auth/react';
 import { ModalClubPlayerContent } from '@/components/admin/modals/ModalClubPlayerContent';
+import { playerSortEntities } from '@/utils/playerSortEntities';
 
 const columns = [
   { name: 'Фото', width: '0%' },
@@ -52,25 +53,24 @@ export default function AdminTeamPage() {
 
   const playersList = useMemo(
     () =>
-      data?.players
-        .sort((a, b) => (a.number ?? 9999) - (b.number ?? 9999))
-        .map((player) => ({
-          data: player,
-          tableData: [
-            <Image
-              key={player.id}
-              src={player.photo ?? defaultPlayerImg}
-              alt=""
-              width={64}
-              height={64}
-              style={{ objectFit: 'cover' }}
-            />,
-            player.number,
-            playerTypeName[player.type],
-            player.name,
-            player.position,
-          ],
-        })),
+      data?.players &&
+      playerSortEntities(data.players).map((player) => ({
+        data: player,
+        tableData: [
+          <Image
+            key={player.id}
+            src={player.photo ?? defaultPlayerImg}
+            alt=""
+            width={64}
+            height={64}
+            style={{ objectFit: 'cover' }}
+          />,
+          player.number,
+          playerTypeName[player.type],
+          player.name,
+          player.position,
+        ],
+      })),
     [data]
   );
 

@@ -3,6 +3,7 @@ import { TGetPlayers } from '@/types';
 import { Path, UseFormRegisterReturn } from 'react-hook-form';
 import { TForm, PlayerFormData } from '../types';
 import s from './styles.module.scss';
+import { playerSortEntities } from '@/utils/playerSortEntities';
 
 type TPlayerMatchItemProps = {
   players: TGetPlayers[];
@@ -13,35 +14,6 @@ type TPlayerMatchItemProps = {
   ) => UseFormRegisterReturn<Path<TForm>>;
 };
 
-const sortEntities = (items: TGetPlayers[]) => {
-  return [...items].sort((a, b) => {
-    // 1. isShow === false всегда уходят в самый низ
-    if (a.isShow === false && b.isShow !== false) return 1;
-    if (a.isShow !== false && b.isShow === false) return -1;
-
-    // 2. Приоритет типов
-    const typePriority = {
-      player: 1,
-      team: 2,
-      old_player: 3,
-    };
-
-    // Если тип не найден, даем ему низший приоритет
-    const priorityA = typePriority[a.type] || 4;
-    const priorityB = typePriority[b.type] || 4;
-
-    if (priorityA !== priorityB) {
-      return priorityA - priorityB;
-    }
-
-    // 3. Сортировка по убыванию playedIn.length
-    const lengthA = a.playedIn?.length || 0;
-    const lengthB = b.playedIn?.length || 0;
-
-    return lengthB - lengthA;
-  });
-};
-
 export const PlayerMatchItem = ({
   players,
   homeClubId,
@@ -49,7 +21,7 @@ export const PlayerMatchItem = ({
 }: TPlayerMatchItemProps) => {
   return (
     <Grid gutter={10}>
-      {sortEntities(players).map((player, i) => (
+      {playerSortEntities(players).map((player, i) => (
         <Grid.Col span={{ base: 12, sm: 12 }} key={player.id}>
           <Grid gutter={10} className={s.team}>
             <Grid.Col span={{ base: 6, sm: 4 }}>

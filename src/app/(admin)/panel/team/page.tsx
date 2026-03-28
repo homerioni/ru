@@ -21,6 +21,7 @@ import { ModalPlayerContent } from 'src/components/admin/modals/ModalPlayerConte
 import { useDebounce } from '@/hooks/useDebounce';
 import { deletePlayers, getClubs, getPlayers } from '@/services';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
+import { playerSortEntities } from '@/utils/playerSortEntities';
 
 const columns = [
   { name: 'Фото', width: '0%' },
@@ -59,9 +60,9 @@ export default function AdminTeamPage() {
 
   const playersList = useMemo(
     () =>
-      data?.players
+      data?.players &&
+      playerSortEntities(data.players, true)
         .filter((player) => !clubId || player.clubId === +clubId)
-        .sort((a, b) => (a.number ?? 9999) - (b.number ?? 9999))
         .map((player) => ({
           data: player,
           tableData: [
