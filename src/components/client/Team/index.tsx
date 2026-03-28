@@ -93,21 +93,25 @@ export const Team = ({ players, matchTypes, transfers }: TeamProps) => {
             })}
 
         {activeTab === 3 &&
-          transfers.map((transfer) => (
-            <TeamCard
-              key={transfer.id}
-              id={transfer.player.id}
-              name={transfer.player.name}
-              position={transfer.player.position}
-              number={transfer.player.number}
-              photo={transfer.player.photo}
-              transfer={{
-                from: transfer.fromClub,
-                to: transfer.toClub,
-                date: transfer.date,
-              }}
-            />
-          ))}
+          transfers
+            .sort(
+              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            )
+            .map((transfer) => (
+              <TeamCard
+                key={transfer.id}
+                id={transfer.player.id}
+                name={transfer.player.name}
+                position={transfer.player.position}
+                number={transfer.player.number}
+                photo={transfer.player.photo}
+                transfer={{
+                  from: transfer.fromClub,
+                  to: transfer.toClub,
+                  date: transfer.date,
+                }}
+              />
+            ))}
       </div>
     </section>
   );

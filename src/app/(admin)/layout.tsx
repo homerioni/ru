@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthGuard } from '@/components/admin/AuthGuard/AuthGuard';
 import { useMediaQuery } from '@mantine/hooks';
 import { AdminPanel } from '@/components/admin/AdminPanel';
+import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
 
 const queryClient = new QueryClient();
