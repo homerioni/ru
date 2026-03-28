@@ -68,18 +68,20 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
       redCards: submitData.redCards,
     };
 
-    const players: PlayerFormData[] = Object.values(submitData.team)
-      .filter((item) => item.playerId)
-      .map(
-        (item) =>
-          item && {
-            playerId: +item.playerId,
-            goals: item.goals ? +item.goals : 0,
-            assists: item.assists ? +item.assists : 0,
-            playerNumber: +item.playerNumber,
-            club: item.club,
-          }
-      );
+    const players: PlayerFormData[] = submitData.team
+      ? Object.values(submitData.team)
+          .filter((item) => item.playerId)
+          .map(
+            (item) =>
+              item && {
+                playerId: +item.playerId,
+                goals: item.goals ? +item.goals : 0,
+                assists: item.assists ? +item.assists : 0,
+                playerNumber: +item.playerNumber,
+                club: item.club,
+              }
+          )
+      : [];
 
     if (data) {
       updateMatch({

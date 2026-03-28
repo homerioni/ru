@@ -69,24 +69,26 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
         ? 'homeClub'
         : 'awayClub';
 
-    const players: PlayerFormData[] = Object.values(submitData.team)
-      .filter((item) => item.playerId)
-      .map((item) => {
-        if (item.club === isHomeOrAwayClub) {
-          qtyGoals += item.goals;
-          qtyAssists += item.assists;
-        }
+    const players: PlayerFormData[] = submitData.team
+      ? Object.values(submitData.team)
+          .filter((item) => item.playerId)
+          .map((item) => {
+            if (item.club === isHomeOrAwayClub) {
+              qtyGoals += item.goals;
+              qtyAssists += item.assists;
+            }
 
-        return (
-          item && {
-            playerId: +item.playerId,
-            goals: item.goals ? +item.goals : 0,
-            assists: item.assists ? +item.assists : 0,
-            playerNumber: +item.playerNumber,
-            club: item.club,
-          }
-        );
-      });
+            return (
+              item && {
+                playerId: +item.playerId,
+                goals: item.goals ? +item.goals : 0,
+                assists: item.assists ? +item.assists : 0,
+                playerNumber: +item.playerNumber,
+                club: item.club,
+              }
+            );
+          })
+      : [];
 
     if (
       match.score.length &&
