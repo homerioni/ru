@@ -37,7 +37,9 @@ export const ModalClubPlayerContent = ({
   const { data: userData } = useSession();
 
   const { register, handleSubmit, setValue } = useForm<TForm>({
-    defaultValues: data ?? {},
+    defaultValues: data ?? {
+      type: playerTypes[0].value as PLAYER_TYPE,
+    },
   });
   const [preview, setPreview] = useState<string | null>(data?.photo || null);
   const [isUploading, setIsUploading] = useState(false);
