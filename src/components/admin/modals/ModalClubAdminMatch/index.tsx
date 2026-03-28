@@ -134,7 +134,7 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
             {clubsData && (
               <Select
                 data={clubsData.clubs
-                  .sort((a) => (a.id === userData!.user.clubAdminId! ? 1 : -1))
+                  .sort((a) => (a.id === userData!.user.clubAdminId! ? -1 : 1))
                   .map((item) => ({
                     value: String(item.id),
                     label: item.name,
@@ -167,7 +167,7 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
             {clubsData && (
               <Select
                 data={clubsData.clubs
-                  .sort((a) => (a.id === userData!.user.clubAdminId! ? 1 : -1))
+                  .sort((a) => (a.id === userData!.user.clubAdminId! ? -1 : 1))
                   .map((item) => ({
                     value: String(item.id),
                     label: item.name,
