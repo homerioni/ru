@@ -55,7 +55,14 @@ export const createPlayer = async (player: TCreatePlayerData) => {
 
 export const updatePlayer = async (player: Player) => {
   const newData = {
-    ...player,
+    id: player.id,
+    number: player.number,
+    name: player.name,
+    type: player.type,
+    photo: player.photo,
+    position: player.position,
+    isShow: player.isShow,
+    clubId: player.clubId,
     username: player.username?.startsWith('@')
       ? player.username.slice(1)
       : player.username,
