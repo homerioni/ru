@@ -12,7 +12,7 @@ export const metadata = {
 
 export default async function TeamPage() {
   const [players, matchTypes, transfers] = await Promise.all([
-    getPlayers().then((res) => res.players),
+    getPlayers({ clubId: String(MY_CLUB_ID) }).then((res) => res.players),
     getMatchTypes(),
     getTransfers({ clubId: MY_CLUB_ID }).then((res) => res.transfers),
   ]);
