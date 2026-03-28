@@ -4,8 +4,8 @@
 
 .avatar {
   > img {
-    width: 7rem;
-    height: 7rem;
+    width: 5rem;
+    height: 5rem;
     border: 2px solid var(--brand);
     border-radius: 100%;
     object-fit: cover;
@@ -21,7 +21,7 @@
   position: absolute;
   right: -2rem;
   z-index: 10;
-  top: calc(100% + 2rem);
+  top: calc(100% + 1rem);
   display: flex;
   flex-direction: column;
   width: max-content;
@@ -31,7 +31,7 @@
   border-bottom: 1px solid var(--border-primary);
   backdrop-filter: blur(5px) brightness(1.5);
   background-color: rgba(0, 0, 0, .7);
-  font-size: 3.4rem;
+  font-size: 2rem;
   opacity: 0;
   visibility: hidden;
   transition: opacity .15s ease-in-out;
@@ -43,9 +43,30 @@
 }
 
 .item {
-  padding: 2.4rem 3.4rem;
+  padding: 1.6rem 3rem;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--border-primary);
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+  }
+
+  .avatar {
+    > img {
+      width: 7rem;
+      height: 7rem;
+    }
+  }
+
+  .list {
+    top: calc(100% + 2rem);
+    font-size: 3.4rem;
+  }
+
+  .item {
+    padding: 2.4rem 3.4rem;
   }
 }

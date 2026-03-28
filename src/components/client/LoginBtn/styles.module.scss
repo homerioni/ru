@@ -1,14 +1,22 @@
+.main {
+  position: relative;
+}
+
+.login {
+  position: absolute;
+  right: -3rem;
+  top: 1rem;
+  transform: scaleY(2) scaleX(1);
+  opacity: 0;
+}
 
 @media (max-width: 48em) {
   .main {
-    position: relative;
   }
 
   .login {
-    position: absolute;
     right: -5rem;
     top: 1rem;
     transform: scaleY(2) scaleX(.7);
-    opacity: 0;
   }
 }
