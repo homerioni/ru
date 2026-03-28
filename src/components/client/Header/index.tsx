@@ -59,8 +59,8 @@ export const HeaderContent = () => {
   return (
     <header className={`${s.main} container`}>
       <BurgerBtn isActive={false} onClick={onBurgerClick} />
-      {!isPlayerPage && (
-        <div className={s.logoBox}>
+      <div className={s.logoBox}>
+        {!isPlayerPage && (
           <div className={s.logo}>
             {isClubPage ? (
               thisClub?.logoSrc && (
@@ -81,8 +81,8 @@ export const HeaderContent = () => {
               />
             )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <nav className={`${s.menu} ${menuIsOpen ? s.open : ''}`}>
         <BurgerBtn isActive onClick={onBurgerClick} className={s.burgerClose} />
         <ul className={s.menuList}>

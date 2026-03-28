@@ -46,6 +46,7 @@
 }
 
 .number {
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,6 +57,23 @@
   color: var(--text-primary);
   font-family: 'Vintage Jersey', sans-serif;
   font-size: 4rem;
+}
+
+.clubWrapper {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.clubImg {
+  width: 10rem;
+  height: 10rem;
+  padding: 1rem 0;
+  border-radius: 1rem;
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  object-fit: contain;
+  background-color: rgba(0,0,0,.1);
 }
 
 .textWrapper {
@@ -178,6 +196,8 @@
   }
 
   .clubImg {
+    width: 14rem;
+    height: auto;
     padding: 1rem 0;
     border-radius: 1rem;
     border-top: 1px solid var(--border-primary);

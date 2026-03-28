@@ -36,7 +36,9 @@ export const PlayerEditModal = ({
   onClose: () => void;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>();
+  const [preview, setPreview] = useState<string | null>(
+    playerData.photo ?? null
+  );
   const [isDisabled, setIsDisabled] = useState(false);
 
   const { register, handleSubmit } = useForm<TForm>({
