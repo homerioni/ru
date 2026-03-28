@@ -89,8 +89,9 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
       });
 
     if (
-      qtyGoals > match.score[isHomeOrAwayClub === 'homeClub' ? 0 : 1] ||
-      qtyAssists > match.score[isHomeOrAwayClub === 'homeClub' ? 0 : 1]
+      match.score.length &&
+      (qtyGoals > match.score[isHomeOrAwayClub === 'homeClub' ? 0 : 1] ||
+        qtyAssists > match.score[isHomeOrAwayClub === 'homeClub' ? 0 : 1])
     ) {
       notifications.show({
         title: 'Ошибка',
