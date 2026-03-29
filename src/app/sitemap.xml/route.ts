@@ -3,15 +3,25 @@ import { prisma } from '../../../prisma/prisma-client';
 export async function GET() {
   const SITE_URL = 'https://rechutd.ru';
 
-  const staticRoutes = ['', 'team', 'matches', 'tables'];
+  const staticRoutes = ['', 'team', 'matches', 'tables', 'clubs'];
 
   const matchIds = await prisma.match
+    .findMany({ select: { id: true } })
+    .then((res) => res.map((item) => item.id));
+
+  const playerIds = await prisma.player
+    .findMany({ select: { id: true } })
+    .then((res) => res.map((item) => item.id));
+
+  const clubIds = await prisma.club
     .findMany({ select: { id: true } })
     .then((res) => res.map((item) => item.id));
 
   const urls = [
     ...staticRoutes.map((path) => `${SITE_URL}/${path}`),
     ...matchIds.map((id) => `${SITE_URL}/match/${id}`),
+    ...playerIds.map((id) => `${SITE_URL}/player/${id}`),
+    ...clubIds.map((id) => `${SITE_URL}/club/${id}`),
   ];
 
   const priorities = [1, 0.9, 0.8, 0.9];
