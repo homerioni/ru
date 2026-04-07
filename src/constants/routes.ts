@@ -62,6 +62,7 @@ export const apiRoutes = {
   players: '/players',
   top: '/top',
   tg: '/tg',
+  tgProfile: '/tg-profile-request',
   upload: '/upload',
   transfers: '/transfers',
   userPlayer: '/user-player',

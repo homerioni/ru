@@ -6,6 +6,7 @@ import s from './styles.module.scss';
 import { TGetPlayer } from '@/types';
 import { useState } from 'react';
 import { PlayerEditModal } from './PlayerEditModal';
+import { profileRequestTgBot } from '@/services/profileUserTg';
 
 type PlayerEditProps = { username: string | null; playerData: TGetPlayer };
 
@@ -20,6 +21,35 @@ export const PlayerEdit = (props: PlayerEditProps) => {
 const PlayerEditContent = ({ username, playerData }: PlayerEditProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data } = useSession();
+
+  if (!data) {
+    return (
+      <div className={s.notAuth}>
+        Чтобы редактировать профиль войдите в свой аккаунт
+      </div>
+    );
+  }
+
+  if (username === undefined || username === null) {
+    return (
+      <div className={s.notUsername}>
+        <p>Профиль не привязан</p>
+        <Button
+          className={s.button}
+          onClick={() =>
+            data?.user?.username &&
+            profileRequestTgBot({
+              username: data?.user?.username,
+              playerId: playerData.id,
+              playerName: playerData.name,
+            })
+          }
+        >
+          Запросить доступ к аккаунту
+        </Button>
+      </div>
+    );
+  }
 
   if (!username || username !== data?.user?.username) {
     return null;

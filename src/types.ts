@@ -45,3 +45,9 @@ export type TMessageTg = {
   contact: string;
   message?: string;
 };
+
+export type TProfileRequestTg = {
+  playerId: number;
+  username: string;
+  playerName: string;
+};
