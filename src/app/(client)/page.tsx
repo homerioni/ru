@@ -10,6 +10,7 @@ import { getMatchType } from '@/services/matchTypes';
 import { LeagueTable } from '@/components/client/LeagueTable';
 import { getTableStats } from '@/utils/getTableStats';
 
+//test
 export const dynamic = 'force-dynamic';
 
 export default async function MainPage() {
