@@ -4,7 +4,7 @@ import { Button } from '@ui/Button';
 import { SessionProvider, useSession } from 'next-auth/react';
 import s from './styles.module.scss';
 import { TGetPlayer } from '@/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlayerEditModal } from './PlayerEditModal';
 import { profileRequestTgBot } from '@/services/profileUserTg';
 
@@ -12,7 +12,7 @@ type PlayerEditProps = { username: string | null; playerData: TGetPlayer };
 
 export const PlayerEdit = (props: PlayerEditProps) => {
   return (
-    <SessionProvider refetchOnWindowFocus={true}>
+    <SessionProvider>
       <PlayerEditContent {...props} />
     </SessionProvider>
   );
@@ -23,7 +23,11 @@ const PlayerEditContent = ({ username, playerData }: PlayerEditProps) => {
   const [isHasRequest, setIsHasRequest] = useState(
     sessionStorage.getItem('hasRequest') === 'true'
   );
-  const { data, status } = useSession();
+  const { data, status, update } = useSession();
+
+  useEffect(() => {
+    update();
+  }, [update]);
 
   const onRequest = async () => {
     if (!data?.user?.username) {
