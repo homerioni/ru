@@ -74,8 +74,8 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
           .filter((item) => item.playerId)
           .map((item) => {
             if (item.club === isHomeOrAwayClub) {
-              qtyGoals += item.goals;
-              qtyAssists += item.assists;
+              qtyGoals += +item.goals;
+              qtyAssists += +item.assists;
             }
 
             return (

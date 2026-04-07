@@ -65,7 +65,7 @@ export const PlayerMatchItem = ({
           <input
             style={{ display: 'none' }}
             {...registerPlayerField(player.id, 'club')}
-            value={homeClubId === player.club.id ? 'homeClub' : 'awayClub'}
+            value={homeClubId == player.club.id ? 'homeClub' : 'awayClub'}
           />
           <input
             style={{ display: 'none' }}
