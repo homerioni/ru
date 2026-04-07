@@ -7,7 +7,6 @@ import { playerSortEntities } from '@/utils/playerSortEntities';
 
 type TPlayerMatchItemProps = {
   players: TGetPlayers[];
-  homeClubId: number;
   registerPlayerField: (
     playerId: number,
     field: keyof PlayerFormData
@@ -16,7 +15,6 @@ type TPlayerMatchItemProps = {
 
 export const PlayerMatchItem = ({
   players,
-  homeClubId,
   registerPlayerField,
 }: TPlayerMatchItemProps) => {
   return (
@@ -64,8 +62,9 @@ export const PlayerMatchItem = ({
           </Grid>
           <input
             style={{ display: 'none' }}
-            {...registerPlayerField(player.id, 'club')}
-            value={homeClubId == player.club.id ? 'homeClub' : 'awayClub'}
+            type="number"
+            {...registerPlayerField(player.id, 'clubId')}
+            defaultValue={player.club.id}
           />
           <input
             style={{ display: 'none' }}

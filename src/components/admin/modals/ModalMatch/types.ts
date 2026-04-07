@@ -11,7 +11,7 @@ export type PlayerFormData = {
   goals: number;
   assists: number;
   playerNumber: number;
-  club: 'homeClub' | 'awayClub';
+  clubId: number;
 };
 
 export type TForm = Omit<

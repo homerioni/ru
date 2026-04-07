@@ -20,7 +20,6 @@ type TGetMatchProps = {
 export type TTeamStats = MatchPlayer & {
   player: Player;
   playerNumber?: number;
-  club: 'homeClub' | 'awayClub';
 };
 
 export type TGetMatch = Match & {

@@ -96,7 +96,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
             <span>П</span>
           </div>
           {data.players
-            .filter((item) => item.club === 'homeClub')
+            .filter((item) => item.clubId === data.homeClub.id)
             .sort((a, b) => (a.player.number ?? 0) - (b.player.number ?? 0))
             .map((item) => (
               <div
@@ -129,7 +129,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
             <span>П</span>
           </div>
           {data.players
-            .filter((item) => item.club === 'awayClub')
+            .filter((item) => item.clubId === data.awayClub.id)
             .sort((a, b) => (a.player.number ?? 0) - (b.player.number ?? 0))
             .map((item) => (
               <div

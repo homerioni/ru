@@ -196,7 +196,7 @@ model MatchPlayer {
   goals        Int @default(0)
   assists      Int @default(0)
   playerNumber Int?
-  club         MatchPlayerClub
+  clubId       Int
 
   match   Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
   matchId Int

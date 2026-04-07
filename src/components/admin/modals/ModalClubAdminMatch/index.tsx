@@ -73,7 +73,7 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
       ? Object.values(submitData.team)
           .filter((item) => item.playerId)
           .map((item) => {
-            if (item.club === isHomeOrAwayClub) {
+            if (item.clubId === userData!.user.clubAdminId!) {
               qtyGoals += +item.goals;
               qtyAssists += +item.assists;
             }
@@ -84,7 +84,7 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
                 goals: item.goals ? +item.goals : 0,
                 assists: item.assists ? +item.assists : 0,
                 playerNumber: +item.playerNumber,
-                club: item.club,
+                clubId: +item.clubId,
               }
             );
           })
@@ -221,7 +221,6 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
             <Grid.Col span={{ base: 12, sm: 12 }}>
               <PlayerMatchItem
                 players={playersData.players}
-                homeClubId={watch('homeClubId')}
                 registerPlayerField={registerPlayerField}
               />
             </Grid.Col>

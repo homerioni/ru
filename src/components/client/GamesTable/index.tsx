@@ -49,7 +49,9 @@ export const GamesTable = ({
 
       if (!acc.has(stats.player.name)) {
         acc.set(stats.player.name, {
-          clubImgSrc: match[stats.club].logoSrc,
+          clubImgSrc:
+            match[stats.clubId === match.homeClubId ? 'homeClub' : 'awayClub']
+              .logoSrc,
           name: stats.player.name,
           qty: stats.goals,
         });
@@ -71,7 +73,9 @@ export const GamesTable = ({
 
       if (!acc.has(stats.player.name)) {
         acc.set(stats.player.name, {
-          clubImgSrc: match[stats.club].logoSrc,
+          clubImgSrc:
+            match[stats.clubId === match.homeClubId ? 'homeClub' : 'awayClub']
+              .logoSrc,
           name: stats.player.name,
           qty: stats.assists,
         });
