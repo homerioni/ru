@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
       {
         chat_id: CHAT_ID,
-        text: `📥 Запрос на профиль:\n\nUsername: @${data.username}\nPlayer ID: ${data.playerId}\nИмя игрока: ${data.playerName}`,
+        text: `📥 Запрос на профиль:\n\nUsername: @${data.username}\nИгрок: https://rechutd.ru/player/${data.playerId}\nИмя игрока: ${data.playerName}`,
       }
     );
 

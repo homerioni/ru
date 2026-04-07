@@ -20,6 +20,11 @@
       opacity: 0.7;
     }
   }
+
+  &:disabled {
+    background-color: var(--bg-secondary-4);
+    color: var(--text-secondary);
+  }
 }
 
 @media (max-width: 48em) {

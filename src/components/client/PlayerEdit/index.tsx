@@ -20,9 +20,32 @@ export const PlayerEdit = (props: PlayerEditProps) => {
 
 const PlayerEditContent = ({ username, playerData }: PlayerEditProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useSession();
+  const [isHasRequest, setIsHasRequest] = useState(
+    sessionStorage.getItem('hasRequest') === 'true'
+  );
+  const { data, status } = useSession();
 
-  if (!data) {
+  const onRequest = () => {
+    if (!data?.user?.username) {
+      return;
+    }
+
+    setIsHasRequest(true);
+
+    profileRequestTgBot({
+      username: data?.user?.username,
+      playerId: playerData.id,
+      playerName: playerData.name,
+    })
+      .then(() => {
+        sessionStorage.setItem('hasRequest', 'true');
+      })
+      .catch(() => {
+        setIsHasRequest(false);
+      });
+  };
+
+  if (status === 'unauthenticated') {
     return (
       <div className={s.notAuth}>
         Чтобы редактировать профиль войдите в свой аккаунт
@@ -34,18 +57,8 @@ const PlayerEditContent = ({ username, playerData }: PlayerEditProps) => {
     return (
       <div className={s.notUsername}>
         <p>Профиль не привязан</p>
-        <Button
-          className={s.button}
-          onClick={() =>
-            data?.user?.username &&
-            profileRequestTgBot({
-              username: data?.user?.username,
-              playerId: playerData.id,
-              playerName: playerData.name,
-            })
-          }
-        >
-          Запросить доступ к аккаунту
+        <Button className={s.button} onClick={onRequest}>
+          {isHasRequest ? 'Запрос отправлен' : 'Запросить доступ к аккаунту'}
         </Button>
       </div>
     );
