@@ -29,9 +29,7 @@ export const LoginBtn = ({ status }: LoginBtnProps) => {
           showAvatar={false}
           botUsername="rechutd_bot"
           onAuthCallback={(data) => {
-            signIn('telegram-login', { callbackUrl: '/' }, data as never).then(
-              () => location.reload()
-            );
+            signIn('telegram-login', { callbackUrl: '/' }, data as never);
           }}
         />
       </div>
