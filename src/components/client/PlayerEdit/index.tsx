@@ -25,7 +25,7 @@ const PlayerEditContent = ({ username, playerData }: PlayerEditProps) => {
   );
   const { data, status } = useSession();
 
-  const onRequest = () => {
+  const onRequest = async () => {
     if (!data?.user?.username) {
       return;
     }
@@ -57,7 +57,11 @@ const PlayerEditContent = ({ username, playerData }: PlayerEditProps) => {
     return (
       <div className={s.notUsername}>
         <p>Профиль не привязан</p>
-        <Button className={s.button} onClick={onRequest}>
+        <Button
+          className={s.button}
+          onClick={onRequest}
+          disabled={isHasRequest}
+        >
           {isHasRequest ? 'Запрос отправлен' : 'Запросить доступ к аккаунту'}
         </Button>
       </div>
