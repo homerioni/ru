@@ -5,6 +5,7 @@ import { MatchVote as MatchVoteType } from '@prisma/client';
 import { Button } from '@ui/Button';
 import s from './styles.module.scss';
 import { createVote } from '@/services/vote';
+import { useState } from 'react';
 
 type MatchVoteProps = {
   selectedPlayer: {
@@ -22,13 +23,17 @@ export const MatchVote = ({
   votes,
 }: MatchVoteProps) => {
   const { data, status } = useSession();
+  const [isVoteLoading, setIsVoteLoading] = useState(false);
 
   const handleVote = (data: {
     playerId: number;
     matchId: number;
     username: string;
   }) => {
-    createVote(data).finally(() => location.reload());
+    setIsVoteLoading(true);
+    createVote(data)
+      .then(() => location.reload())
+      .catch(() => setIsVoteLoading(false));
   };
 
   if (status === 'unauthenticated') {
@@ -77,6 +82,7 @@ export const MatchVote = ({
             playerId: selectedPlayer?.id,
           })
         }
+        disabled={!selectedPlayer || isVoteLoading}
       >
         Проголосовать
       </Button>
