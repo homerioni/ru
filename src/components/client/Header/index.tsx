@@ -9,18 +9,12 @@ import { LINKS, ROUTES } from '@/constants/routes';
 import { BurgerBtn } from '@ui/BurgerBtn';
 import s from './styles.module.scss';
 import { InstagramIcon, TelegramIcon } from '@ui/Icons';
-import { SessionProvider, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { LoginBtn } from '@/components/client/LoginBtn';
 import { getClub } from '@/services';
 import { Club } from '@prisma/client';
 
-export const Header = () => (
-  <SessionProvider refetchInterval={0} refetchOnWindowFocus={false}>
-    <HeaderContent />
-  </SessionProvider>
-);
-
-export const HeaderContent = () => {
+export const Header = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [thisClub, setThisClub] = useState<Club | null>(null);
 

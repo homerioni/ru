@@ -1,33 +1,21 @@
 'use client';
 
 import { Button } from '@ui/Button';
-import { SessionProvider, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import s from './styles.module.scss';
 import { TGetPlayer } from '@/types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { PlayerEditModal } from './PlayerEditModal';
 import { profileRequestTgBot } from '@/services/profileUserTg';
 
 type PlayerEditProps = { username: string | null; playerData: TGetPlayer };
 
-export const PlayerEdit = (props: PlayerEditProps) => {
-  return (
-    <SessionProvider>
-      <PlayerEditContent {...props} />
-    </SessionProvider>
-  );
-};
-
-const PlayerEditContent = ({ username, playerData }: PlayerEditProps) => {
+export const PlayerEdit = ({ username, playerData }: PlayerEditProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHasRequest, setIsHasRequest] = useState(
     sessionStorage.getItem('hasRequest') === 'true'
   );
-  const { data, status, update } = useSession();
-
-  useEffect(() => {
-    update();
-  }, [update]);
+  const { data, status } = useSession();
 
   const onRequest = async () => {
     if (!data?.user?.username) {
