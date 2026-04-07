@@ -73,7 +73,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
             </p>
             <Image
               src={
-                awardPlayerInfo.club === 'homeClub'
+                awardPlayerInfo.clubId === data.homeClub.id
                   ? data.homeClub.logoSrc
                   : data.awayClub.logoSrc
               }
