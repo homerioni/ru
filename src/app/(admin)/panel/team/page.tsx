@@ -48,9 +48,14 @@ export default function AdminTeamPage() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['players', page, searchDebounce],
+    queryKey: ['players', page, searchDebounce, clubId],
     queryFn: () =>
-      getPlayers({ qty: 50, search: searchDebounce || undefined, page }),
+      getPlayers({
+        qty: 50,
+        search: searchDebounce || undefined,
+        page,
+        clubId: clubId || undefined,
+      }),
   });
 
   const { data: clubsData } = useQuery({
