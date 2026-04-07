@@ -12,7 +12,7 @@ type PlayerEditProps = { username: string | null; playerData: TGetPlayer };
 
 export const PlayerEdit = (props: PlayerEditProps) => {
   return (
-    <SessionProvider>
+    <SessionProvider refetchOnWindowFocus={true}>
       <PlayerEditContent {...props} />
     </SessionProvider>
   );
