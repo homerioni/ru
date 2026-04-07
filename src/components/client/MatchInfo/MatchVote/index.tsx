@@ -1,6 +1,6 @@
 'use client';
 
-import { SessionProvider, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { MatchVote as MatchVoteType } from '@prisma/client';
 import { Button } from '@ui/Button';
 import s from './styles.module.scss';
@@ -16,20 +16,12 @@ type MatchVoteProps = {
   votes: MatchVoteType[];
 };
 
-export const MatchVote = (props: MatchVoteProps) => {
-  return (
-    <SessionProvider>
-      <MatchVoteContent {...props} />
-    </SessionProvider>
-  );
-};
-
-export const MatchVoteContent = ({
+export const MatchVote = ({
   matchId,
   selectedPlayer,
   votes,
 }: MatchVoteProps) => {
-  const { data } = useSession();
+  const { data, status } = useSession();
 
   const handleVote = (data: {
     playerId: number;
@@ -39,7 +31,7 @@ export const MatchVoteContent = ({
     createVote(data).finally(() => location.reload());
   };
 
-  if (!data?.user?.username) {
+  if (status === 'unauthenticated') {
     return (
       <div className={s.main}>
         <p className={s.auth}>
@@ -49,7 +41,7 @@ export const MatchVoteContent = ({
     );
   }
 
-  if (votes.some((vote) => vote.username === data.user.username)) {
+  if (votes.some((vote) => vote.username === data?.user.username)) {
     return (
       <div className={s.main}>
         <h2 className={s.title}>Голосование</h2>
