@@ -18,7 +18,7 @@ import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { closeVote, getClubs, getMatches, startVote } from '@/services';
 import { TGetMatch } from '@/services/matches';
-import { ModalClubAdminMatch } from 'src/components/admin/modals/ModalClubAdminMatch';
+import { ModalClubAdminMatch } from '@/components/admin/modals/ModalClubAdminMatch';
 import { getMatchTypes } from '@/services/matchTypes';
 import { useSession } from 'next-auth/react';
 

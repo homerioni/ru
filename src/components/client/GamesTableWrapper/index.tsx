@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Tabs } from '@/components/client/Tabs';
 import { GamesTable } from '@/components/client/GamesTable';
-import { TMatchGroups } from '@/app/(client)/tables/page';
+import { TMatchGroups } from '@/app/(layout)/(client)/tables/page';
 import { Select } from '@ui/Select';
 import s from './styles.module.scss';
 

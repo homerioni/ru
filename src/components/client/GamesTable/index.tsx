@@ -1,6 +1,6 @@
 'use client';
 
-import { ClubStats, TMatchNotType } from '@/app/(client)/tables/page';
+import { ClubStats, TMatchNotType } from '@/app/(layout)/(client)/tables/page';
 import { useState } from 'react';
 import { Tabs } from '@/components/client/Tabs';
 import s from './styles.module.scss';

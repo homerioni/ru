@@ -1,4 +1,4 @@
-import { ClubStats } from '@/app/(client)/tables/page';
+import { ClubStats } from '@/app/(layout)/(client)/tables/page';
 
 export type LeagueTableProps = {
   data: ClubStats[];

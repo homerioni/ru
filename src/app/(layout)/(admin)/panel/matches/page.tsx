@@ -25,7 +25,7 @@ import {
   startVote,
 } from '@/services';
 import { TGetMatch } from '@/services/matches';
-import { ModalMatch } from 'src/components/admin/modals/ModalMatch';
+import { ModalMatch } from '@/components/admin/modals/ModalMatch';
 import { getMatchTypes } from '@/services/matchTypes';
 
 const columns = [

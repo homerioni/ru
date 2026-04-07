@@ -1,4 +1,4 @@
-import { MainIntro } from 'src/components/client/MainIntro';
+import { MainIntro } from '@/components/client/MainIntro';
 import { NextMatch } from '@/components/client/NextMatch';
 import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider';
 import { TeamSlider } from '@/components/client/TeamSlider';

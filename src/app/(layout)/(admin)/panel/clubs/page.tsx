@@ -11,7 +11,7 @@ import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { useDebounce } from '@/hooks/useDebounce';
 import { deleteClubs, getClubs } from '@/services';
-import { ModalClub } from 'src/components/admin/modals/ModalClub';
+import { ModalClub } from '@/components/admin/modals/ModalClub';
 
 const columns = [
   { name: 'Логотип', width: '0%' },

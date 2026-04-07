@@ -1,19 +1,19 @@
 'use client';
 
 import Head from 'next/head';
-import { SessionProvider } from 'next-auth/react';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthGuard } from '@/components/admin/AuthGuard/AuthGuard';
 import { useMediaQuery } from '@mantine/hooks';
-import { AdminPanel } from '@/components/admin/AdminPanel';
 import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
+import { Notifications } from '@mantine/notifications';
+import { ClubAdminPanel } from '@/components/admin/ClubAdminPanel';
+import { ClubAuthGuard } from '@/components/admin/ClubAuthGuard/AuthGuard';
 
 const queryClient = new QueryClient();
 
-export default function AdminLayout({
+export default function ClubAdminLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -34,17 +34,16 @@ export default function AdminLayout({
       <Head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </Head>
-      <SessionProvider>
-        <AuthGuard>
-          <QueryClientProvider client={queryClient}>
-            <MantineProvider>
-              <ModalsProvider modalProps={modalProps}>
-                <AdminPanel>{children}</AdminPanel>
-              </ModalsProvider>
-            </MantineProvider>
-          </QueryClientProvider>
-        </AuthGuard>
-      </SessionProvider>
+      <ClubAuthGuard>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider>
+            <Notifications position="top-center" zIndex={1000} />
+            <ModalsProvider modalProps={modalProps}>
+              <ClubAdminPanel>{children}</ClubAdminPanel>
+            </ModalsProvider>
+          </MantineProvider>
+        </QueryClientProvider>
+      </ClubAuthGuard>
     </>
   );
 }

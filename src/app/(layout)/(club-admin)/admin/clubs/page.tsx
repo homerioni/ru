@@ -10,7 +10,7 @@ import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { getClub } from '@/services';
-import { ModalClub } from 'src/components/admin/modals/ModalClub';
+import { ModalClub } from '@/components/admin/modals/ModalClub';
 import { useSession } from 'next-auth/react';
 
 const columns = [
