@@ -1,5 +1,7 @@
 import { Burger, Button, Flex, Skeleton, Text, Title } from '@mantine/core';
 import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { ROUTES } from '@/constants';
 
 type THeaderProps = {
   menuIsOpen: boolean;
@@ -38,6 +40,7 @@ export const Header = ({ menuIsOpen, burgerClick }: THeaderProps) => {
         onClick={burgerClick}
       />
       <LoginComponent />
+      <Link href={ROUTES.main.href}>Вернутся на сайт</Link>
     </Flex>
   );
 };
