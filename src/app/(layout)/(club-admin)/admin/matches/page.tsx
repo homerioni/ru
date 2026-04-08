@@ -141,7 +141,9 @@ export default function ClubAdminMatchesPage() {
                   .onClick
               }
             >
-              {matchesVoteStatus(match.id, match.voteStatus).text}
+              {!!voteDay && voteDay < 3
+                ? 'Идет голосование'
+                : matchesVoteStatus(match.id, match.voteStatus).text}
             </Button>,
           ],
         };
