@@ -142,7 +142,7 @@ export default function ClubAdminMatchesPage() {
               }
             >
               {!!voteDay && voteDay < 3
-                ? 'Идет голосование'
+                ? 'Идет голосование...'
                 : matchesVoteStatus(match.id, match.voteStatus).text}
             </Button>,
           ],
