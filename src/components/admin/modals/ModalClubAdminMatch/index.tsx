@@ -116,6 +116,7 @@ export const ModalClubAdminMatch = ({ data, refetch }: TModalPlayerProps) => {
         ...match,
         players: players ? { create: players } : undefined,
         voteStatus: 'init',
+        voteStartDate: null,
       }).then(() => refetch());
     }
 

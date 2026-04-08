@@ -94,6 +94,7 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
         ...match,
         players: players ? { create: players } : undefined,
         voteStatus: 'init',
+        voteStartDate: null,
       }).then(() => refetch());
     }
 
