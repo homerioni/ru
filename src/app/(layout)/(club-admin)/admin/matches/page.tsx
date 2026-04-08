@@ -89,52 +89,63 @@ export default function ClubAdminMatchesPage() {
 
   const matchesList = useMemo(
     () =>
-      data?.matches.map((match) => ({
-        data: match,
-        tableData: [
-          <Image
-            key={match.id}
-            src={match.homeClub.logoSrc}
-            alt=""
-            width={64}
-            height={64}
-            style={{ objectFit: 'cover' }}
-          />,
-          match.score.length ? `${match.score[0]} - ${match.score[1]}` : '-',
-          <Image
-            key={match.id}
-            src={match.awayClub.logoSrc}
-            alt=""
-            width={64}
-            height={64}
-            style={{ objectFit: 'cover' }}
-          />,
-          match.type.name,
-          new Date(match.date).toLocaleString('ru-RU', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-          }),
-          match.votes && match.voteStatus === 'started' ? (
-            <Text key={match.id} style={{ textWrap: 'nowrap' }}>
-              {`${match.votes.length} ${getEndingByAmount(match.votes.length, ['голос', 'голоса', 'голосов'])}`}
-            </Text>
-          ) : undefined,
-          <Button
-            key={match.id}
-            color={match.voteStatus === 'started' ? 'red' : undefined}
-            disabled={match.voteStatus === 'closed' || !match.score.length}
-            onClick={
-              matchesVoteStatus(match.id, match.voteStatus, () => refetch())
-                .onClick
-            }
-          >
-            {matchesVoteStatus(match.id, match.voteStatus).text}
-          </Button>,
-        ],
-      })),
+      data?.matches.map((match) => {
+        const voteDay =
+          match.voteStartDate &&
+          (new Date().getTime() - new Date(match.voteStartDate).getTime()) /
+            (1000 * 60 * 60 * 24);
+
+        return {
+          data: match,
+          tableData: [
+            <Image
+              key={match.id}
+              src={match.homeClub.logoSrc}
+              alt=""
+              width={64}
+              height={64}
+              style={{ objectFit: 'cover' }}
+            />,
+            match.score.length ? `${match.score[0]} - ${match.score[1]}` : '-',
+            <Image
+              key={match.id}
+              src={match.awayClub.logoSrc}
+              alt=""
+              width={64}
+              height={64}
+              style={{ objectFit: 'cover' }}
+            />,
+            match.type.name,
+            new Date(match.date).toLocaleString('ru-RU', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            match.votes && match.voteStatus === 'started' ? (
+              <Text key={match.id} style={{ textWrap: 'nowrap' }}>
+                {`${match.votes.length} ${getEndingByAmount(match.votes.length, ['голос', 'голоса', 'голосов'])}`}
+              </Text>
+            ) : undefined,
+            <Button
+              key={match.id}
+              color={match.voteStatus === 'started' ? 'red' : undefined}
+              disabled={
+                match.voteStatus === 'closed' ||
+                !match.score.length ||
+                (!!voteDay && voteDay < 3)
+              }
+              onClick={
+                matchesVoteStatus(match.id, match.voteStatus, () => refetch())
+                  .onClick
+              }
+            >
+              {matchesVoteStatus(match.id, match.voteStatus).text}
+            </Button>,
+          ],
+        };
+      }),
     [data, refetch]
   );
 
