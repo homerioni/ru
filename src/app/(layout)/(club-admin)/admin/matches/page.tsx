@@ -116,9 +116,11 @@ export default function ClubAdminMatchesPage() {
             hour: '2-digit',
             minute: '2-digit',
           }),
-          <Text key={match.id}>
-            {`${match.votes.length} ${getEndingByAmount(match.votes.length, ['голос', 'голоса', 'голосов'])}`}
-          </Text>,
+          match.votes && match.voteStatus === 'started' ? (
+            <Text key={match.id}>
+              {`${match.votes.length} ${getEndingByAmount(match.votes.length, ['голос', 'голоса', 'голосов'])}`}
+            </Text>
+          ) : undefined,
           <Button
             key={match.id}
             color={match.voteStatus === 'started' ? 'red' : undefined}
