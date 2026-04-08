@@ -1,6 +1,6 @@
 import { axiosInstance } from '@/services/index';
 import { apiRoutes } from '@/constants';
-import { MatchVote } from '@prisma/client';
+import { Club, Match, MatchType, MatchVote } from '@prisma/client';
 
 export const createVote = async (
   vote: Omit<MatchVote, 'id' | 'createdAt' | 'updateAt'>
@@ -27,6 +27,20 @@ export const closeVote = async (id: number) => {
     voteStatus: 'closed',
   };
   const { data } = await axiosInstance.post(apiRoutes.match, newMatch);
+
+  return data;
+};
+
+export type TGetVoteMatch = Match & {
+  awayClub: Club;
+  homeClub: Club;
+  type: MatchType;
+};
+
+export const getVotesMatches = async () => {
+  const { data } = await axiosInstance.get<TGetVoteMatch[]>(
+    apiRoutes.votesMatches
+  );
 
   return data;
 };

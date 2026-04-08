@@ -55,7 +55,7 @@
 .menuList {
   display: flex;
   align-items: center;
-  gap: 5rem;
+  gap: 4rem;
 }
 
 .menuItem {
@@ -104,6 +104,10 @@
 
 @media (min-width: 48.01em) {
   .menuItem.mobile, .menuBg {
+    display: none;
+  }
+
+  .menuItem .mobile {
     display: none;
   }
 }
@@ -202,6 +206,10 @@
         width: 5rem;
         object-fit: contain;
       }
+    }
+
+    .desktop {
+      display: none;
     }
   }
 

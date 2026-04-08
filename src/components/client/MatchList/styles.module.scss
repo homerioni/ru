@@ -1,0 +1,30 @@
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  margin-bottom: 10rem;
+  padding: 0 10rem;
+}
+
+.title {
+  margin-top: 8rem;
+  margin-bottom: 6rem;
+  padding: 0 30rem;
+  font-size: 4rem;
+  text-align: center;
+}
+
+@media (max-width: 48em) {
+  .list {
+    grid-template-columns: 1fr;
+    padding: 0 4rem;
+  }
+
+  .title {
+    margin-top: 15rem;
+    margin-bottom: 5rem;
+    padding: 0 4rem;
+    font-size: 5rem;
+    text-align: center;
+  }
+}

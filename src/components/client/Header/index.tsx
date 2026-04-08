@@ -83,7 +83,8 @@ export const Header = () => {
           {Object.entries(ROUTES).map(([key, item]) => (
             <li key={key} className={s.menuItem}>
               <Link href={item.href} onClick={() => setMenuIsOpen(false)}>
-                {item.name}
+                <span className={s.desktop}>{item.name}</span>
+                <span className={s.mobile}>{item.mobName ?? item.name}</span>
               </Link>
             </li>
           ))}

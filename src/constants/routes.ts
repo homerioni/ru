@@ -1,22 +1,32 @@
 export const ROUTES = {
   main: {
     name: 'Главная',
+    mobName: undefined,
     href: '/',
   },
   team: {
     name: 'Команда',
+    mobName: undefined,
     href: '/team',
   },
   matches: {
     name: 'Наши матчи',
+    mobName: undefined,
     href: '/matches',
   },
   tables: {
     name: 'Турниры',
+    mobName: undefined,
     href: '/tables',
+  },
+  votes: {
+    name: 'Голосования',
+    mobName: 'Активные голосования',
+    href: '/votes',
   },
   clubs: {
     name: 'Другие команды',
+    mobName: undefined,
     href: '/clubs',
   },
 } as const;
@@ -57,6 +67,7 @@ export const apiRoutes = {
   matchType: '/match/type',
   matchTypeGetAll: '/match/type/getAll',
   matchVote: '/match/vote',
+  votesMatches: '/votes/matches',
   player: '/player',
   updatePlayer: '/player/update',
   players: '/players',

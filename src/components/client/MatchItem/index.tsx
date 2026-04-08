@@ -6,7 +6,7 @@ import s from './styles.module.scss';
 
 type TMatchItemProps = {
   id: number;
-  myClubId: number;
+  myClubId?: number;
   clubs: {
     id: number;
     logoSrc: string;
@@ -62,7 +62,7 @@ export const MatchItem = ({
         <p className={s.infoTitle}>{type}</p>
         <p className={s.score}>
           <span>{score.length ? `${score[0]} - ${score[1]}` : 'VS'}</span>
-          {!!score.length && result && (
+          {myClubId && !!score.length && result && (
             <span className={`${s.result} ${result.className}`}>
               {result.text}
             </span>
