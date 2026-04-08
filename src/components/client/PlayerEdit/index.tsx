@@ -12,9 +12,13 @@ type PlayerEditProps = { username: string | null; playerData: TGetPlayer };
 
 export const PlayerEdit = ({ username, playerData }: PlayerEditProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isHasRequest, setIsHasRequest] = useState(
-    sessionStorage.getItem('hasRequest') === 'true'
-  );
+  const [isHasRequest, setIsHasRequest] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('hasRequest') === 'true';
+    }
+
+    return false;
+  });
   const { data, status } = useSession();
 
   const onRequest = async () => {
