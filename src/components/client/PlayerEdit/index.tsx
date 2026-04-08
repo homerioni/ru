@@ -45,7 +45,7 @@ export const PlayerEdit = ({ username, playerData }: PlayerEditProps) => {
     );
   }
 
-  if (username === undefined || username === null) {
+  if (!username) {
     return (
       <div className={s.notUsername}>
         <p>Профиль не привязан</p>
@@ -60,7 +60,7 @@ export const PlayerEdit = ({ username, playerData }: PlayerEditProps) => {
     );
   }
 
-  if (!username || username !== data?.user?.username) {
+  if (username !== data?.user?.username) {
     return null;
   }
 
