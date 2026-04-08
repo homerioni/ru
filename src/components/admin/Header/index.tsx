@@ -1,7 +1,6 @@
 import { Burger, Button, Flex, Skeleton, Text, Title } from '@mantine/core';
-import { signOut, useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { ROUTES } from '@/constants';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 type THeaderProps = {
   menuIsOpen: boolean;
@@ -10,6 +9,7 @@ type THeaderProps = {
 
 const LoginComponent = () => {
   const { data, status } = useSession();
+  const router = useRouter();
 
   if (status === 'loading') {
     return (
@@ -23,7 +23,7 @@ const LoginComponent = () => {
   return (
     <Flex align="center" gap={16} justify="flex-end" ml="auto">
       <Text>{data?.user?.name}</Text>
-      <Button onClick={() => signOut()}>Выйти</Button>
+      <Button onClick={() => router.push('/')}>Выйти</Button>
     </Flex>
   );
 };
@@ -40,7 +40,6 @@ export const Header = ({ menuIsOpen, burgerClick }: THeaderProps) => {
         onClick={burgerClick}
       />
       <LoginComponent />
-      <Link href={ROUTES.main.href}>Вернутся на сайт</Link>
     </Flex>
   );
 };
