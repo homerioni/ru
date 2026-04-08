@@ -116,7 +116,7 @@ export default function ClubAdminMatchesPage() {
           <Button
             key={match.id}
             color={match.voteStatus === 'started' ? 'red' : undefined}
-            disabled={match.voteStatus === 'closed'}
+            disabled={match.voteStatus === 'closed' || !match.score.length}
             onClick={
               matchesVoteStatus(match.id, match.voteStatus, () => refetch())
                 .onClick
