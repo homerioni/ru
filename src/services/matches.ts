@@ -15,6 +15,7 @@ type TGetMatchProps = {
   page?: string | number;
   typeId?: number;
   clubId?: number;
+  votes?: 'true' | 'false';
 };
 
 export type TTeamStats = MatchPlayer & {

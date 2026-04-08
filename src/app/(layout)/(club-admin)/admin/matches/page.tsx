@@ -73,6 +73,7 @@ export default function ClubAdminMatchesPage() {
         page,
         clubId: userData!.user.clubAdminId!,
         typeId: typeId ? +typeId : undefined,
+        votes: 'true',
       }),
   });
 

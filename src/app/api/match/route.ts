@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
     const page = req.nextUrl.searchParams.get('page');
     const typeId = req.nextUrl.searchParams.get('typeId');
     const clubId = req.nextUrl.searchParams.get('clubId');
+    const votes = req.nextUrl.searchParams.get('votes');
 
     const takeQty = qty ? +qty : 100;
 
@@ -64,7 +65,7 @@ export async function GET(req: NextRequest) {
             },
           },
         },
-        votes: !!clubId,
+        votes: votes === 'true',
       },
     });
 
