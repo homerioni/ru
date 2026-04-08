@@ -161,13 +161,14 @@ enum VOTE_STATUS {
 }
 
 model Match {
-  id          Int         @id @default(autoincrement())
-  date        DateTime
-  score       Int[]       @default([])
-  round       Int?
-  yellowCards Int?        @default(0)
-  redCards    Int?        @default(0)
-  voteStatus  VOTE_STATUS @default(init)
+  id            Int         @id @default(autoincrement())
+  date          DateTime
+  score         Int[]       @default([])
+  round         Int?
+  yellowCards   Int?        @default(0)
+  redCards      Int?        @default(0)
+  voteStatus    VOTE_STATUS @default(init)
+  voteStartDate DateTime?
 
   players MatchPlayer[]
 

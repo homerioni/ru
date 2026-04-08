@@ -14,6 +14,7 @@ export const startVote = async (id: number) => {
   const newMatch = {
     id,
     voteStatus: 'started',
+    voteStartDate: new Date(),
   };
   const { data } = await axiosInstance.post(apiRoutes.match, newMatch);
 
