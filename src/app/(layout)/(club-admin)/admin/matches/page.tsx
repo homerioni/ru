@@ -10,6 +10,7 @@ import {
   Pagination,
   Select,
   Stack,
+  Text,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { useQuery } from '@tanstack/react-query';
@@ -21,6 +22,7 @@ import { TGetMatch } from '@/services/matches';
 import { ModalClubAdminMatch } from '@/components/admin/modals/ModalClubAdminMatch';
 import { getMatchTypes } from '@/services/matchTypes';
 import { useSession } from 'next-auth/react';
+import { getEndingByAmount } from '@/utils/getEndingByAmount';
 
 const columns = [
   { name: '', width: '0%' },
@@ -28,6 +30,7 @@ const columns = [
   { name: '', width: '0%' },
   { name: 'Вид матча', width: 200, minWidth: 200 },
   { name: 'Дата', width: 1000, minWidth: 200 },
+  { name: '', width: '0%' },
   { name: '', width: '0%' },
 ] as const;
 
@@ -113,6 +116,9 @@ export default function ClubAdminMatchesPage() {
             hour: '2-digit',
             minute: '2-digit',
           }),
+          <Text key={match.id}>
+            {`${match.votes.length} ${getEndingByAmount(match.votes.length, ['голос', 'голоса', 'голосов'])}`}
+          </Text>,
           <Button
             key={match.id}
             color={match.voteStatus === 'started' ? 'red' : undefined}
