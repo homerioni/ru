@@ -118,7 +118,7 @@ export default function ClubAdminMatchesPage() {
             minute: '2-digit',
           }),
           match.votes && match.voteStatus === 'started' ? (
-            <Text key={match.id}>
+            <Text key={match.id} style={{ textWrap: 'nowrap' }}>
               {`${match.votes.length} ${getEndingByAmount(match.votes.length, ['голос', 'голоса', 'голосов'])}`}
             </Text>
           ) : undefined,
