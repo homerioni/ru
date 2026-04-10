@@ -28,7 +28,7 @@ export const Header = () => {
 
   useEffect(() => {
     update();
-  }, [update]);
+  }, []);
 
   useEffect(() => {
     if (isClubPage && params.clubId) {
