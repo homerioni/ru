@@ -21,12 +21,17 @@ export const startVote = async (id: number) => {
   return data;
 };
 
-export const closeVote = async (id: number) => {
+export const closeVote = async (
+  id: number,
+  info: { playerId: number; matchType: string; matchName: string; date: Date }
+) => {
   const newMatch = {
     id,
     voteStatus: 'closed',
   };
   const { data } = await axiosInstance.post(apiRoutes.match, newMatch);
+
+  await axiosInstance.post(apiRoutes.award, { type: 'match', ...info });
 
   return data;
 };

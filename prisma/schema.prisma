@@ -106,6 +106,7 @@ model Award {
   clubName   String
   matchType  String?
   matchName  String?
+  date       DateTime
 
   player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId Int

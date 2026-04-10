@@ -22,7 +22,7 @@ const texts = {
 };
 
 export const Award = ({ data }: AwardProps) => {
-  const date = new Date(data.createdAt).toLocaleString('ru-RU', {
+  const date = new Date(data.date).toLocaleString('ru-RU', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -38,11 +38,21 @@ export const Award = ({ data }: AwardProps) => {
         height={128}
       />
       <div className={s.awardInfo}>
-        <p>{texts[data.type]}</p>
-        <p>{data.matchType}</p>
-        <p>Клуб: {data.clubName}</p>
-        <p>Матч: {data.matchName}</p>
-        <p>{date}</p>
+        <p>
+          <span>Награда:</span> {texts[data.type]}
+        </p>
+        <p>
+          <span>Тип матча:</span> {data.matchType}
+        </p>
+        <p>
+          <span>Клуб:</span> {data.clubName}
+        </p>
+        <p>
+          <span>Матч:</span> {data.matchName}
+        </p>
+        <p>
+          <span>Дата:</span> {date}
+        </p>
       </div>
     </div>
   );

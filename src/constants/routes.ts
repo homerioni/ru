@@ -70,6 +70,7 @@ export const apiRoutes = {
   votesMatches: '/votes/matches',
   player: '/player',
   updatePlayer: '/player/update',
+  award: '/award',
   players: '/players',
   top: '/top',
   tg: '/tg',

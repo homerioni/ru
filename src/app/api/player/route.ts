@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
         include: { match: { include: { type: true } } },
       },
       transfers: true,
+      awards: true,
     },
   });
 

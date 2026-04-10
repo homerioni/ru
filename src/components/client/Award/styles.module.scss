@@ -47,4 +47,14 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity .15s ease-in-out;
+
+  > p {
+    display: flex;
+
+    > span {
+      flex: none;
+      width: 15rem;
+      color: var(--brand);
+    }
+  }
 }
