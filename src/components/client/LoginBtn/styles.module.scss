@@ -4,9 +4,9 @@
 
 .login {
   position: absolute;
-  right: -3rem;
-  top: 1rem;
-  transform: scaleY(2) scaleX(1);
+  right: -1rem;
+  top: 1.4rem;
+  transform: scaleY(2.3) scaleX(1);
   opacity: 0;
 }
 
@@ -14,6 +14,11 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  > img {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
 }
 
 @media (max-width: 48em) {
@@ -21,7 +26,7 @@
   }
 
   .login {
-    right: -5rem;
+    right: -4rem;
     top: 1rem;
     transform: scaleY(2) scaleX(.7);
   }
