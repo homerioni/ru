@@ -15,6 +15,11 @@
     color: var(--text-red);
   }
 
+  &.blue {
+    background: none;
+    border: .2rem solid #0088cc;
+  }
+
   @media (min-width: 48.01em) {
     &:hover {
       opacity: 0.7;

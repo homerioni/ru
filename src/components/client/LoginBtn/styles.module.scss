@@ -10,6 +10,12 @@
   opacity: 0;
 }
 
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 @media (max-width: 48em) {
   .main {
   }
@@ -18,5 +24,14 @@
     right: -5rem;
     top: 1rem;
     transform: scaleY(2) scaleX(.7);
+  }
+
+  .btn {
+    gap: 1.4rem;
+
+    > img {
+      width: 3.4rem;
+      height: 3.4rem;
+    }
   }
 }

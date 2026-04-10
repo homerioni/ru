@@ -1,7 +1,7 @@
 import s from './styles.module.scss';
 
 type ButtonProps = {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'blue';
   type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
   className?: string;
