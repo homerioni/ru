@@ -18,13 +18,17 @@ export const Header = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [thisClub, setThisClub] = useState<Club | null>(null);
 
-  const { data, status } = useSession();
+  const { data, status, update } = useSession();
   const pathname = usePathname();
   const params = useParams();
 
   const isPlayerPage =
     pathname === '/player' || pathname.startsWith('/player/');
   const isClubPage = pathname.startsWith('/club/');
+
+  useEffect(() => {
+    update();
+  }, [update]);
 
   useEffect(() => {
     if (isClubPage && params.clubId) {
