@@ -37,11 +37,17 @@ const columns = [
   { name: '', width: '0%' },
 ] as const;
 
-const matchesVoteStatus = (
-  id: number,
-  status: string,
-  refetch?: () => void
-) => {
+const matchesVoteStatus = ({
+  id,
+  status,
+  refetch,
+  match,
+}: {
+  id: number;
+  status: string;
+  refetch?: () => void;
+  match?: TGetMatch;
+}) => {
   switch (status) {
     case 'init':
       return {
@@ -51,7 +57,34 @@ const matchesVoteStatus = (
     case 'started':
       return {
         text: 'Закрыть голосование',
-        onClick: () => closeVote(id).then(refetch),
+        onClick: () => {
+          if (!match) {
+            return;
+          }
+
+          const playerId = match.votes
+            .reduce<{ id: number; qty: number }[]>((acc, item) => {
+              const index = acc.findIndex(
+                (accItem) => accItem.id === item.playerId
+              );
+
+              if (index === -1) {
+                return [...acc, { id: item.playerId, qty: 1 }];
+              }
+
+              acc[index] = { ...acc[index], qty: acc[index].qty + 1 };
+
+              return [...acc];
+            }, [])
+            .sort((a, b) => b.qty - a.qty)[0].id;
+
+          closeVote(id, {
+            playerId,
+            matchType: match.type.name,
+            matchName: `${match.homeClub.name} - ${match.awayClub.name}`,
+            date: match.date,
+          }).then(refetch);
+        },
       };
     default:
       return {
@@ -123,11 +156,15 @@ export default function AdminMatchesPage() {
             color={match.voteStatus === 'started' ? 'red' : undefined}
             disabled={match.voteStatus === 'closed'}
             onClick={
-              matchesVoteStatus(match.id, match.voteStatus, () => refetch())
-                .onClick
+              matchesVoteStatus({
+                id: match.id,
+                status: match.voteStatus,
+                refetch,
+                match,
+              }).onClick
             }
           >
-            {matchesVoteStatus(match.id, match.voteStatus).text}
+            {matchesVoteStatus({ id: match.id, status: match.voteStatus }).text}
           </Button>,
         ],
       })),
