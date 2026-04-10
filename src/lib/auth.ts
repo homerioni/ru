@@ -1,4 +1,4 @@
-import { createUserOrUpdate } from '@/lib/prisma';
+import { createUserOrUpdate, prisma } from '@/lib/prisma';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -52,6 +52,23 @@ export const authOptions: NextAuthOptions = {
         token.clubAdminId = user.clubAdminId;
       }
 
+      if (token.id) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { role: true, clubAdminId: true, username: true },
+          });
+
+          if (dbUser) {
+            token.role = dbUser.role;
+            token.clubAdminId = dbUser.clubAdminId;
+            token.username = dbUser.username;
+          }
+        } catch (e) {
+          console.error('Error fetching user in jwt callback', e);
+        }
+      }
+
       if (trigger === 'update' && session?.role) {
         token.role = session.role;
       }
@@ -67,7 +84,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = (token.id as string) || session.user.email;
         session.user.username = token.username as string;
         session.user.role = token.role as ROLE;
-        session.user.clubAdminId = token.clubAdminId as number;
+        session.user.clubAdminId = token.clubAdminId as number | null;
       }
       return session;
     },
