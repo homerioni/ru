@@ -7,5 +7,5 @@ type Props = {
 };
 
 export const Providers = ({ children }: Props) => {
-  return <SessionProvider refetchInterval={60}>{children}</SessionProvider>;
+  return <SessionProvider refetchInterval={600}>{children}</SessionProvider>;
 };
