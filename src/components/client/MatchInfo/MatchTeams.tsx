@@ -7,6 +7,8 @@ import s from './styles.module.scss';
 import { MatchVote } from '@/components/client/MatchInfo/MatchVote';
 import Image from 'next/image';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
+import Link from 'next/link';
+import { ROUTES } from '@/constants';
 
 type MatchTeamsProps = {
   data: TGetMatch;
@@ -58,7 +60,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
         />
       )}
       {data.voteStatus === 'closed' && awardPlayerInfo && (
-        <div className={s.award}>
+        <Link href={`/player/${awardPlayerInfo.playerId}`} className={s.award}>
           <h3 className={s.awardTitle}>Игрок матча</h3>
           <div className={s.awardPlayer}>
             <Image
@@ -83,7 +85,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
               height={100}
             />
           </div>
-        </div>
+        </Link>
       )}
       <div className={s.mobileSelect}>
         <Select options={options} value={activeClub} onChange={setActiveClub} />
