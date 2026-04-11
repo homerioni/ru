@@ -8,7 +8,6 @@ import { MatchVote } from '@/components/client/MatchInfo/MatchVote';
 import Image from 'next/image';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
 import Link from 'next/link';
-import { ROUTES } from '@/constants';
 
 type MatchTeamsProps = {
   data: TGetMatch;
