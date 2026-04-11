@@ -62,6 +62,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
           <h3 className={s.awardTitle}>Игрок матча</h3>
           <div className={s.awardPlayer}>
             <Image
+              className={s.awardPhoto}
               src={awardPlayerInfo.player.photo ?? defaultPlayerImg}
               alt={'Игрок'}
               width={100}

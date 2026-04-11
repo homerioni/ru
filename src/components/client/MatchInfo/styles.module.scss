@@ -143,6 +143,10 @@
     border-top: 1px solid var(--border-primary);
     border-bottom: 1px solid var(--border-primary);
   }
+
+  .awardPhoto {
+    object-fit: cover;
+  }
 }
 
 .awardText {
@@ -273,13 +277,8 @@
     font-size: 3.4rem;
 
     > img {
-      flex: none;
       width: 12rem;
       height: 12rem;
-      object-fit: contain;
-      border-radius: 1rem;
-      border-top: 1px solid var(--border-primary);
-      border-bottom: 1px solid var(--border-primary);
     }
   }
 
