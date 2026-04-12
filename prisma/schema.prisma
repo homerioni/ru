@@ -165,7 +165,7 @@ model Match {
   id            Int         @id @default(autoincrement())
   date          DateTime
   score         Int[]       @default([])
-  round         Int?
+  round         String?
   yellowCards   Int?        @default(0)
   redCards      Int?        @default(0)
   voteStatus    VOTE_STATUS @default(init)

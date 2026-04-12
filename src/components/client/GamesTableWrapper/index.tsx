@@ -63,7 +63,8 @@ export const GamesTableWrapper = ({ matches }: GamesTableWrapperProps) => {
         matches={activeMatches}
         title={matches[activeTab].type.fullName}
         name={matches[activeTab].type.name}
-        type={matches[activeTab].type.type}
+        typeKey={matches[activeTab].type.type}
+        type={matches[activeTab].type}
       />
     </>
   );

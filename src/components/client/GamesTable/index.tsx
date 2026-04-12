@@ -5,12 +5,13 @@ import { useState } from 'react';
 import { Tabs } from '@/components/client/Tabs';
 import s from './styles.module.scss';
 import { useSearchParams } from 'next/navigation';
-import { MatchType } from '@prisma/client';
+import { Club, MatchType } from '@prisma/client';
 import { LeagueTable } from '@/components/client/LeagueTable';
 import { MatchesListByMonth } from '@/components/client/MatchesListByMonth';
 import { TGetMatch } from '@/services/matches';
 import { PlayerStatsTable } from '@/components/client/PlayerStatsTable';
 import { MY_CLUB_ID } from '@/constants';
+import { MatchesCupList } from '@/components/client/MatchesCupList';
 
 type TGamesTableProps = {
   matches?: {
@@ -20,7 +21,8 @@ type TGamesTableProps = {
   table?: ClubStats[];
   title: string;
   name: string;
-  type: MatchType['type'];
+  typeKey: MatchType['type'];
+  type: MatchType & { clubs: Club[] };
 };
 
 const matchesTabs = [
@@ -34,6 +36,7 @@ export const GamesTable = ({
   table,
   title,
   name,
+  typeKey,
   type,
 }: TGamesTableProps) => {
   const searchParams = useSearchParams();
@@ -90,38 +93,46 @@ export const GamesTable = ({
   }, new Map());
 
   const content = [
-    matches?.played && (
-      <MatchesListByMonth
-        key={'played'}
-        clubId={MY_CLUB_ID}
-        matches={
-          matches.played
-            .sort(
-              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-            )
-            .map((item) => ({
-              ...item,
-              type: { name },
-            })) as TGetMatch[]
-        }
-      />
-    ),
-    matches?.future && (
-      <MatchesListByMonth
-        key={'future'}
-        clubId={MY_CLUB_ID}
-        matches={
-          matches.future
-            .sort(
-              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-            )
-            .map((item) => ({
-              ...item,
-              type: { name },
-            })) as TGetMatch[]
-        }
-      />
-    ),
+    matches?.played &&
+      (typeKey === 'cup' ? (
+        <MatchesCupList matches={matches.played} type={type} />
+      ) : (
+        <MatchesListByMonth
+          key={'played'}
+          clubId={MY_CLUB_ID}
+          matches={
+            matches.played
+              .sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              )
+              .map((item) => ({
+                ...item,
+                type: { name },
+              })) as TGetMatch[]
+          }
+        />
+      )),
+    matches?.future &&
+      (typeKey === 'cup' ? (
+        <MatchesCupList matches={matches.future} type={type} />
+      ) : (
+        <MatchesListByMonth
+          key={'future'}
+          clubId={MY_CLUB_ID}
+          matches={
+            matches.future
+              .sort(
+                (a, b) =>
+                  new Date(a.date).getTime() - new Date(b.date).getTime()
+              )
+              .map((item) => ({
+                ...item,
+                type: { name },
+              })) as TGetMatch[]
+          }
+        />
+      )),
     <PlayerStatsTable
       key={'stats'}
       goals={
@@ -140,7 +151,7 @@ export const GamesTable = ({
   return (
     <section className={`${s.main} container`}>
       <h1 className={s.title}>{title}</h1>
-      {type === 'league' && table?.length && (
+      {typeKey === 'league' && table?.length && (
         <div className={s.table}>
           <LeagueTable data={table} myClubId={MY_CLUB_ID} />
         </div>

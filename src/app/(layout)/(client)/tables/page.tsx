@@ -30,7 +30,7 @@ export type TMatchGroups = {
   types: { id: number; name: string; year: number | null }[];
 } & {
   [id: number]: {
-    type: MatchType;
+    type: MatchType & { clubs: Club[] };
     matches?: {
       played: TMatchNotType[];
       future: TMatchNotType[];
@@ -64,6 +64,7 @@ export default async function TablesPage() {
           year: type.year,
           type: type.type,
           isArchive: type.isArchive,
+          clubs: type.clubs,
         },
       };
 
