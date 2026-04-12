@@ -28,7 +28,7 @@ export const getMatchType = async (id: number | string) => {
   return data;
 };
 
-export const getAllMatchesTypes = async (clubId: string) => {
+export const getAllMatchesTypes = async (clubId?: string) => {
   const { data } = await axiosInstance.get<
     (MatchType & {
       matches: (Match & {
