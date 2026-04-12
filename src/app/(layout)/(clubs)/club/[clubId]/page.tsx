@@ -5,6 +5,7 @@ import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider
 import { LeagueTable } from '@/components/client/LeagueTable';
 import { getTableStats } from '@/utils/getTableStats';
 import { TeamSlider } from '@/components/client/TeamSlider';
+import s from './styles.module.scss';
 
 const getClubMatchType = (clubId: string) => {
   switch (clubId) {
@@ -42,7 +43,7 @@ export default async function ClubPage({
   ]);
 
   return (
-    <>
+    <div className={s.main}>
       {nextMatch && <NextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} clubId={+clubId} />
       {getClubMatchType(clubId) && (
@@ -53,6 +54,6 @@ export default async function ClubPage({
         />
       )}
       <TeamSlider players={players} clubId={clubId} />
-    </>
+    </div>
   );
 }
