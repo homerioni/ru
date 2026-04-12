@@ -1,8 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../../../prisma/prisma-client';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const clubId = req.nextUrl.searchParams.get('clubId') || '';
+
+  const where = clubId
+    ? {
+        clubs: {
+          some: {
+            id: +clubId,
+          },
+        },
+      }
+    : undefined;
+
   const types = await prisma.matchType.findMany({
+    where,
     include: {
       matches: {
         include: {

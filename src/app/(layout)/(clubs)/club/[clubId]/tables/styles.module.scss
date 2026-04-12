@@ -1,0 +1,11 @@
+.backLink {
+  margin-left: 30rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 48em) {
+  .backLink {
+    margin-top: 0;
+    margin-left: 4rem;
+  }
+}

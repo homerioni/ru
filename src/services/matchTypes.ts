@@ -28,7 +28,7 @@ export const getMatchType = async (id: number | string) => {
   return data;
 };
 
-export const getAllMatchesTypes = async () => {
+export const getAllMatchesTypes = async (clubId: string) => {
   const { data } = await axiosInstance.get<
     (MatchType & {
       matches: (Match & {
@@ -37,7 +37,7 @@ export const getAllMatchesTypes = async () => {
         players: TTeamStats[];
       })[];
     } & { clubs: Club[] })[]
-  >(apiRoutes.matchTypeGetAll);
+  >(apiRoutes.matchTypeGetAll, { params: { clubId } });
 
   return data;
 };

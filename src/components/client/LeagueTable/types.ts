@@ -4,4 +4,5 @@ export type LeagueTableProps = {
   data: ClubStats[];
   title?: string;
   myClubId: number;
+  clubId?: string;
 };

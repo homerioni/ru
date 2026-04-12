@@ -3,13 +3,14 @@ import { getAllMatchesTypes } from '@/services/matchTypes';
 import { Club, Match, MatchType } from '@prisma/client';
 import { TGetMatch } from '@/services/matches';
 import { getTableStats } from '@/utils/getTableStats';
-import { MY_CLUB_ID } from '@/constants';
+import s from './styles.module.scss';
+import { BackLink } from '@ui/BackLink';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Турниры | Речичане United',
-  description: 'Турниры в которых учавствует клуб Речичане United',
+  description: 'Турниры',
 };
 
 export type ClubStats = {
@@ -40,8 +41,14 @@ export type TMatchGroups = {
   };
 };
 
-export default async function TablesPage() {
-  const matches = await getAllMatchesTypes().then((res) => {
+export default async function TablesPage({
+  params,
+}: {
+  params: Promise<{ clubId: string }>;
+}) {
+  const { clubId } = await params;
+
+  const matches = await getAllMatchesTypes(clubId).then((res) => {
     const groupedMatches: TMatchGroups = {
       types: [],
     };
@@ -95,5 +102,12 @@ export default async function TablesPage() {
     return groupedMatches;
   });
 
-  return <GamesTableWrapper matches={matches} myClubId={MY_CLUB_ID} />;
+  return (
+    <>
+      <div className={s.backLink}>
+        <BackLink href={`/club/${clubId}`} />
+      </div>
+      <GamesTableWrapper matches={matches} myClubId={+clubId} />
+    </>
+  );
 }

@@ -9,16 +9,28 @@ import s from './styles.module.scss';
 
 type GamesTableWrapperProps = {
   matches: TMatchGroups;
+  myClubId: number;
 };
 
-const years = [
-  { label: '2026', value: '2026' },
-  { label: '2025', value: '2025' },
-];
+const getYears = (clubId: number) => {
+  switch (clubId) {
+    case 7:
+    case 12:
+      return [{ label: '2026', value: '2026' }];
+    default:
+      return [
+        { label: '2026', value: '2026' },
+        { label: '2025', value: '2025' },
+      ];
+  }
+};
 
-export const GamesTableWrapper = ({ matches }: GamesTableWrapperProps) => {
+export const GamesTableWrapper = ({
+  matches,
+  myClubId,
+}: GamesTableWrapperProps) => {
   const [activeTab, setActiveTab] = useState(matches.types[0].id);
-  const [selectYear, setSelectYear] = useState(years[0].value);
+  const [selectYear, setSelectYear] = useState(getYears(myClubId)[0].value);
 
   const tabs = matches.types.filter(
     (type) => type.year === +selectYear || type.year === null
@@ -45,7 +57,7 @@ export const GamesTableWrapper = ({ matches }: GamesTableWrapperProps) => {
       <section className={s.season}>
         <p>Сезон</p>
         <Select
-          options={years}
+          options={getYears(myClubId)}
           onChange={(year) => setSelectYear(year)}
           value={selectYear}
         />
@@ -65,6 +77,7 @@ export const GamesTableWrapper = ({ matches }: GamesTableWrapperProps) => {
         name={matches[activeTab].type.name}
         typeKey={matches[activeTab].type.type}
         type={matches[activeTab].type}
+        myClubId={myClubId}
       />
     </>
   );

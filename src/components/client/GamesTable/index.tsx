@@ -10,8 +10,7 @@ import { LeagueTable } from '@/components/client/LeagueTable';
 import { MatchesListByMonth } from '@/components/client/MatchesListByMonth';
 import { TGetMatch } from '@/services/matches';
 import { PlayerStatsTable } from '@/components/client/PlayerStatsTable';
-import { MY_CLUB_ID } from '@/constants';
-import { MatchesCupList } from '@/components/client/MatchesCupList';
+wimport { MatchesCupList } from '@/components/client/MatchesCupList';
 
 type TGamesTableProps = {
   matches?: {
@@ -23,6 +22,7 @@ type TGamesTableProps = {
   name: string;
   typeKey: MatchType['type'];
   type: MatchType & { clubs: Club[] };
+  myClubId: number;
 };
 
 const matchesTabs = [
@@ -38,6 +38,7 @@ export const GamesTable = ({
   name,
   typeKey,
   type,
+  myClubId,
 }: TGamesTableProps) => {
   const searchParams = useSearchParams();
   const defaultId = searchParams.get('tabId') ?? 0;
@@ -95,11 +96,15 @@ export const GamesTable = ({
   const content = [
     matches?.played &&
       (typeKey === 'cup' ? (
-        <MatchesCupList matches={matches.played} type={type} />
+        <MatchesCupList
+          matches={matches.played}
+          type={type}
+          myClubId={myClubId}
+        />
       ) : (
         <MatchesListByMonth
           key={'played'}
-          clubId={MY_CLUB_ID}
+          clubId={myClubId}
           matches={
             matches.played
               .sort(
@@ -115,11 +120,15 @@ export const GamesTable = ({
       )),
     matches?.future &&
       (typeKey === 'cup' ? (
-        <MatchesCupList matches={matches.future} type={type} />
+        <MatchesCupList
+          matches={matches.future}
+          type={type}
+          myClubId={myClubId}
+        />
       ) : (
         <MatchesListByMonth
           key={'future'}
-          clubId={MY_CLUB_ID}
+          clubId={myClubId}
           matches={
             matches.future
               .sort(
@@ -153,7 +162,7 @@ export const GamesTable = ({
       <h1 className={s.title}>{title}</h1>
       {typeKey === 'league' && table?.length && (
         <div className={s.table}>
-          <LeagueTable data={table} myClubId={MY_CLUB_ID} />
+          <LeagueTable data={table} myClubId={myClubId} />
         </div>
       )}
       <div className={s.tabs}>

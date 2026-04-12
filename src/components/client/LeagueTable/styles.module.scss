@@ -115,6 +115,19 @@
   }
 }
 
+.button {
+  display: block;
+  align-self: flex-end;
+  width: fit-content;
+  padding: 1.2rem 2rem;
+  margin-top: 3rem;
+  margin-left: 10rem;
+  border-radius: 1.2rem;
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  font-size: 3.4rem;
+}
+
 @media (max-width: 48em) {
   .title {
     width: 98rem;
@@ -155,5 +168,10 @@
 
     .name {
     }
+  }
+
+  .button {
+    margin-left: auto;
+    margin-right: 4rem;
   }
 }

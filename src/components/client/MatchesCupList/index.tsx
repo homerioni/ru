@@ -25,9 +25,11 @@ const getRoundTitle = (round: string) => {
 export const MatchesCupList = ({
   matches,
   type,
+  myClubId,
 }: {
   matches: TMatchNotType[];
   type: MatchType & { clubs: Club[] };
+  myClubId?: number;
 }) => {
   const [collapsedRounds, setCollapsedRounds] = useState<
     Record<string, boolean>
@@ -83,6 +85,7 @@ export const MatchesCupList = ({
               roundTitle={getRoundTitle(round)}
               matchList={matchList}
               type={type}
+              myClubId={myClubId}
             />
           );
         })}

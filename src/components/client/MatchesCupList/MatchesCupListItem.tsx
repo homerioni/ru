@@ -14,6 +14,7 @@ type MatchesCupListItemProps = {
   isCollapsed: boolean;
   matchList: TGetMatch[];
   type: MatchType & { clubs: Club[] };
+  myClubId?: number;
 };
 
 export const MatchesCupListItem = ({
@@ -23,6 +24,7 @@ export const MatchesCupListItem = ({
   isCollapsed,
   matchList,
   type,
+  myClubId,
 }: MatchesCupListItemProps) => (
   <div className={s.listWrapper}>
     <div className={s.listHeader} onClick={toggleRound}>
@@ -68,6 +70,7 @@ export const MatchesCupListItem = ({
                   type={match.type.name}
                   date={`${matchDate.day}, ${matchDate.time}`}
                   score={match.score}
+                  myClubId={myClubId}
                 />
               </li>
             );

@@ -1,8 +1,14 @@
 import Image from 'next/image';
 import { LeagueTableProps } from '@/components/client/LeagueTable/types';
 import s from './styles.module.scss';
+import Link from 'next/link';
 
-export const LeagueTable = ({ data, title, myClubId }: LeagueTableProps) => {
+export const LeagueTable = ({
+  data,
+  title,
+  myClubId,
+  clubId,
+}: LeagueTableProps) => {
   return (
     <div className={s.main}>
       <div className={s.tableWrapper}>
@@ -52,6 +58,11 @@ export const LeagueTable = ({ data, title, myClubId }: LeagueTableProps) => {
           </tbody>
         </table>
       </div>
+      {clubId && (
+        <Link className={s.button} href={`/club/${clubId}/tables`}>
+          Смотреть все турниры
+        </Link>
+      )}
     </div>
   );
 };

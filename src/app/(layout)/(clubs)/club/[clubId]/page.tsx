@@ -51,6 +51,7 @@ export default async function ClubPage({
           data={getTableStats(matchType)}
           title={matchType.name}
           myClubId={+clubId}
+          clubId={clubId}
         />
       )}
       <TeamSlider players={players} clubId={clubId} />

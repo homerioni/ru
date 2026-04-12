@@ -5,8 +5,12 @@
   justify-content: center;
   gap: 1rem;
   padding: 0 4rem;
-  margin: 8rem 0 4rem;
+  margin: 2rem 0 4rem;
   font-size: 3.4rem;
+
+  &:first-child {
+    margin: 8rem 0 4rem;
+  }
 }
 
 .tabs {
@@ -15,8 +19,12 @@
 
 @media (max-width: 48em) {
   .season {
-    margin: 16rem 0 6rem;
+    margin: 6rem 0;
     font-size: 4rem;
+
+    &:first-child {
+      margin: 16rem 0 6rem;
+    }
   }
 
   .tabs {
