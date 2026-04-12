@@ -10,7 +10,7 @@ import { LeagueTable } from '@/components/client/LeagueTable';
 import { MatchesListByMonth } from '@/components/client/MatchesListByMonth';
 import { TGetMatch } from '@/services/matches';
 import { PlayerStatsTable } from '@/components/client/PlayerStatsTable';
-wimport { MatchesCupList } from '@/components/client/MatchesCupList';
+import { MatchesCupList } from '@/components/client/MatchesCupList';
 
 type TGamesTableProps = {
   matches?: {
