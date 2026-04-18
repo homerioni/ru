@@ -54,7 +54,7 @@ export default function AdminTeamPage() {
         qty: 50,
         search: searchDebounce || undefined,
         page,
-        clubId: clubId || undefined,
+        clubId: clubId === 'null' ? null : clubId || undefined,
       }),
   });
 
@@ -143,10 +143,13 @@ export default function AdminTeamPage() {
         {clubsData && (
           <Flex align="center" gap={4}>
             <Select
-              data={clubsData.clubs.map((item) => ({
-                value: String(item.id),
-                label: item.name,
-              }))}
+              data={[
+                ...clubsData.clubs.map((item) => ({
+                  value: String(item.id),
+                  label: item.name,
+                })),
+                { value: 'null', label: 'Без команды' },
+              ]}
               placeholder="Команда"
               maxDropdownHeight={200}
               allowDeselect={false}

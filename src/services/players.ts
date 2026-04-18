@@ -7,7 +7,7 @@ type TGetPlayerProps = {
   search?: string;
   qty?: number;
   page?: string | number;
-  clubId?: string;
+  clubId?: string | null;
 };
 
 type TGetPlayersResponse = {
