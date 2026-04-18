@@ -12,7 +12,9 @@ export async function POST(req: NextRequest) {
     throw new Error('Player not found');
   }
 
-  const club = await prisma.club.findUnique({ where: { id: player.clubId } });
+  const club = await prisma.club.findUnique({
+    where: { id: player.clubId ?? 0 },
+  });
 
   if (!club) {
     throw new Error('Club not found');
