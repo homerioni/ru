@@ -13,6 +13,7 @@ type TeamProps = {
   players: TGetPlayers[];
   matchTypes: MatchType[];
   transfers: TGetTransfer[];
+  clubId: number;
 };
 
 const tabList = [
@@ -22,7 +23,7 @@ const tabList = [
   { id: 3, name: 'Трансферы' },
 ];
 
-export const Team = ({ players, matchTypes, transfers }: TeamProps) => {
+export const Team = ({ players, matchTypes, transfers, clubId }: TeamProps) => {
   const [activeTab, setActiveTab] = useState(0);
   const [activeType, setActiveType] = useState('');
 
@@ -33,6 +34,16 @@ export const Team = ({ players, matchTypes, transfers }: TeamProps) => {
       label: `${type.name} ${type.year ?? ''}`,
     })),
   ];
+
+  const oldPlayers = Object.values(
+    transfers
+      .filter((transfer) => transfer.player.club?.id !== clubId)
+      .reduce<{ [p: number]: TGetTransfer['player'] }>((acc, item) => {
+        acc[item.player.id] = item.player;
+
+        return acc;
+      }, {})
+  );
 
   return (
     <section className={`${s.main} container`}>
@@ -52,7 +63,7 @@ export const Team = ({ players, matchTypes, transfers }: TeamProps) => {
         />
       )}
       <div className={s.list}>
-        {activeTab !== 3 &&
+        {activeTab < 2 &&
           players
             .filter(
               (player) =>
@@ -88,6 +99,43 @@ export const Team = ({ players, matchTypes, transfers }: TeamProps) => {
                   goals={goals}
                   assists={assists}
                   isTeam={player.type === 'team'}
+                />
+              );
+            })}
+
+        {activeTab === 2 &&
+          oldPlayers
+            .map((player) => ({
+              ...player,
+              playedIn: activeType
+                ? player.playedIn.filter(
+                    (item) => item.match.type.id === +activeType
+                  )
+                : player.playedIn,
+            }))
+            .sort((a, b) => {
+              return b.playedIn.length - a.playedIn.length;
+            })
+            .map((player) => {
+              const matches = player.playedIn.length;
+              const [goals, assists] = player.playedIn.reduce(
+                (acc, item) => [acc[0] + item.goals, acc[1] + item.assists],
+                [0, 0]
+              );
+
+              return (
+                <TeamCard
+                  key={player.id}
+                  id={player.id}
+                  number={player.number}
+                  photo={player.photo}
+                  name={player.name}
+                  position={player.position}
+                  matches={matches}
+                  goals={goals}
+                  assists={assists}
+                  isTeam={player.type === 'team'}
+                  club={activeTab === 2 ? player.club : undefined}
                 />
               );
             })}

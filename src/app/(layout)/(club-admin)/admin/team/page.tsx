@@ -10,7 +10,7 @@ import { EditableList, TEditableItem } from '@/components/admin/EditableList';
 import { EditableListSkeleton } from '@/components/admin/EditableList/skeleton';
 import { ListControlPanel } from '@/components/admin/ListControlPanel';
 import { useDebounce } from '@/hooks/useDebounce';
-import { deletePlayers, getPlayers } from '@/services';
+import { createTransfer, getPlayers } from '@/services';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
 import { useSession } from 'next-auth/react';
 import { ModalClubPlayerContent } from '@/components/admin/modals/ModalClubPlayerContent';
@@ -84,9 +84,18 @@ export default function AdminTeamPage() {
       labels: { confirm: 'Да, удалить', cancel: 'Отменить' },
       confirmProps: { color: 'red' },
       onConfirm: () => {
-        deletePlayers(selectedItems.map((player) => player.id)).then(() =>
-          refetch()
-        );
+        selectedItems.forEach((player) => {
+          createTransfer(
+            {
+              date: new Date(),
+              playerId: player.id,
+              fromClubId: userData!.user.clubAdminId!,
+              toClubId: null,
+              clubAdminId: null,
+            },
+            true
+          ).then(() => refetch());
+        });
         setSelectedItems([]);
       },
     });

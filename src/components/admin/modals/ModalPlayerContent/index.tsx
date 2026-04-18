@@ -26,7 +26,6 @@ const playerTypes = [
     label: 'Игрок',
     value: 'player',
   },
-  { label: 'Бывший игрок', value: 'old_player' },
   { label: 'Представитель', value: 'team' },
 ];
 

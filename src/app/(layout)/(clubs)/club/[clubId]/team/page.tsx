@@ -29,7 +29,12 @@ export default async function TeamPage({
       <div className={s.backLink}>
         <BackLink href={`/club/${clubId}`} />
       </div>
-      <Team players={players} matchTypes={matchTypes} transfers={transfers} />
+      <Team
+        players={players}
+        matchTypes={matchTypes}
+        transfers={transfers}
+        clubId={+clubId}
+      />
     </>
   );
 }

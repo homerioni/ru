@@ -35,7 +35,26 @@ export async function GET(req: NextRequest) {
     take: takeQty,
     skip: skipQty,
     include: {
-      player: true,
+      player: {
+        include: {
+          club: true,
+          playedIn: {
+            select: {
+              goals: true,
+              assists: true,
+              match: {
+                select: {
+                  type: {
+                    select: {
+                      id: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       fromClub: true,
       toClub: true,
     },
@@ -50,11 +69,20 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const data = await req.json();
 
+  const { isPlayerUpdate, ...transferData } = data;
+
   if (data.id) {
     const transfer = await prisma.transfer.update({
       where: { id: data.id },
-      data,
+      data: transferData,
     });
+
+    if (isPlayerUpdate) {
+      await prisma.player.update({
+        where: { id: data.playerId },
+        data: { clubId: data.toClubId ?? null },
+      });
+    }
 
     return NextResponse.json(transfer);
   } else {
@@ -88,7 +116,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const transfer = await prisma.transfer.create({ data });
+    const transfer = await prisma.transfer.create({ data: transferData });
+
+    if (isPlayerUpdate) {
+      await prisma.player.update({
+        where: { id: data.playerId },
+        data: { clubId: data.toClubId ?? null },
+      });
+    }
 
     return NextResponse.json(transfer);
   }

@@ -10,7 +10,14 @@ type TGetTransfersProps = {
 };
 
 export type TGetTransfer = Transfer & {
-  player: Player;
+  player: Player & {
+    club: Club | null;
+    playedIn: {
+      goals: number;
+      assists: number;
+      match: { type: { id: number } };
+    }[];
+  };
   fromClub: Club | null;
   toClub: Club | null;
 };
@@ -43,17 +50,25 @@ export const deleteTransfers = async (ids: number[]) => {
 
 // Omit id for creation, or use a specific type if available
 export const createTransfer = async (
-  transfer: Omit<Transfer, 'id' | 'createdAt' | 'updateAt'>
+  transfer: Omit<Transfer, 'id' | 'createdAt' | 'updateAt'>,
+  isPlayerUpdate?: boolean
 ) => {
-  const { data } = await axiosInstance.post(apiRoutes.transfers, transfer);
+  const { data } = await axiosInstance.post(apiRoutes.transfers, {
+    ...transfer,
+    isPlayerUpdate,
+  });
 
   return data;
 };
 
 export const updateTransfer = async (
-  transfer: Omit<Transfer, 'createdAt' | 'updateAt'>
+  transfer: Omit<Transfer, 'createdAt' | 'updateAt'>,
+  isPlayerUpdate?: boolean
 ) => {
-  const { data } = await axiosInstance.post(apiRoutes.transfers, transfer);
+  const { data } = await axiosInstance.post(apiRoutes.transfers, {
+    ...transfer,
+    isPlayerUpdate,
+  });
 
   return data;
 };

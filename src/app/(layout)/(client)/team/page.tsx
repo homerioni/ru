@@ -19,7 +19,12 @@ export default async function TeamPage() {
 
   return (
     <>
-      <Team players={players} matchTypes={matchTypes} transfers={transfers} />
+      <Team
+        players={players}
+        matchTypes={matchTypes}
+        transfers={transfers}
+        clubId={MY_CLUB_ID}
+      />
     </>
   );
 }

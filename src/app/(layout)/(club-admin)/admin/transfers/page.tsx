@@ -31,28 +31,30 @@ export default function AdminTransfersPage() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['transfers', page],
     queryFn: () =>
-      getTransfers({ qty: 50, page, clubAdminId: userData!.user.clubAdminId! }),
+      getTransfers({ qty: 50, page, clubId: userData!.user.clubAdminId! }),
   });
 
   const transfersList = useMemo(
     () =>
-      data?.transfers.map((transfer) => ({
-        data: transfer,
-        tableData: [
-          <Image
-            key={transfer.id}
-            src={transfer.player?.photo ?? defaultPlayerImg}
-            alt=""
-            width={64}
-            height={64}
-            style={{ objectFit: 'cover' }}
-          />,
-          transfer.player?.name || 'Неизвестный игрок',
-          transfer.fromClub?.name || '-',
-          transfer.toClub?.name || '-',
-          new Date(transfer.date).toLocaleDateString(),
-        ],
-      })),
+      data?.transfers
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .map((transfer) => ({
+          data: transfer,
+          tableData: [
+            <Image
+              key={transfer.id}
+              src={transfer.player?.photo ?? defaultPlayerImg}
+              alt=""
+              width={64}
+              height={64}
+              style={{ objectFit: 'cover' }}
+            />,
+            transfer.player?.name || 'Неизвестный игрок',
+            transfer.fromClub?.name || '-',
+            transfer.toClub?.name || '-',
+            new Date(transfer.date).toLocaleDateString(),
+          ],
+        })),
     [data]
   );
 

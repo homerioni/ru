@@ -29,7 +29,7 @@ type TTeamCardProps = {
     from: Club | null;
     to: Club | null;
   };
-  club?: Club;
+  club?: Club | null;
   className?: string;
   socials?: {
     telegram?: string | null;
@@ -140,6 +140,15 @@ export const TeamCardContent = ({
               height={128}
             />
           )}
+          {club === null && (
+            <Image
+              className={s.clubImg}
+              src={notClubImg}
+              alt="Свободный агент"
+              width={128}
+              height={128}
+            />
+          )}
           {!!number && <p className={s.number}>{number}</p>}
         </div>
         <div className={s.textWrapper}>
@@ -173,7 +182,9 @@ export const TeamCardContent = ({
                       ? socials.telegram
                       : socials.telegram.startsWith('t.me')
                         ? `https://${socials.telegram}`
-                        : `https://t.me/${socials.telegram}`
+                        : socials.telegram.startsWith('@')
+                          ? `https://t.me/${socials.telegram.slice(1)}`
+                          : `https://t.me/${socials.telegram}`
                   }
                   className={s.link}
                   target={'_blank'}
@@ -186,7 +197,9 @@ export const TeamCardContent = ({
                   href={
                     socials.instagram.startsWith('http')
                       ? socials.instagram
-                      : `https://${socials.instagram}`
+                      : socials.instagram.startsWith('instagram')
+                        ? `https://${socials.instagram}`
+                        : `https://instagram.com/${socials.instagram}`
                   }
                   className={s.link}
                   target={'_blank'}
