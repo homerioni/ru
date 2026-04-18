@@ -8,6 +8,23 @@ type MatchInfoProps = {
   data: TGetMatch;
 };
 
+const getRoundTitle = (round: string | null) => {
+  if (round === null || round.startsWith('group')) {
+    return '';
+  }
+
+  switch (round) {
+    case '1':
+      return ' Финал';
+    case '2':
+      return ' Полуфинал';
+    case '3':
+      return ' 3-е место';
+    default:
+      return ` 1/${round} финала`;
+  }
+};
+
 export const MatchInfo = ({ data }: MatchInfoProps) => {
   const matchDate = getMatchDate(data.date);
 
@@ -22,7 +39,7 @@ export const MatchInfo = ({ data }: MatchInfoProps) => {
         <div className={s.infoWrapper}>
           <p className={s.infoTitle}>
             {data.type.name}
-            {data.round ? ` ${data.round} тур` : ''}
+            {getRoundTitle(data.round)}
           </p>
           <p className={s.score}>
             {data.score.length ? `${data.score[0]} - ${data.score[1]}` : 'VS'}
