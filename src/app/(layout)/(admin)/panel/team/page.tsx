@@ -21,6 +21,7 @@ import { ModalPlayerContent } from '@/components/admin/modals/ModalPlayerContent
 import { useDebounce } from '@/hooks/useDebounce';
 import { deletePlayers, getClubs, getPlayers } from '@/services';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
+import defaultClubImg from '@/assets/img/not-club.webp';
 import { playerSortEntities } from '@/utils/playerSortEntities';
 
 const columns = [
@@ -81,8 +82,8 @@ export default function AdminTeamPage() {
             />,
             player.number,
             <Image
-              key={player.clubId}
-              src={player.club.logoSrc}
+              key={player.clubId ?? player.id}
+              src={player.club?.logoSrc ?? defaultClubImg}
               alt=""
               width={40}
               height={40}
