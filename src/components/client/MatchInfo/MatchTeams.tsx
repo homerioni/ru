@@ -114,12 +114,8 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
               >
                 <span className={s.number}>{item.player.number}</span>
                 <span className={s.name}>{item.player.name}</span>
-                {item.goals > 0 && (
-                  <span className={s.stats}>{item.goals}</span>
-                )}
-                {item.assists > 0 && (
-                  <span className={s.stats}>{item.assists}</span>
-                )}
+                <span className={s.stats}>{item.goals || ''}</span>
+                <span className={s.stats}>{item.assists || ''}</span>
               </div>
             ))}
         </div>
