@@ -188,12 +188,7 @@ export const ModalMatch = ({ data, refetch }: TModalPlayerProps) => {
           </Grid.Col>
           <Grid.Col span={{ base: 4, sm: 2 }}>
             <Input.Wrapper label="Номер тура">
-              <Input
-                placeholder="Тур"
-                type="number"
-                step={1}
-                {...register('round', { valueAsNumber: true })}
-              />
+              <Input placeholder="Тур" {...register('round')} />
             </Input.Wrapper>
           </Grid.Col>
           <Grid.Col span={{ base: 6, sm: 3 }}>
