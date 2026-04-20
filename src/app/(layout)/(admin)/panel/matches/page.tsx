@@ -108,6 +108,7 @@ export default function AdminMatchesPage() {
         page,
         clubId: clubId ? +clubId : undefined,
         typeId: typeId ? +typeId : undefined,
+        votes: 'true',
       }),
   });
 
