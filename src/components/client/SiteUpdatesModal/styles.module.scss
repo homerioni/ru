@@ -27,16 +27,17 @@
 
 .images {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1.2rem;
   margin-bottom: 1.6rem;
 }
 
 .imageWrap {
+  flex: 45%;
   position: relative;
   margin-bottom: 1.6rem;
   width: 100%;
-  max-height: min(40vh, 36rem);
+  max-height: min(50vh, 50rem);
   border-radius: 0.8rem;
   overflow: hidden;
 }
@@ -44,7 +45,7 @@
 .image {
   width: 100%;
   height: auto;
-  max-height: min(40vh, 36rem);
+  max-height: min(50vh, 50rem);
   object-fit: contain;
 }
 
@@ -75,12 +76,10 @@
   }
 
   .images {
-    flex-direction: row;
     flex-wrap: wrap;
   }
 
   .imageWrap {
-    flex: 45%;
     margin-bottom: 2rem;
     max-height: min(50vh, 70rem);
   }
