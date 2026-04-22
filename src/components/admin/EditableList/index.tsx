@@ -1,11 +1,17 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Center, Checkbox, Table } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { Player, Match, Club, MatchType, Transfer } from '@prisma/client';
+import { Player, Match, Club, MatchType, Transfer, SiteUpdate } from '@prisma/client';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import s from './styles.module.scss';
 
-export type TEditableItem = Player | Match | Club | MatchType | Transfer;
+export type TEditableItem =
+  | Player
+  | Match
+  | Club
+  | MatchType
+  | Transfer
+  | SiteUpdate;
 
 type TEditableListProps = {
   selectedItems: TEditableItem[];
@@ -62,7 +68,7 @@ export const EditableList = ({
       prev.length ? [] : data.map((item) => item.data)
     );
 
-  const getBgColor = (id: number) =>
+  const getBgColor = (id: number | string) =>
     selectedItems.some((item) => item.id === id)
       ? 'var(--mantine-color-blue-light)'
       : undefined;

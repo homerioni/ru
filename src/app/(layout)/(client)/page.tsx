@@ -1,4 +1,5 @@
 import { MainIntro } from '@/components/client/MainIntro';
+import { SiteUpdatesModal } from '@/components/client/SiteUpdatesModal';
 import { NextMatch } from '@/components/client/NextMatch';
 import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider';
 import { TeamSlider } from '@/components/client/TeamSlider';
@@ -29,6 +30,7 @@ export default async function MainPage() {
 
   return (
     <>
+      <SiteUpdatesModal />
       <MainIntro />
       {nextMatch && <NextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} clubId={MY_CLUB_ID} />

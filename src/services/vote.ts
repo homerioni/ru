@@ -49,3 +49,11 @@ export const getVotesMatches = async () => {
 
   return data;
 };
+
+export const getRecentClosedVotesMatches = async () => {
+  const { data } = await axiosInstance.get<TGetVoteMatch[]>(
+    `${apiRoutes.votesMatches}?status=closedRecent`
+  );
+
+  return data;
+};

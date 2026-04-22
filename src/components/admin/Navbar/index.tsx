@@ -32,6 +32,11 @@ export const Navbar = () => {
         href={adminRoutes.transfers}
         active={pathname === adminRoutes.transfers}
       />
+      <NavLink
+        label="Объявления на сайте"
+        href={adminRoutes.siteUpdates}
+        active={pathname === adminRoutes.siteUpdates}
+      />
     </>
   );
 };

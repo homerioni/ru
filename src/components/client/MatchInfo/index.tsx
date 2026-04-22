@@ -39,7 +39,9 @@ export const MatchInfo = ({ data }: MatchInfoProps) => {
         <div className={s.infoWrapper}>
           <p className={s.infoTitle}>
             {data.type.name}
-            {getRoundTitle(data.round)}
+            {data.type.type === 'cup' &&
+              data.round &&
+              getRoundTitle(data.round)}
           </p>
           <p className={s.score}>
             {data.score.length ? `${data.score[0]} - ${data.score[1]}` : 'VS'}

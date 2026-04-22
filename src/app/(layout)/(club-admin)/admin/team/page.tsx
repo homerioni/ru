@@ -32,6 +32,7 @@ const playerTypeName: { [key in PLAYER_TYPE]: string } = {
 
 export default function AdminTeamPage() {
   const { data: userData } = useSession();
+  const clubAdminId = userData?.user?.clubAdminId;
 
   const [selectedItems, setSelectedItems] = useState<Player[]>([]);
 
@@ -41,14 +42,15 @@ export default function AdminTeamPage() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['players', page, searchDebounce],
+    queryKey: ['players', page, searchDebounce, clubAdminId],
     queryFn: () =>
       getPlayers({
-        clubId: `${userData!.user.clubAdminId!}`,
+        clubId: `${clubAdminId!}`,
         qty: 50,
         search: searchDebounce || undefined,
         page,
       }),
+    enabled: clubAdminId != null,
   });
 
   const playersList = useMemo(
@@ -84,12 +86,13 @@ export default function AdminTeamPage() {
       labels: { confirm: 'Да, удалить', cancel: 'Отменить' },
       confirmProps: { color: 'red' },
       onConfirm: () => {
+        if (clubAdminId == null) return;
         selectedItems.forEach((player) => {
           createTransfer(
             {
               date: new Date(),
               playerId: player.id,
-              fromClubId: userData!.user.clubAdminId!,
+              fromClubId: clubAdminId,
               toClubId: null,
               clubAdminId: null,
             },

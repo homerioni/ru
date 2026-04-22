@@ -46,6 +46,7 @@ export const adminRoutes = {
   clubs: `${adminRoute}/clubs`,
   types: `${adminRoute}/types`,
   transfers: `${adminRoute}/transfers`,
+  siteUpdates: `${adminRoute}/site-updates`,
 } as const;
 
 export const clubAdminRoutes = {
@@ -78,4 +79,5 @@ export const apiRoutes = {
   upload: '/upload',
   transfers: '/transfers',
   userPlayer: '/user-player',
+  siteUpdates: '/site-updates',
 } as const;

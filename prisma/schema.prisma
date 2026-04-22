@@ -244,3 +244,16 @@ model Transfer {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }
+
+model SiteUpdate {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  imageSrcs   String[] @default([])
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("site_updates")
+}

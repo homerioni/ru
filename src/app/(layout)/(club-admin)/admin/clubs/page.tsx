@@ -22,10 +22,12 @@ export default function ClubAdminClubsPage() {
   const [selectedItems, setSelectedItems] = useState<Club[]>([]);
 
   const { data: userData } = useSession();
+  const clubAdminId = userData?.user?.clubAdminId;
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['clubs'],
-    queryFn: () => getClub(userData!.user.clubAdminId!),
+    queryKey: ['clubs', clubAdminId],
+    queryFn: () => getClub(clubAdminId!),
+    enabled: clubAdminId != null,
   });
 
   useEffect(() => {

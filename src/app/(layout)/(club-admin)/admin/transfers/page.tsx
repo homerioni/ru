@@ -27,11 +27,13 @@ export default function AdminTransfersPage() {
   const [page, setPage] = useState(1);
 
   const { data: userData } = useSession();
+  const clubAdminId = userData?.user?.clubAdminId;
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['transfers', page],
+    queryKey: ['transfers', page, clubAdminId],
     queryFn: () =>
-      getTransfers({ qty: 50, page, clubId: userData!.user.clubAdminId! }),
+      getTransfers({ qty: 50, page, clubId: clubAdminId! }),
+    enabled: clubAdminId != null,
   });
 
   const transfersList = useMemo(

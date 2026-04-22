@@ -1,4 +1,4 @@
-import { getVotesMatches } from '@/services';
+import { getRecentClosedVotesMatches, getVotesMatches } from '@/services';
 import { MatchList } from '@/components/client/MatchList';
 
 export const dynamic = 'force-dynamic';
@@ -9,13 +9,18 @@ export const metadata = {
 };
 
 export default async function VotesPage() {
-  const [votesMatches] = await Promise.all([getVotesMatches()]);
-
-  console.log('votesMatches', votesMatches);
+  const [votesMatches, recentClosedVotesMatches] = await Promise.all([
+    getVotesMatches(),
+    getRecentClosedVotesMatches(),
+  ]);
 
   return (
     <>
       <MatchList matches={votesMatches} />
+      <MatchList
+        matches={recentClosedVotesMatches}
+        title="Недавно завершенные голосования"
+      />
     </>
   );
 }

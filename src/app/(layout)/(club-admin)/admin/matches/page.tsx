@@ -92,6 +92,7 @@ const matchesVoteStatus = ({
 
 export default function ClubAdminMatchesPage() {
   const { data: userData } = useSession();
+  const clubAdminId = userData?.user?.clubAdminId;
 
   const [selectedItems, setSelectedItems] = useState<TGetMatch[]>([]);
 
@@ -99,15 +100,16 @@ export default function ClubAdminMatchesPage() {
   const [typeId, setTypeId] = useState<string | null>();
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['matches', page, userData!.user.clubAdminId!, typeId],
+    queryKey: ['matches', page, clubAdminId, typeId],
     queryFn: () =>
       getMatches({
         qty: 50,
         page,
-        clubId: userData!.user.clubAdminId!,
+        clubId: clubAdminId!,
         typeId: typeId ? +typeId : undefined,
         votes: 'true',
       }),
+    enabled: clubAdminId != null,
   });
 
   const { data: matchTypesData } = useQuery({

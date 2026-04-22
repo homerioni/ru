@@ -5,12 +5,16 @@ import s from './styles.module.scss';
 
 type MatchListProps = {
   matches: TGetVoteMatch[];
+  title?: string;
 };
 
-export const MatchList = ({ matches }: MatchListProps) => {
+export const MatchList = ({
+  matches,
+  title = 'Активные голосования',
+}: MatchListProps) => {
   return (
     <section>
-      <h2 className={s.title}>Активные голосования</h2>
+      <h2 className={s.title}>{title}</h2>
       <div className={s.list}>
         {matches.map((match) => {
           const matchDate = getMatchDate(match.date);

@@ -10,3 +10,4 @@ export * from './players';
 export * from './transfers';
 export * from './upload';
 export * from './vote';
+export * from './siteUpdates';
