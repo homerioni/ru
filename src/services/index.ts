@@ -11,3 +11,4 @@ export * from './transfers';
 export * from './upload';
 export * from './vote';
 export * from './siteUpdates';
+export * from './adminRequestLogs';

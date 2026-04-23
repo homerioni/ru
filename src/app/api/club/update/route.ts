@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../../prisma/prisma-client';
+import { withClubAdminRequestLog } from '@/lib/clubAdminRequestLogger';
 
 export async function POST(req: NextRequest) {
-  const data = await req.json();
+  return withClubAdminRequestLog(req, async () => {
+    const data = await req.json();
 
-  const club = await prisma.club.update({
-    where: { id: data.id },
-    data,
+    const club = await prisma.club.update({
+      where: { id: data.id },
+      data,
+    });
+
+    return NextResponse.json(club);
   });
-
-  return NextResponse.json(club);
 }

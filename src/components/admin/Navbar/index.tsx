@@ -37,6 +37,11 @@ export const Navbar = () => {
         href={adminRoutes.siteUpdates}
         active={pathname === adminRoutes.siteUpdates}
       />
+      <NavLink
+        label="Логи club-admin"
+        href={adminRoutes.requestLogs}
+        active={pathname === adminRoutes.requestLogs}
+      />
     </>
   );
 };

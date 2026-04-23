@@ -1,52 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../prisma/prisma-client';
 import { Prisma } from '.prisma/client';
+import { withClubAdminRequestLog } from '@/lib/clubAdminRequestLogger';
 import TransferWhereInput = Prisma.TransferWhereInput;
 
 export async function GET(req: NextRequest) {
-  const qty = req.nextUrl.searchParams.get('qty');
-  const page = req.nextUrl.searchParams.get('page');
-  const clubId = req.nextUrl.searchParams.get('clubId');
-  const clubAdminId = req.nextUrl.searchParams.get('clubAdminId');
+  return withClubAdminRequestLog(req, async () => {
+    const qty = req.nextUrl.searchParams.get('qty');
+    const page = req.nextUrl.searchParams.get('page');
+    const clubId = req.nextUrl.searchParams.get('clubId');
+    const clubAdminId = req.nextUrl.searchParams.get('clubAdminId');
 
-  const takeQty = qty ? +qty : 100;
+    const takeQty = qty ? +qty : 100;
 
-  const pageNum = page !== null ? +page : undefined;
+    const pageNum = page !== null ? +page : undefined;
 
-  const skipQty = pageNum && (pageNum - 1) * takeQty;
+    const skipQty = pageNum && (pageNum - 1) * takeQty;
 
-  const activePage = skipQty ? skipQty / takeQty + 1 : 1;
+    const activePage = skipQty ? skipQty / takeQty + 1 : 1;
 
-  const where: TransferWhereInput & { clubAdminId?: number } = {};
+    const where: TransferWhereInput & { clubAdminId?: number } = {};
 
-  if (clubId) {
-    where.OR = [{ fromClubId: +clubId }, { toClubId: +clubId }];
-  }
+    if (clubId) {
+      where.OR = [{ fromClubId: +clubId }, { toClubId: +clubId }];
+    }
 
-  if (clubAdminId) {
-    where.clubAdminId = +clubAdminId;
-  }
+    if (clubAdminId) {
+      where.clubAdminId = +clubAdminId;
+    }
 
-  const transfers = await prisma.transfer.findMany({
-    where,
-    orderBy: {
-      updateAt: 'desc',
-    },
-    take: takeQty,
-    skip: skipQty,
-    include: {
-      player: {
-        include: {
-          club: true,
-          playedIn: {
-            select: {
-              goals: true,
-              assists: true,
-              match: {
-                select: {
-                  type: {
-                    select: {
-                      id: true,
+    const transfers = await prisma.transfer.findMany({
+      where,
+      orderBy: {
+        updateAt: 'desc',
+      },
+      take: takeQty,
+      skip: skipQty,
+      include: {
+        player: {
+          include: {
+            club: true,
+            playedIn: {
+              select: {
+                goals: true,
+                assists: true,
+                match: {
+                  select: {
+                    type: {
+                      select: {
+                        id: true,
+                      },
                     },
                   },
                 },
@@ -54,89 +57,93 @@ export async function GET(req: NextRequest) {
             },
           },
         },
+        fromClub: true,
+        toClub: true,
       },
-      fromClub: true,
-      toClub: true,
-    },
+    });
+
+    const totalCount = await prisma.transfer.count({ where });
+    const totalPages = Math.ceil(totalCount / takeQty);
+
+    return NextResponse.json({ transfers, totalCount, activePage, totalPages });
   });
-
-  const totalCount = await prisma.transfer.count({ where });
-  const totalPages = Math.ceil(totalCount / takeQty);
-
-  return NextResponse.json({ transfers, totalCount, activePage, totalPages });
 }
 
 export async function POST(req: NextRequest) {
-  const data = await req.json();
+  return withClubAdminRequestLog(req, async () => {
+    const data = await req.json();
 
-  const { isPlayerUpdate, ...transferData } = data;
+    const { isPlayerUpdate, ...transferData } = data;
 
-  if (data.id) {
-    const transfer = await prisma.transfer.update({
-      where: { id: data.id },
-      data: transferData,
-    });
-
-    if (isPlayerUpdate) {
-      await prisma.player.update({
-        where: { id: data.playerId },
-        data: { clubId: data.toClubId ?? null },
+    if (data.id) {
+      const transfer = await prisma.transfer.update({
+        where: { id: data.id },
+        data: transferData,
       });
-    }
 
-    return NextResponse.json(transfer);
-  } else {
-    const transferDate = new Date(data.date);
+      if (isPlayerUpdate) {
+        await prisma.player.update({
+          where: { id: data.playerId },
+          data: { clubId: data.toClubId ?? null },
+        });
+      }
 
-    const startOfDay = new Date(transferDate);
-    startOfDay.setDate(1);
-    startOfDay.setUTCHours(0, 0, 0, 0);
+      return NextResponse.json(transfer);
+    } else {
+      const transferDate = new Date(data.date);
 
-    const endOfDay = new Date(
-      new Date(transferDate).getFullYear(),
-      new Date(transferDate).getMonth() + 1,
-      0
-    );
-    endOfDay.setUTCHours(23, 59, 59, 999);
+      const startOfDay = new Date(transferDate);
+      startOfDay.setDate(1);
+      startOfDay.setUTCHours(0, 0, 0, 0);
 
-    const existingTransfer = await prisma.transfer.findFirst({
-      where: {
-        date: {
-          gte: startOfDay,
-          lte: endOfDay,
-        },
-        playerId: data.playerId,
-      },
-    });
-
-    if (existingTransfer) {
-      return NextResponse.json(
-        { error: 'Трансфер этого игрока уже есть в этом месяце' },
-        { status: 409 }
+      const endOfDay = new Date(
+        new Date(transferDate).getFullYear(),
+        new Date(transferDate).getMonth() + 1,
+        0
       );
-    }
+      endOfDay.setUTCHours(23, 59, 59, 999);
 
-    const transfer = await prisma.transfer.create({ data: transferData });
-
-    if (isPlayerUpdate) {
-      await prisma.player.update({
-        where: { id: data.playerId },
-        data: { clubId: data.toClubId ?? null },
+      const existingTransfer = await prisma.transfer.findFirst({
+        where: {
+          date: {
+            gte: startOfDay,
+            lte: endOfDay,
+          },
+          playerId: data.playerId,
+        },
       });
-    }
 
-    return NextResponse.json(transfer);
-  }
+      if (existingTransfer) {
+        return NextResponse.json(
+          { error: 'Трансфер этого игрока уже есть в этом месяце' },
+          { status: 409 }
+        );
+      }
+
+      const transfer = await prisma.transfer.create({ data: transferData });
+
+      if (isPlayerUpdate) {
+        await prisma.player.update({
+          where: { id: data.playerId },
+          data: { clubId: data.toClubId ?? null },
+        });
+      }
+
+      return NextResponse.json(transfer);
+    }
+  });
 }
 
 export async function DELETE(req: NextRequest) {
-  const idsParam = req.nextUrl.searchParams.get('ids');
+  return withClubAdminRequestLog(req, async () => {
+    const idsParam = req.nextUrl.searchParams.get('ids');
 
-  const ids = idsParam ? idsParam.split(',').map(Number) : [];
+    const ids = idsParam ? idsParam.split(',').map(Number) : [];
 
-  const response = await prisma.transfer.deleteMany({
-    where: { id: { in: ids } },
+    const response = await prisma.transfer.deleteMany({
+      where: { id: { in: ids } },
+    });
+
+    return NextResponse.json(response);
   });
-
-  return NextResponse.json(response);
 }

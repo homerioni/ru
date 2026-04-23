@@ -257,3 +257,23 @@ model SiteUpdate {
 
   @@map("site_updates")
 }
+
+model ClubAdminRequestLog {
+  id            String   @id @default(cuid())
+  method        String
+  path          String
+  query         String?  @db.Text
+  payload       String?  @db.Text
+  adminUserId   String?
+  adminUsername String?
+  adminRole     ROLE?
+  clubAdminId   Int?
+  statusCode    Int?
+  error         String?  @db.Text
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([adminUserId])
+  @@index([clubAdminId])
+  @@map("club_admin_request_logs")
+}

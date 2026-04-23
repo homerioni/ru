@@ -5,11 +5,13 @@ import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMediaQuery } from '@mantine/hooks';
+import { useEffect } from 'react';
 import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';
 import { ClubAdminPanel } from '@/components/admin/ClubAdminPanel';
 import { ClubAuthGuard } from '@/components/admin/ClubAuthGuard/AuthGuard';
+import { axiosInstance } from '@/services';
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,14 @@ export default function ClubAdminLayout({
   children: React.ReactNode;
 }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  useEffect(() => {
+    axiosInstance.defaults.headers.common['x-admin-scope'] = 'club-admin';
+
+    return () => {
+      delete axiosInstance.defaults.headers.common['x-admin-scope'];
+    };
+  }, []);
 
   const modalProps = {
     fullScreen: isMobile,
