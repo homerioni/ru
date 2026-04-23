@@ -21,7 +21,7 @@ export const ROUTES = {
   },
   votes: {
     name: 'Голосования',
-    mobName: 'Активные голосования',
+    mobName: undefined,
     href: '/votes',
   },
   clubs: {
