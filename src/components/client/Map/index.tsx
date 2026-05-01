@@ -4,7 +4,7 @@ import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps';
 import s from './styles.module.scss';
 
 export const MyMap = ({
-  coordinates = [52.364996, 30.425191],
+  coordinates = [52.370709, 30.335817],
 }: {
   coordinates?: [number, number];
 }) => {
