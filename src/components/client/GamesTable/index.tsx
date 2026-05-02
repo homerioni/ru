@@ -46,13 +46,16 @@ export const GamesTable = ({
   const [activeTab, setActiveTab] = useState(+defaultId);
 
   const goals = matches?.played?.reduce<
-    Map<string, { clubImgSrc: string; name: string; qty: number }>
+    Map<number, { clubImgSrc: string; name: string; qty: number }>
   >((acc, match) => {
+    console.log('match', match);
+
     match.players.forEach((stats) => {
+      console.log('stats', stats);
       if (!stats.goals) return;
 
-      if (!acc.has(stats.player.name)) {
-        acc.set(stats.player.name, {
+      if (!acc.has(stats.player.id)) {
+        acc.set(stats.player.id, {
           clubImgSrc:
             match[stats.clubId === match.homeClubId ? 'homeClub' : 'awayClub']
               .logoSrc,
@@ -60,14 +63,16 @@ export const GamesTable = ({
           qty: stats.goals,
         });
       } else {
-        const get = acc.get(stats.player.name)!;
+        const get = acc.get(stats.player.id)!;
 
-        acc.set(stats.player.name, { ...get, qty: get.qty + stats.goals });
+        acc.set(stats.player.id, { ...get, qty: get.qty + stats.goals });
       }
     });
 
     return acc;
   }, new Map());
+
+  console.log(goals);
 
   const assists = matches?.played?.reduce<
     Map<string, { clubImgSrc: string; name: string; qty: number }>
@@ -146,12 +151,12 @@ export const GamesTable = ({
       key={'stats'}
       goals={
         goals
-          ? [...goals.values()].slice(0, 10).sort((a, b) => b.qty - a.qty)
+          ? [...goals.values()].sort((a, b) => b.qty - a.qty).slice(0, 10)
           : []
       }
       assists={
         assists
-          ? [...assists.values()].slice(0, 10).sort((a, b) => b.qty - a.qty)
+          ? [...assists.values()].sort((a, b) => b.qty - a.qty).slice(0, 10)
           : []
       }
     />,
