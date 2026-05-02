@@ -48,10 +48,7 @@ export const GamesTable = ({
   const goals = matches?.played?.reduce<
     Map<number, { clubImgSrc: string; name: string; qty: number }>
   >((acc, match) => {
-    console.log('match', match);
-
     match.players.forEach((stats) => {
-      console.log('stats', stats);
       if (!stats.goals) return;
 
       if (!acc.has(stats.player.id)) {
@@ -71,8 +68,6 @@ export const GamesTable = ({
 
     return acc;
   }, new Map());
-
-  console.log(goals);
 
   const assists = matches?.played?.reduce<
     Map<string, { clubImgSrc: string; name: string; qty: number }>
