@@ -23,7 +23,7 @@ export type TGetPlayers = Player & {
   playedIn: {
     goals: number;
     assists: number;
-    match: { type: { id: number } };
+    match: { type: { id: number }; date: Date };
   }[];
   club: Club;
 };

@@ -12,6 +12,11 @@
   margin-bottom: 6rem;
 }
 
+.selects {
+  display: flex;
+  gap: 3rem;
+}
+
 .select {
   margin-bottom: 3rem;
 }
@@ -28,6 +33,12 @@
 
   .tabs {
     margin-bottom: 4rem;
+  }
+
+  .selects {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
   }
 
   .select {

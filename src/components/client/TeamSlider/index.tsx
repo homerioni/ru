@@ -10,6 +10,15 @@ import { TeamCard } from '@/components/client/TeamCard';
 import { TGetPlayers } from '@/types';
 import Link from 'next/link';
 
+function shuffle<T>(items: T[]): T[] {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 type TeamSliderProps = {
   players: TGetPlayers[];
   clubId?: number | string;
@@ -17,16 +26,11 @@ type TeamSliderProps = {
 
 export const TeamSlider = ({ players, clubId }: TeamSliderProps) => {
   const swiperRef = useRef<SwiperType>(null);
-  const [playerList, setPlayerList] = useState(
-    players.filter(
-      (player) =>
-        player.isShow && (player.type === 'player' || player.type === 'team')
-    )
-  );
+  const [orderedPlayers, setOrderedPlayers] = useState(players);
 
   useEffect(() => {
-    setPlayerList((prev) => prev.sort(() => Math.random() - 0.5));
-  }, []);
+    setOrderedPlayers(shuffle(players));
+  }, [players]);
 
   return (
     <section className={`${s.main} container`}>
@@ -50,7 +54,7 @@ export const TeamSlider = ({ players, clubId }: TeamSliderProps) => {
           },
         }}
       >
-        {playerList.map((player) => (
+        {orderedPlayers.map((player) => (
           <SwiperSlide key={player.id}>
             <TeamCard
               small

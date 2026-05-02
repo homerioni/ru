@@ -42,10 +42,12 @@ export async function GET(req: NextRequest) {
             club: true,
             playedIn: {
               select: {
+                clubId: true,
                 goals: true,
                 assists: true,
                 match: {
                   select: {
+                    date: true,
                     type: {
                       select: {
                         id: true,

@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
             assists: true,
             match: {
               select: {
+                date: true,
                 type: {
                   select: {
                     id: true,
