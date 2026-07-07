@@ -73,7 +73,7 @@
 
 .animate {
   position: relative;
-  width: 100vw;
+  width: 30vw;
   aspect-ratio: 10 / 7;
 
   > * {
@@ -124,5 +124,9 @@
     font-size: 4.4rem;
     padding: 1.6rem 6.4rem;
     border-radius: 1rem;
+  }
+
+  .animate {
+    width: 100vw;
   }
 }
