@@ -33,15 +33,15 @@ export default function AdminLayout({
       <Head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </Head>
-      {/*<AuthGuard>*/}
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider>
-          <ModalsProvider modalProps={modalProps}>
-            <AdminPanel>{children}</AdminPanel>
-          </ModalsProvider>
-        </MantineProvider>
-      </QueryClientProvider>
-      {/*</AuthGuard>*/}
+      <AuthGuard>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider>
+            <ModalsProvider modalProps={modalProps}>
+              <AdminPanel>{children}</AdminPanel>
+            </ModalsProvider>
+          </MantineProvider>
+        </QueryClientProvider>
+      </AuthGuard>
     </>
   );
 }
