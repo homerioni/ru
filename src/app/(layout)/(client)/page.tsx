@@ -1,6 +1,6 @@
 import { MainIntro } from '@/components/client/MainIntro';
 import { SiteUpdatesModal } from '@/components/client/SiteUpdatesModal';
-import { NextMatch } from '@/components/client/NextMatch';
+import { NewNextMatch } from '@/components/client/NewNextMatch';
 import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider';
 import { TeamSlider } from '@/components/client/TeamSlider';
 import { getMatches, getNextMatch } from '@/services/matches';
@@ -25,14 +25,14 @@ export default async function MainPage() {
       );
     }),
     getPlayers({ clubId: String(MY_CLUB_ID) }).then((res) => res.players),
-    getMatchType(2),
+    getMatchType(8),
   ]);
 
   return (
     <>
       <SiteUpdatesModal />
       <MainIntro />
-      {nextMatch && <NextMatch match={nextMatch} />}
+      {nextMatch && <NewNextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} clubId={MY_CLUB_ID} />
       <LeagueTable
         data={getTableStats(matchType)}

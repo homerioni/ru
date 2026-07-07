@@ -1,0 +1,128 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  margin: 15rem auto;
+}
+
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.infoTitle {
+  font-size: 3rem;
+  text-transform: uppercase;
+  padding: 1.5rem 2rem;
+  border-radius: .6rem;
+  background: var(--red);
+  color: var(--text-primary);
+}
+
+.timer {
+  width: 40rem;
+  padding: 1.5rem 0;
+  margin: 6rem 0;
+  background: var(--bg-secondary-4);
+  font-size: 4rem;
+  color: var(--foreground);
+  backdrop-filter: blur(2px);
+}
+
+.date {
+  font-size: 3rem;
+  color: var(--text-secondary);
+}
+
+.time {
+  font-size: 3rem;
+  text-transform: uppercase;
+  padding: 1.5rem 5rem;
+  border-radius: .6rem;
+  background: var(--red);
+  color: var(--text-primary);
+}
+
+@keyframes anim1 {
+  0% {
+    visibility: hidden;
+  }
+  50% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: visible;
+  }
+}
+
+@keyframes anim2 {
+  0% {
+    visibility: visible;
+  }
+  50% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: hidden;
+  }
+}
+
+.animate {
+  position: relative;
+  width: 100vw;
+  aspect-ratio: 10 / 7;
+
+  > * {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  > *:first-child {
+    animation: anim1 1.4s linear infinite;
+  }
+
+  > *:last-child {
+    animation: anim2 1.4s linear infinite;
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    flex-direction: column;
+    gap: 6rem;
+  }
+
+  .infoBox {
+    gap: 2rem;
+  }
+
+  .infoTitle {
+    font-size: 4rem;
+    padding: 2rem 3rem;
+    border-radius: 1rem;
+  }
+
+  .timer {
+    width: 60rem;
+    padding: 2rem 0;
+    margin: 4rem 0;
+    font-size: 6rem;
+  }
+
+  .date {
+    font-size: 4.4rem;
+  }
+
+  .time {
+    font-size: 4.4rem;
+    padding: 1.6rem 6.4rem;
+    border-radius: 1rem;
+  }
+}

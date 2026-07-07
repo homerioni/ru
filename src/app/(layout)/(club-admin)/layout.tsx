@@ -44,16 +44,16 @@ export default function ClubAdminLayout({
       <Head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </Head>
-      <ClubAuthGuard>
-        <QueryClientProvider client={queryClient}>
-          <MantineProvider>
-            <Notifications position="top-center" zIndex={1000} />
-            <ModalsProvider modalProps={modalProps}>
-              <ClubAdminPanel>{children}</ClubAdminPanel>
-            </ModalsProvider>
-          </MantineProvider>
-        </QueryClientProvider>
-      </ClubAuthGuard>
+      {/*<ClubAuthGuard>*/}
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider>
+          <Notifications position="top-center" zIndex={1000} />
+          <ModalsProvider modalProps={modalProps}>
+            <ClubAdminPanel>{children}</ClubAdminPanel>
+          </ModalsProvider>
+        </MantineProvider>
+      </QueryClientProvider>
+      {/*</ClubAuthGuard>*/}
     </>
   );
 }
