@@ -5,34 +5,13 @@ import s from './styles.module.scss';
 
 type LiveStreamPlayerProps = {
   embedUrl: string;
-  isCinema?: boolean;
-  onToggleCinema?: () => void;
 };
 
-export const LiveStreamPlayer = ({
-  embedUrl,
-  isCinema = false,
-  onToggleCinema,
-}: LiveStreamPlayerProps) => {
+export const LiveStreamPlayer = ({ embedUrl }: LiveStreamPlayerProps) => {
   const [hasError, setHasError] = useState(false);
 
   return (
-    <div className={`${s.wrap} ${isCinema ? s.wrapCinema : ''}`}>
-      {onToggleCinema ? (
-        <button
-          type="button"
-          className={s.fullscreenBtn}
-          onClick={onToggleCinema}
-          aria-label={
-            isCinema
-              ? 'Выйти из полноэкранного режима'
-              : 'Смотреть на весь экран с чатом'
-          }
-        >
-          {isCinema ? '✕' : '⛶'}
-        </button>
-      ) : null}
-
+    <div className={s.wrap}>
       {hasError ? (
         <div className={s.fallback}>
           <p>Не удалось загрузить плеер</p>

@@ -1,10 +1,34 @@
 import type { LiveBroadcast } from '@prisma/client';
-import { LiveRoomClient } from './LiveRoomClient';
+import s from './styles.module.scss';
+import { LiveStreamPlayer } from './LiveStreamPlayer';
+import { LiveTextChat } from './LiveTextChat';
+import { DiscordWidget } from './DiscordWidget';
 
 type LiveRoomProps = {
   broadcast: LiveBroadcast;
 };
 
 export const LiveRoom = ({ broadcast }: LiveRoomProps) => {
-  return <LiveRoomClient broadcast={broadcast} />;
+  return (
+    <section className={s.main}>
+      <div className={s.header}>
+        <div className={s.liveBadge}>LIVE</div>
+        <h1 className={s.title}>{broadcast.title}</h1>
+        {broadcast.description ? (
+          <p className={s.description}>{broadcast.description}</p>
+        ) : null}
+      </div>
+
+      <LiveStreamPlayer embedUrl={broadcast.streamEmbedUrl} />
+
+      <div className={s.chatSection}>
+        <h2 className={s.chatTitle}>Чат</h2>
+        <LiveTextChat broadcastId={broadcast.id} />
+      </div>
+
+      <DiscordWidget />
+
+      <div className={s.dogSpacer} aria-hidden />
+    </section>
+  );
 };
