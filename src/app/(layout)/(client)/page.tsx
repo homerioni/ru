@@ -4,7 +4,8 @@ import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider
 import { TeamSlider } from '@/components/client/TeamSlider';
 import { getMatches, getNextMatch } from '@/services/matches';
 import { MY_CLUB_ID } from '@/constants';
-import { getPlayers, getClubPhotos } from '@/services';
+import { getPlayers } from '@/services';
+import { getClubPhotosFromDb } from '@/lib/clubPhotos';
 import { MyMap } from '@/components/client/Map';
 import { getMatchType } from '@/services/matchTypes';
 import { LeagueTable } from '@/components/client/LeagueTable';
@@ -27,7 +28,7 @@ export default async function MainPage() {
     }),
     getPlayers({ clubId: String(MY_CLUB_ID) }).then((res) => res.players),
     getMatchType(8),
-    getClubPhotos(MY_CLUB_ID),
+    getClubPhotosFromDb(MY_CLUB_ID),
   ]);
 
   return (

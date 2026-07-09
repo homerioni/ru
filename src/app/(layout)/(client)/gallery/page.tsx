@@ -1,6 +1,6 @@
 import { ClubGallery } from '@/components/client/ClubGallery';
 import { MY_CLUB_ID } from '@/constants';
-import { getClubPhotos } from '@/services';
+import { getClubPhotosFromDb } from '@/lib/clubPhotos';
 import { BackLink } from '@ui/BackLink';
 import s from './styles.module.scss';
 
@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 export default async function GalleryPage() {
-  const photos = await getClubPhotos(MY_CLUB_ID);
+  const photos = await getClubPhotosFromDb(MY_CLUB_ID);
 
   return (
     <>

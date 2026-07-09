@@ -1,5 +1,5 @@
 import { ClubGallery } from '@/components/client/ClubGallery';
-import { getClubPhotos } from '@/services';
+import { getClubPhotosFromDb } from '@/lib/clubPhotos';
 import { getClub } from '@/services';
 import { BackLink } from '@ui/BackLink';
 import s from './styles.module.scss';
@@ -27,7 +27,7 @@ export default async function ClubGalleryPage({
 }) {
   const { clubId } = await params;
 
-  const photos = await getClubPhotos(+clubId);
+  const photos = await getClubPhotosFromDb(+clubId);
 
   return (
     <>

@@ -1,4 +1,5 @@
-import { getMatches, getNextMatch, getPlayers, getClubPhotos } from '@/services';
+import { getMatches, getNextMatch, getPlayers } from '@/services';
+import { getClubPhotosFromDb } from '@/lib/clubPhotos';
 import { getMatchType } from '@/services/matchTypes';
 import { NextMatch } from '@/components/client/NextMatch';
 import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider';
@@ -41,7 +42,7 @@ export default async function ClubPage({
     }),
     getPlayers({ clubId }).then((res) => res.players),
     getMatchType(getClubMatchType(clubId) ?? 2),
-    getClubPhotos(+clubId),
+    getClubPhotosFromDb(+clubId),
   ]);
 
   return (
