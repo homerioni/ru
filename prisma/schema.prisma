@@ -281,7 +281,6 @@ model LiveBroadcast {
   description    String?  @db.Text
   streamInput    String   @db.Text
   streamEmbedUrl String   @db.Text
-  jitsiRoomName  String
   isActive       Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

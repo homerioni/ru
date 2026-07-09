@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { prisma } from '../../../../prisma/prisma-client';
-import { generateJitsiRoomName, parseStreamInput } from '@/utils/parseStreamInput';
+import { parseStreamInput } from '@/utils/parseStreamInput';
 
 function revalidateLivePaths() {
   revalidatePath('/live');
@@ -50,10 +50,6 @@ export async function POST(req: NextRequest) {
   }
 
   const isActive = Boolean(body.isActive ?? false);
-  const jitsiRoomName =
-    typeof body.jitsiRoomName === 'string' && body.jitsiRoomName.trim()
-      ? body.jitsiRoomName.trim()
-      : generateJitsiRoomName();
 
   if (isActive) {
     await prisma.liveBroadcast.updateMany({
@@ -68,7 +64,6 @@ export async function POST(req: NextRequest) {
       description: body.description ? String(body.description) : null,
       streamInput,
       streamEmbedUrl,
-      jitsiRoomName,
       isActive,
     },
   });

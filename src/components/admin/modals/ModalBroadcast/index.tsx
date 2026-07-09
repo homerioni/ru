@@ -1,10 +1,9 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Grid, Input, Switch, Text, Textarea } from '@mantine/core';
+import { Grid, Input, Switch, Textarea } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { LiveBroadcast } from '@prisma/client';
 import { createBroadcast, updateBroadcast } from '@/services';
 import { AdminEditModal } from '@/components/admin/modals/AdminEditModal';
-import { generateJitsiRoomName } from '@/utils/parseStreamInput';
 
 type TModalBroadcastProps = {
   data?: LiveBroadcast;
@@ -15,7 +14,6 @@ type TForm = {
   title: string;
   description: string;
   streamInput: string;
-  jitsiRoomName: string;
   isActive: boolean;
 };
 
@@ -25,7 +23,6 @@ export const ModalBroadcast = ({ data, refetch }: TModalBroadcastProps) => {
       title: data?.title ?? '',
       description: data?.description ?? '',
       streamInput: data?.streamInput ?? '',
-      jitsiRoomName: data?.jitsiRoomName ?? generateJitsiRoomName(),
       isActive: data?.isActive ?? false,
     },
   });
@@ -35,7 +32,6 @@ export const ModalBroadcast = ({ data, refetch }: TModalBroadcastProps) => {
       title: values.title,
       description: values.description || null,
       streamInput: values.streamInput,
-      jitsiRoomName: values.jitsiRoomName.trim() || generateJitsiRoomName(),
       isActive: values.isActive,
     };
 
@@ -80,33 +76,6 @@ export const ModalBroadcast = ({ data, refetch }: TModalBroadcastProps) => {
             {...register('streamInput', { required: true })}
           />
         </Input.Wrapper>
-      </Grid.Col>
-      <Grid.Col span={12}>
-        <Input.Wrapper
-          label="Комната конференции (Jitsi)"
-          description="Уникальное имя. Можно сгенерировать новое для каждого эфира"
-        >
-          <Input
-            placeholder="rechutd-x7k2m9"
-            {...register('jitsiRoomName', { required: true })}
-          />
-        </Input.Wrapper>
-        <Text fz="xs" c="dimmed" mt={4}>
-          <button
-            type="button"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--blue)',
-              cursor: 'pointer',
-              padding: 0,
-              font: 'inherit',
-            }}
-            onClick={() => setValue('jitsiRoomName', generateJitsiRoomName())}
-          >
-            Сгенерировать новое имя
-          </button>
-        </Text>
       </Grid.Col>
       <Grid.Col span={12}>
         <Switch

@@ -94,7 +94,7 @@
   }
 }
 
-.tabsWrap {
+.chatSection {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -102,70 +102,10 @@
   margin-top: 1.6rem;
 }
 
-.tabBar {
-  display: flex;
-  gap: 0.8rem;
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  padding: 0.8rem 0;
-  background: var(--bg);
-}
-
-.tab {
-  flex: 1;
-  padding: 1.2rem 1rem;
-  border: 1px solid var(--border-primary-op-5);
-  border-radius: 0.6rem;
-  background: var(--bg-2);
-  color: var(--text-primary);
-  font-size: 1.6rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-
-  &.active {
-    background: var(--brand-op-1);
-    border-color: var(--brand);
-    color: var(--brand-2);
-  }
-}
-
-.tabPanel {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 42dvh;
-}
-
-.tabPanels {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 42dvh;
-}
-
-.tabPane {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 42dvh;
-  width: 100%;
-}
-
-.tabPaneVisible {
-  position: relative;
-  z-index: 1;
-}
-
-.tabPaneHidden {
-  position: absolute;
-  inset: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
+.chatTitle {
+  margin: 0 0 1rem;
+  font-size: 2.4rem;
+  text-transform: uppercase;
 }
 
 .chat {
@@ -329,96 +269,58 @@
   height: 0;
 }
 
-.conferenceUser {
-  margin: 0;
-  font-size: 1.6rem;
-  color: var(--text-secondary);
-
-  strong {
-    color: var(--brand-2);
-  }
-}
-
-.conferenceJoin {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.2rem;
-  flex: 1;
-  padding: 2.4rem 1.6rem;
+.discord {
+  margin-top: 2rem;
+  padding: 1.6rem;
   border: 1px solid var(--border-primary-op-5);
   border-radius: 0.8rem;
   background: var(--bg-2);
-  text-align: center;
 }
 
-.conferenceTitle {
-  margin: 0;
+.discordHeader {
+  margin-bottom: 1.2rem;
+}
+
+.discordTitle {
+  margin: 0 0 0.6rem;
   font-size: 2.4rem;
   text-transform: uppercase;
 }
 
-.conferenceHint,
-.conferenceNote {
+.discordHint {
   margin: 0;
-  max-width: 36rem;
-  font-size: 1.5rem;
-  line-height: 1.45;
+  font-size: 1.6rem;
+  line-height: 1.4;
   color: var(--text-secondary);
 }
 
-.conferenceNameLabel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+.discordFrame {
+  display: block;
   width: 100%;
-  max-width: 32rem;
-  text-align: left;
-  font-size: 1.4rem;
-}
-
-.conferenceNameInput {
-  padding: 1.2rem 1.4rem;
-  border: 1px solid var(--border-primary-op-5);
-  border-radius: 0.6rem;
-  background: var(--bg);
-  color: var(--text-primary);
-  font-size: 1.6rem;
-}
-
-.conferenceJoinBtn {
-  width: 100%;
-  max-width: 32rem;
-  padding: 1.4rem 2rem;
+  height: 35rem;
+  margin-bottom: 1.2rem;
   border: 0;
   border-radius: 0.6rem;
-  background: var(--blue);
+  background: #2f3136;
+}
+
+.discordBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1.4rem 2rem;
+  border-radius: 0.6rem;
+  background: #5865f2;
   color: #fff;
   font-size: 1.8rem;
   font-weight: 700;
-  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
 
-  &:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
+  &:hover {
+    background: #4752c4;
   }
-}
-
-.conference {
-  flex: 1;
-  min-height: 50dvh;
-  border: 1px solid var(--border-primary-op-5);
-  border-radius: 0.8rem;
-  overflow: hidden;
-  background: #000;
-}
-
-.conferenceFrame {
-  width: 100%;
-  height: 100%;
-  min-height: 50dvh;
-  border: 0;
 }
 
 @media (max-width: 48em) {
@@ -443,15 +345,9 @@
     border-radius: 0.6rem;
   }
 
-  .tab {
-    font-size: 1.8rem;
-    padding: 1.4rem 0.8rem;
-  }
-
-  .tabPanels,
-  .tabPane,
-  .tabPanel {
-    min-height: 48dvh;
+  .chatTitle {
+    font-size: 2.8rem;
+    margin-bottom: 1.2rem;
   }
 
   .chat {
@@ -540,48 +436,30 @@
   }
 
   .dogSpacer {
-    //height: 22rem;
+    height: 22rem;
   }
 
-  .conference {
-    min-height: 55dvh;
+  .discord {
+    margin-top: 2.4rem;
+    padding: 2rem 1.6rem;
   }
 
-  .conferenceFrame {
-    min-height: 55dvh;
-  }
-
-  .conferenceTitle {
+  .discordTitle {
     font-size: 2.8rem;
   }
 
-  .conferenceHint,
-  .conferenceNote,
-  .conferenceUser {
+  .discordHint {
     font-size: 2.8rem;
-    max-width: none;
   }
 
-  .conferenceNameLabel {
-    font-size: 2.8rem;
-    max-width: none;
+  .discordFrame {
+    height: 42rem;
+    margin-bottom: 1.6rem;
   }
 
-  .conferenceNameInput {
-    padding: 1.8rem 2rem;
-    font-size: 3.2rem;
-    border-radius: 1rem;
-  }
-
-  .conferenceJoinBtn {
-    max-width: none;
+  .discordBtn {
     padding: 2rem;
     font-size: 3.2rem;
     border-radius: 1rem;
-  }
-
-  .conferenceJoin {
-    padding: 2.4rem 1.2rem;
-    gap: 2rem;
   }
 }

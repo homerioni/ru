@@ -16,7 +16,6 @@ const PAGE_SIZE = 20;
 
 const columns = [
   { name: 'Заголовок', width: 0 },
-  { name: 'Комната', width: '18%' },
   { name: 'Статус', width: '12%' },
 ] as const;
 
@@ -38,7 +37,6 @@ export default function AdminBroadcastPage() {
     return allRows.filter(
       (row) =>
         row.title.toLowerCase().includes(q) ||
-        row.jitsiRoomName.toLowerCase().includes(q) ||
         row.streamInput.toLowerCase().includes(q)
     );
   }, [allRows, searchDebounce]);
@@ -60,7 +58,6 @@ export default function AdminBroadcastPage() {
         data: row,
         tableData: [
           row.title,
-          row.jitsiRoomName,
           row.isActive ? (
             <Badge color="red">В эфире</Badge>
           ) : (

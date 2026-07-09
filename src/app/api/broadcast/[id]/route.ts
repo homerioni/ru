@@ -28,9 +28,6 @@ export async function PATCH(req: NextRequest, context: Params) {
   if (body.description !== undefined) {
     data.description = body.description ? String(body.description) : null;
   }
-  if (body.jitsiRoomName !== undefined) {
-    data.jitsiRoomName = String(body.jitsiRoomName).trim();
-  }
 
   if (body.streamInput !== undefined) {
     const streamInput = String(body.streamInput);

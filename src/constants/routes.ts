@@ -44,6 +44,13 @@ export const ROUTES = {
 export const LINKS = {
   telegram: 'https://t.me/rechitcaneunited',
   instagram: 'https://www.instagram.com/rechichaneunited',
+  discord: 'https://discord.gg/rCBqNd6rt',
+} as const;
+
+export const DISCORD = {
+  invite: process.env.NEXT_PUBLIC_DISCORD_INVITE ?? LINKS.discord,
+  serverId:
+    process.env.NEXT_PUBLIC_DISCORD_SERVER_ID ?? '1524857248600555530',
 } as const;
 
 const adminRoute = '/panel';

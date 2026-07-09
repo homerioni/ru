@@ -241,8 +241,6 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
           </button>
         </div>
       </form>
-
-      <div className={s.dogSpacer} aria-hidden />
     </div>
   );
 };

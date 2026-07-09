@@ -1,7 +1,8 @@
 import type { LiveBroadcast } from '@prisma/client';
 import s from './styles.module.scss';
 import { LiveStreamPlayer } from './LiveStreamPlayer';
-import { LiveTabs } from './LiveTabs';
+import { LiveTextChat } from './LiveTextChat';
+import { DiscordWidget } from './DiscordWidget';
 
 type LiveRoomProps = {
   broadcast: LiveBroadcast;
@@ -20,10 +21,14 @@ export const LiveRoom = ({ broadcast }: LiveRoomProps) => {
 
       <LiveStreamPlayer embedUrl={broadcast.streamEmbedUrl} />
 
-      <LiveTabs
-        broadcastId={broadcast.id}
-        jitsiRoomName={broadcast.jitsiRoomName}
-      />
+      <div className={s.chatSection}>
+        <h2 className={s.chatTitle}>Чат</h2>
+        <LiveTextChat broadcastId={broadcast.id} />
+      </div>
+
+      <DiscordWidget />
+
+      <div className={s.dogSpacer} aria-hidden />
     </section>
   );
 };

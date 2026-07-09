@@ -20,7 +20,7 @@ export const getBroadcastsAll = async () => {
 
 type TCreateBroadcast = Pick<
   LiveBroadcast,
-  'title' | 'description' | 'streamInput' | 'jitsiRoomName' | 'isActive'
+  'title' | 'description' | 'streamInput' | 'isActive'
 >;
 
 export const createBroadcast = async (payload: TCreateBroadcast) => {

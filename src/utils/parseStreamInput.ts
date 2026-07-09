@@ -53,8 +53,3 @@ export function parseStreamInput(input: string): string | null {
 
   return null;
 }
-
-export function generateJitsiRoomName(): string {
-  const suffix = Math.random().toString(36).slice(2, 10);
-  return `rechutd-${suffix}`;
-}
