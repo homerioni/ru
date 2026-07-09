@@ -275,6 +275,35 @@ model SiteUpdate {
   @@map("site_updates")
 }
 
+model LiveBroadcast {
+  id             String   @id @default(cuid())
+  title          String
+  description    String?  @db.Text
+  streamInput    String   @db.Text
+  streamEmbedUrl String   @db.Text
+  jitsiRoomName  String
+  isActive       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  chatMessages LiveChatMessage[]
+
+  @@map("live_broadcasts")
+}
+
+model LiveChatMessage {
+  id          String        @id @default(cuid())
+  broadcastId String        @map("broadcast_id")
+  broadcast   LiveBroadcast @relation(fields: [broadcastId], references: [id], onDelete: Cascade)
+  username    String
+  userId      String?       @map("user_id")
+  message     String        @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  @@index([broadcastId, createdAt])
+  @@map("live_chat_messages")
+}
+
 model ClubAdminRequestLog {
   id            String   @id @default(cuid())
   method        String

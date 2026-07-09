@@ -3,7 +3,7 @@ import { prisma } from '../../../prisma/prisma-client';
 export async function GET() {
   const SITE_URL = 'https://rechutd.ru';
 
-  const staticRoutes = ['', 'team', 'matches', 'tables', 'votes', 'gallery', 'clubs'];
+  const staticRoutes = ['', 'team', 'matches', 'tables', 'votes', 'gallery', 'clubs', 'live'];
 
   const matchIds = await prisma.match
     .findMany({ select: { id: true } })

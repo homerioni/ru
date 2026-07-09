@@ -34,6 +34,11 @@ export const ROUTES = {
     mobName: undefined,
     href: '/clubs',
   },
+  live: {
+    name: 'Трансляция',
+    mobName: 'Эфир',
+    href: '/live',
+  },
 } as const;
 
 export const LINKS = {
@@ -54,6 +59,7 @@ export const adminRoutes = {
   siteUpdates: `${adminRoute}/site-updates`,
   gallery: `${adminRoute}/gallery`,
   requestLogs: `${adminRoute}/request-logs`,
+  broadcast: `${adminRoute}/broadcast`,
 } as const;
 
 export const clubAdminRoutes = {
@@ -90,4 +96,6 @@ export const apiRoutes = {
   siteUpdates: '/site-updates',
   clubPhotos: '/club-photos',
   adminRequestLogs: '/admin-request-logs',
+  broadcast: '/broadcast',
+  liveChat: '/live-chat',
 } as const;

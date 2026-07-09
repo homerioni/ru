@@ -13,3 +13,5 @@ export * from './vote';
 export * from './siteUpdates';
 export * from './clubPhotos';
 export * from './adminRequestLogs';
+export * from './broadcast';
+export * from './liveChat';

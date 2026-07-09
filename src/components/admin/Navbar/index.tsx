@@ -43,6 +43,11 @@ export const Navbar = () => {
         active={pathname === adminRoutes.gallery}
       />
       <NavLink
+        label="Трансляция"
+        href={adminRoutes.broadcast}
+        active={pathname === adminRoutes.broadcast}
+      />
+      <NavLink
         label="Логи club-admin"
         href={adminRoutes.requestLogs}
         active={pathname === adminRoutes.requestLogs}
