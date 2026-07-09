@@ -23,7 +23,6 @@ type TModalClubPhotoProps = {
   clubId: number;
   data?: ClubPhoto;
   refetch: () => void;
-  baseSortOrder?: number;
 };
 
 type TForm = {
@@ -52,12 +51,11 @@ export const ModalClubPhoto = ({
   clubId,
   data,
   refetch,
-  baseSortOrder = 0,
 }: TModalClubPhotoProps) => {
   const { register, handleSubmit, setValue, watch } = useForm<TForm>({
     defaultValues: {
       caption: data?.caption ?? '',
-      sortOrder: data?.sortOrder ?? baseSortOrder,
+      sortOrder: data?.sortOrder ?? 100,
       isPublished: data?.isPublished ?? true,
     },
   });
@@ -132,10 +130,10 @@ export const ModalClubPhoto = ({
     } else {
       await createClubPhotos({
         clubId,
-        photos: imageSrcs.map((imageSrc, index) => ({
+        photos: imageSrcs.map((imageSrc) => ({
           imageSrc,
           caption: values.caption || null,
-          sortOrder: values.sortOrder + index,
+          sortOrder: values.sortOrder,
           isPublished: values.isPublished,
         })),
       });
@@ -149,7 +147,8 @@ export const ModalClubPhoto = ({
     <AdminEditModal
       isCreate={!data}
       onSubmit={handleSubmit(onSubmit)}
-      isDisabledSubmit={isUploading || slots.length === 0}
+      loading={isUploading}
+      disabled={slots.length === 0}
     >
       <Grid.Col span={12}>
         <Text fw={500} fz="sm" lh={1.7} display="block" mb="xs">

@@ -4,6 +4,8 @@ import { modals } from '@mantine/modals';
 type TAdminEditModalProps = {
   isCreate: boolean;
   onSubmit: () => void;
+  loading?: boolean;
+  disabled?: boolean;
   isDisabledSubmit?: boolean;
   children: React.ReactNode;
 };
@@ -11,9 +13,14 @@ type TAdminEditModalProps = {
 export const AdminEditModal = ({
   isCreate,
   onSubmit,
+  loading,
+  disabled,
   isDisabledSubmit,
   children,
 }: TAdminEditModalProps) => {
+  const isLoading = loading ?? isDisabledSubmit ?? false;
+  const isDisabled = disabled ?? isDisabledSubmit ?? isLoading;
+
   return (
     <form onSubmit={onSubmit}>
       <Grid gutter={10}>
@@ -24,7 +31,8 @@ export const AdminEditModal = ({
               type="submit"
               variant="outline"
               color={isCreate ? 'green' : undefined}
-              loading={isDisabledSubmit}
+              loading={isLoading}
+              disabled={isDisabled}
             >
               {isCreate ? 'Создать' : 'Сохранить'}
             </Button>
@@ -33,7 +41,7 @@ export const AdminEditModal = ({
               variant="transparent"
               color="gray"
               onClick={() => modals.closeAll()}
-              disabled={isDisabledSubmit}
+              disabled={isLoading}
             >
               Отменить
             </Button>

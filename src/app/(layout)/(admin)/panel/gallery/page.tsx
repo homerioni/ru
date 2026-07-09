@@ -88,11 +88,6 @@ export default function AdminGalleryPage() {
     return filtered.slice(start, start + PAGE_SIZE);
   }, [filtered, page]);
 
-  const baseSortOrder = useMemo(() => {
-    if (!allRows?.length) return 0;
-    return Math.max(...allRows.map((row) => row.sortOrder)) + 1;
-  }, [allRows]);
-
   const list = useMemo(
     () =>
       pageRows.map((row) => ({
@@ -151,13 +146,7 @@ export default function AdminGalleryPage() {
     modals.open({
       title: 'Новые фото',
       size: 'xl',
-      children: (
-        <ModalClubPhoto
-          clubId={clubId}
-          refetch={refetch}
-          baseSortOrder={baseSortOrder}
-        />
-      ),
+      children: <ModalClubPhoto clubId={clubId} refetch={refetch} />,
     });
   };
 
