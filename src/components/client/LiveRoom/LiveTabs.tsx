@@ -34,7 +34,7 @@ export const LiveTabs = ({ broadcastId, jitsiRoomName }: LiveTabsProps) => {
           className={`${s.tab} ${tab === 'conference' ? s.active : ''}`}
           onClick={() => setTab('conference')}
         >
-          Конференция
+          Голосовой чат
         </button>
       </div>
 

@@ -34,10 +34,10 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
   if (!joined) {
     return (
       <div className={s.conferenceJoin}>
-        <h2 className={s.conferenceTitle}>Голосовая конференция</h2>
+        <h2 className={s.conferenceTitle}>Голосовой чат</h2>
         <p className={s.conferenceHint}>
-          Общайтесь голосом с другими зрителями. Камеру можно не включать.
-          Для комфортного звука используйте наушники.
+          Общайтесь голосом с другими зрителями. Для комфортного звука
+          используйте наушники.
         </p>
 
         {isAuthenticated && session?.user && (
@@ -71,7 +71,7 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
             (!isAuthenticated && guestName.trim().length < 2)
           }
         >
-          Войти в конференцию
+          Войти в голосовой чат
         </button>
 
         <p className={s.conferenceNote}>
@@ -87,7 +87,7 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
         className={s.conferenceFrame}
         src={embedUrl ?? undefined}
         title="Конференция"
-        allow="camera; microphone; fullscreen; display-capture; autoplay"
+        allow="microphone; autoplay"
         allowFullScreen
       />
     </div>
