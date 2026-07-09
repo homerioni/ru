@@ -1,0 +1,39 @@
+.main {
+  margin: 10rem auto;
+}
+
+.slide {
+  border-radius: 1.2rem;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 22rem;
+  object-fit: cover;
+  display: block;
+}
+
+.button {
+  display: block;
+  align-self: flex-end;
+  width: fit-content;
+  padding: 1.2rem 2rem;
+  margin-top: 3rem;
+  border-radius: 1.2rem;
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+  font-size: 3.4rem;
+}
+
+@media (max-width: 48em) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .image {
+    height: 18rem;
+  }
+}

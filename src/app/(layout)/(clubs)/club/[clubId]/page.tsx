@@ -1,10 +1,11 @@
-import { getMatches, getNextMatch, getPlayers } from '@/services';
+import { getMatches, getNextMatch, getPlayers, getClubPhotos } from '@/services';
 import { getMatchType } from '@/services/matchTypes';
 import { NextMatch } from '@/components/client/NextMatch';
 import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider';
 import { LeagueTable } from '@/components/client/LeagueTable';
 import { getTableStats } from '@/utils/getTableStats';
 import { TeamSlider } from '@/components/client/TeamSlider';
+import { ClubGallerySlider } from '@/components/client/ClubGallerySlider';
 import s from './styles.module.scss';
 
 const getClubMatchType = (clubId: string) => {
@@ -28,7 +29,7 @@ export default async function ClubPage({
 }) {
   const { clubId } = await params;
 
-  const [nextMatch, matches, players, matchType] = await Promise.all([
+  const [nextMatch, matches, players, matchType, photos] = await Promise.all([
     getNextMatch(clubId),
     getMatches({ clubId: +clubId, qty: 15 }).then((res) => {
       const dateNow = Date.now();
@@ -40,6 +41,7 @@ export default async function ClubPage({
     }),
     getPlayers({ clubId }).then((res) => res.players),
     getMatchType(getClubMatchType(clubId) ?? 2),
+    getClubPhotos(+clubId),
   ]);
 
   return (
@@ -55,6 +57,7 @@ export default async function ClubPage({
         />
       )}
       <TeamSlider players={players} clubId={clubId} />
+      <ClubGallerySlider photos={photos.slice(0, 12)} clubId={clubId} />
     </div>
   );
 }

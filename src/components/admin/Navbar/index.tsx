@@ -38,6 +38,11 @@ export const Navbar = () => {
         active={pathname === adminRoutes.siteUpdates}
       />
       <NavLink
+        label="Галереи клубов"
+        href={adminRoutes.gallery}
+        active={pathname === adminRoutes.gallery}
+      />
+      <NavLink
         label="Логи club-admin"
         href={adminRoutes.requestLogs}
         active={pathname === adminRoutes.requestLogs}

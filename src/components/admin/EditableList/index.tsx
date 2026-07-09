@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Center, Checkbox, Table } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { Player, Match, Club, MatchType, Transfer, SiteUpdate } from '@prisma/client';
+import { Player, Match, Club, MatchType, Transfer, SiteUpdate, ClubPhoto } from '@prisma/client';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import s from './styles.module.scss';
 
@@ -11,7 +11,8 @@ export type TEditableItem =
   | Club
   | MatchType
   | Transfer
-  | SiteUpdate;
+  | SiteUpdate
+  | ClubPhoto;
 
 type TEditableListProps = {
   selectedItems: TEditableItem[];

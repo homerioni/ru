@@ -24,6 +24,11 @@ export const ROUTES = {
     mobName: undefined,
     href: '/votes',
   },
+  gallery: {
+    name: 'Галерея',
+    mobName: undefined,
+    href: '/gallery',
+  },
   clubs: {
     name: 'Другие команды',
     mobName: undefined,
@@ -47,6 +52,7 @@ export const adminRoutes = {
   types: `${adminRoute}/types`,
   transfers: `${adminRoute}/transfers`,
   siteUpdates: `${adminRoute}/site-updates`,
+  gallery: `${adminRoute}/gallery`,
   requestLogs: `${adminRoute}/request-logs`,
 } as const;
 
@@ -57,6 +63,7 @@ export const clubAdminRoutes = {
   clubs: `${clubAdminRoute}/clubs`,
   types: `${clubAdminRoute}/types`,
   transfers: `${clubAdminRoute}/transfers`,
+  gallery: `${clubAdminRoute}/gallery`,
 } as const;
 
 export const apiRoutes = {
@@ -81,5 +88,6 @@ export const apiRoutes = {
   transfers: '/transfers',
   userPlayer: '/user-player',
   siteUpdates: '/site-updates',
+  clubPhotos: '/club-photos',
   adminRequestLogs: '/admin-request-logs',
 } as const;

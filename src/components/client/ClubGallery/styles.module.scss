@@ -1,0 +1,160 @@
+.main {
+  padding: 4rem 0 8rem;
+}
+
+.title {
+  margin: 0 0 5rem;
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.image {
+  width: 100%;
+  height: 24rem;
+  object-fit: cover;
+  border-radius: 1.2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.item:hover .image {
+  transform: translateY(-0.2rem);
+  box-shadow: 0 1rem 2.4rem rgba(0, 0, 0, 0.18);
+}
+
+.caption {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.empty {
+  padding: 8rem 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.8rem;
+}
+
+.lightboxContent {
+  max-width: min(96vw, 110rem);
+  width: 100%;
+}
+
+.lightbox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.lightboxImageWrap {
+  width: 100%;
+  max-height: 75vh;
+  display: flex;
+  justify-content: center;
+}
+
+.lightboxImage {
+  width: auto;
+  max-width: 100%;
+  max-height: 75vh;
+  height: auto;
+  object-fit: contain;
+  border-radius: 1rem;
+}
+
+.lightboxCaption {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.counter {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--text-secondary);
+}
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4rem;
+  height: 4rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  z-index: 2;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0 auto;
+    border-top: 0.4rem solid var(--bg);
+    border-right: 0.4rem solid var(--bg);
+  }
+}
+
+.navPrev {
+  left: -4rem;
+
+  &::before {
+    transform: translateX(20%) rotate(-135deg);
+  }
+}
+
+.navNext {
+  right: -4rem;
+
+  &::before {
+    transform: translateX(-20%) rotate(45deg);
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    padding: 2rem 4rem 6rem;
+  }
+
+  .title {
+    font-size: 4rem;
+    margin-bottom: 4rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+
+  .image {
+    height: 20rem;
+  }
+
+  .navBtn {
+    width: 5rem;
+    height: 5rem;
+  }
+}

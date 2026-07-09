@@ -83,8 +83,25 @@ model Club {
   transfersFrom Transfer[] @relation("TransferFromClub")
   transfersTo Transfer[] @relation("TransferToClub")
 
+  photos ClubPhoto[]
+
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
+}
+
+model ClubPhoto {
+  id          Int      @id @default(autoincrement())
+  clubId      Int
+  club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  imageSrc    String
+  caption     String?
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([clubId])
+  @@map("club_photos")
 }
 
 enum PLAYER_TYPE {

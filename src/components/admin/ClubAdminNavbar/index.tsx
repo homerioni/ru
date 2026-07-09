@@ -27,6 +27,11 @@ export const ClubAdminNavbar = () => {
         href={clubAdminRoutes.transfers}
         active={pathname === clubAdminRoutes.transfers}
       />
+      <NavLink
+        label="Галерея"
+        href={clubAdminRoutes.gallery}
+        active={pathname === clubAdminRoutes.gallery}
+      />
     </>
   );
 };

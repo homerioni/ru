@@ -1,20 +1,21 @@
 import { MainIntro } from '@/components/client/MainIntro';
 import { SiteUpdatesModal } from '@/components/client/SiteUpdatesModal';
-import { NewNextMatch } from '@/components/client/NewNextMatch';
 import { PreviousMatchesSlider } from '@/components/client/PreviousMatchesSlider';
 import { TeamSlider } from '@/components/client/TeamSlider';
 import { getMatches, getNextMatch } from '@/services/matches';
 import { MY_CLUB_ID } from '@/constants';
-import { getPlayers } from '@/services';
+import { getPlayers, getClubPhotos } from '@/services';
 import { MyMap } from '@/components/client/Map';
 import { getMatchType } from '@/services/matchTypes';
 import { LeagueTable } from '@/components/client/LeagueTable';
 import { getTableStats } from '@/utils/getTableStats';
+import { NextMatch } from '@/components/client/NextMatch';
+import { ClubGallerySlider } from '@/components/client/ClubGallerySlider';
 
 export const revalidate = 1800;
 
 export default async function MainPage() {
-  const [nextMatch, matches, players, matchType] = await Promise.all([
+  const [nextMatch, matches, players, matchType, photos] = await Promise.all([
     getNextMatch(),
     getMatches({ clubId: MY_CLUB_ID, qty: 15 }).then((res) => {
       const dateNow = Date.now();
@@ -26,13 +27,14 @@ export default async function MainPage() {
     }),
     getPlayers({ clubId: String(MY_CLUB_ID) }).then((res) => res.players),
     getMatchType(8),
+    getClubPhotos(MY_CLUB_ID),
   ]);
 
   return (
     <>
       <SiteUpdatesModal />
       <MainIntro />
-      {nextMatch && <NewNextMatch match={nextMatch} />}
+      {nextMatch && <NextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} clubId={MY_CLUB_ID} />
       <LeagueTable
         data={getTableStats(matchType)}
@@ -40,6 +42,7 @@ export default async function MainPage() {
         myClubId={MY_CLUB_ID}
       />
       <TeamSlider players={players} />
+      <ClubGallerySlider photos={photos.slice(0, 12)} clubId={MY_CLUB_ID} />
       <MyMap />
     </>
   );
