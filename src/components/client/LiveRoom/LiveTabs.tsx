@@ -38,12 +38,21 @@ export const LiveTabs = ({ broadcastId, jitsiRoomName }: LiveTabsProps) => {
         </button>
       </div>
 
-      <div className={s.tabPanel} role="tabpanel">
-        {tab === 'chat' ? (
+      <div className={s.tabPanels}>
+        <div
+          className={`${s.tabPane} ${tab === 'chat' ? s.tabPaneVisible : s.tabPaneHidden}`}
+          role="tabpanel"
+          aria-hidden={tab !== 'chat'}
+        >
           <LiveTextChat broadcastId={broadcastId} />
-        ) : (
+        </div>
+        <div
+          className={`${s.tabPane} ${tab === 'conference' ? s.tabPaneVisible : s.tabPaneHidden}`}
+          role="tabpanel"
+          aria-hidden={tab !== 'conference'}
+        >
           <LiveConference jitsiRoomName={jitsiRoomName} />
-        )}
+        </div>
       </div>
     </div>
   );

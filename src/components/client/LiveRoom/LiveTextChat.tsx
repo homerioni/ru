@@ -21,7 +21,8 @@ function formatTime(date: Date | string) {
 }
 
 export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const [messages, setMessages] = useState<LiveChatMessage[]>([]);
   const lastAfterRef = useRef<string>(new Date(0).toISOString());
   const [input, setInput] = useState('');
@@ -33,9 +34,10 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
   const shouldScrollRef = useRef(true);
 
   useEffect(() => {
+    if (isAuthenticated) return;
     const saved = sessionStorage.getItem(GUEST_NAME_KEY);
     if (saved) setGuestName(saved);
-  }, []);
+  }, [isAuthenticated]);
 
   const mergeMessages = useCallback((incoming: LiveChatMessage[]) => {
     if (!incoming.length) return;
@@ -105,12 +107,15 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
   };
 
   const getUsername = useCallback(() => {
-    return (
-      session?.user?.username ||
-      session?.user?.name ||
-      guestName.trim()
-    );
-  }, [session, guestName]);
+    if (isAuthenticated && session?.user) {
+      return (
+        session.user.username ||
+        session.user.name ||
+        'Болельщик'
+      );
+    }
+    return guestName.trim();
+  }, [isAuthenticated, session, guestName]);
 
   const saveGuestName = (name: string) => {
     const trimmed = name.trim();
@@ -120,6 +125,8 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
   };
 
   const sendMessage = async (text: string) => {
+    if (status === 'loading') return;
+
     const username = getUsername();
     if (!username) {
       setShowNamePrompt(true);
@@ -133,7 +140,7 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
       const msg = await postLiveChatMessage({
         broadcastId,
         message: text,
-        guestName: session ? undefined : username,
+        guestName: isAuthenticated ? undefined : username,
       });
       setMessages((prev) => [...prev, msg]);
       lastAfterRef.current =
@@ -156,6 +163,10 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
     if (!text || isSending) return;
     sendMessage(text);
   };
+
+  const displayName = isAuthenticated
+    ? session?.user?.username || session?.user?.name || 'Болельщик'
+    : guestName;
 
   return (
     <div className={s.chat}>
@@ -180,7 +191,7 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
         )}
       </div>
 
-      {showNamePrompt && !session && (
+      {showNamePrompt && !isAuthenticated && status !== 'loading' && (
         <div className={s.namePrompt}>
           <p>Введите имя для чата</p>
           <form
@@ -215,26 +226,27 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={
-              session
-                ? 'Сообщение...'
-                : guestName
-                  ? `Сообщение от ${guestName}...`
-                  : 'Сообщение...'
+              isAuthenticated || displayName
+                ? `Сообщение${displayName ? ` от ${displayName}` : ''}...`
+                : 'Сообщение...'
             }
             maxLength={500}
             enterKeyHint="send"
             autoComplete="off"
+            disabled={status === 'loading'}
           />
           <button
             type="submit"
             className={s.sendBtn}
-            disabled={!input.trim() || isSending}
+            disabled={!input.trim() || isSending || status === 'loading'}
             aria-label="Отправить"
           >
-            →
+            <span className={s.sendIcon} aria-hidden>↑</span>
           </button>
         </div>
       </form>
+
+      <div className={s.dogSpacer} aria-hidden />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { getJitsiEmbedUrl } from '@/utils/getJitsiEmbedUrl';
 import s from './styles.module.scss';
 
@@ -10,20 +10,30 @@ type LiveConferenceProps = {
 };
 
 export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const [joined, setJoined] = useState(false);
   const [guestName, setGuestName] = useState('');
+  const [embedUrl, setEmbedUrl] = useState<string | null>(null);
 
-  const displayName =
-    session?.user?.username ||
-    session?.user?.name ||
-    guestName.trim() ||
-    'Гость';
+  const resolveDisplayName = () => {
+    if (isAuthenticated && session?.user) {
+      return (
+        session.user.username ||
+        session.user.name ||
+        'Болельщик'
+      );
+    }
+    return guestName.trim();
+  };
 
-  const embedUrl = useMemo(
-    () => getJitsiEmbedUrl(jitsiRoomName, displayName),
-    [jitsiRoomName, displayName]
-  );
+  const handleJoin = () => {
+    const displayName = resolveDisplayName();
+    if (!displayName) return;
+
+    setEmbedUrl(getJitsiEmbedUrl(jitsiRoomName, displayName));
+    setJoined(true);
+  };
 
   if (!joined) {
     return (
@@ -34,7 +44,16 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
           Для комфортного звука используйте наушники.
         </p>
 
-        {!session && (
+        {isAuthenticated && session?.user && (
+          <p className={s.conferenceUser}>
+            Вы войдёте как{' '}
+            <strong>
+              {session.user.username || session.user.name || 'Болельщик'}
+            </strong>
+          </p>
+        )}
+
+        {!isAuthenticated && status !== 'loading' && (
           <label className={s.conferenceNameLabel}>
             <span>Ваше имя</span>
             <input
@@ -50,8 +69,11 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
         <button
           type="button"
           className={s.conferenceJoinBtn}
-          onClick={() => setJoined(true)}
-          disabled={!session && guestName.trim().length < 2}
+          onClick={handleJoin}
+          disabled={
+            status === 'loading' ||
+            (!isAuthenticated && guestName.trim().length < 2)
+          }
         >
           Войти в конференцию
         </button>
@@ -67,7 +89,7 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
     <div className={s.conference}>
       <iframe
         className={s.conferenceFrame}
-        src={embedUrl}
+        src={embedUrl ?? undefined}
         title="Конференция"
         allow="camera; microphone; fullscreen; display-capture; autoplay"
         allowFullScreen
