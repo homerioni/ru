@@ -11,6 +11,7 @@ const POLL_INTERVAL = 2500;
 
 type LiveTextChatProps = {
   broadcastId: string;
+  compact?: boolean;
 };
 
 function formatTime(date: Date | string) {
@@ -20,7 +21,7 @@ function formatTime(date: Date | string) {
   });
 }
 
-export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
+export const LiveTextChat = ({ broadcastId, compact = false }: LiveTextChatProps) => {
   const { data: session, status } = useSession();
   const isAuthenticated = status === 'authenticated';
   const [messages, setMessages] = useState<LiveChatMessage[]>([]);
@@ -165,7 +166,7 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
     : guestName;
 
   return (
-    <div className={s.chat}>
+    <div className={`${s.chat} ${compact ? s.chatCompact : ''}`}>
       <div
         ref={listRef}
         className={s.messages}
