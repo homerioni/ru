@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Swiper as SwiperType } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { ClubPhoto } from '@prisma/client';
 import { Modal } from '@/components/ui/Modal';
 import s from './styles.module.scss';
@@ -14,7 +12,6 @@ type ClubGalleryProps = {
 
 export const ClubGallery = ({ photos }: ClubGalleryProps) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const swiperRef = useRef<SwiperType | null>(null);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -39,11 +36,13 @@ export const ClubGallery = ({ photos }: ClubGalleryProps) => {
   const activePhoto = activeIndex !== null ? photos[activeIndex] : null;
 
   const showPrev = () => {
-    swiperRef.current?.slidePrev();
+    if (activeIndex === null) return;
+    setActiveIndex((activeIndex - 1 + photos.length) % photos.length);
   };
 
   const showNext = () => {
-    swiperRef.current?.slideNext();
+    if (activeIndex === null) return;
+    setActiveIndex((activeIndex + 1) % photos.length);
   };
 
   return (
@@ -87,34 +86,16 @@ export const ClubGallery = ({ photos }: ClubGalleryProps) => {
               onClick={showPrev}
               aria-label="Предыдущее фото"
             />
-            <Swiper
-              className={s.lightboxSwiper}
-              slidesPerView={1}
-              spaceBetween={0}
-              loop={photos.length > 1}
-              initialSlide={activeIndex ?? 0}
-              onSwiper={(swiper) => {
-                swiperRef.current = swiper;
-              }}
-              onSlideChange={(swiper) => {
-                setActiveIndex(swiper.realIndex);
-              }}
-            >
-              {photos.map((photo) => (
-                <SwiperSlide key={photo.id}>
-                  <div className={s.lightboxImageWrap}>
-                    <Image
-                      src={photo.imageSrc}
-                      alt={photo.caption ?? ''}
-                      width={1200}
-                      height={900}
-                      className={s.lightboxImage}
-                      sizes="90vw"
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <div className={s.lightboxImageWrap}>
+              <Image
+                src={activePhoto.imageSrc}
+                alt={activePhoto.caption ?? ''}
+                width={1200}
+                height={900}
+                className={s.lightboxImage}
+                sizes="90vw"
+              />
+            </div>
             <button
               type="button"
               className={`${s.navBtn} ${s.navNext}`}
