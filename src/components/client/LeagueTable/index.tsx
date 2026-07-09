@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import { LeagueTableProps } from '@/components/client/LeagueTable/types';
-import s from './styles.module.scss';
 import Link from 'next/link';
+import { LeagueTableProps } from '@/components/client/LeagueTable/types';
+import { getClubHref } from '@/utils/getClubHref';
+import s from './styles.module.scss';
 
 export const LeagueTable = ({
   data,
@@ -37,14 +38,18 @@ export const LeagueTable = ({
               >
                 <td>{i + 1}</td>
                 <td className={s.logo}>
-                  <Image
-                    src={item.club.logoSrc}
-                    alt={item.club.name}
-                    width={200}
-                    height={200}
-                  />
+                  <Link href={getClubHref(item.club.id)}>
+                    <Image
+                      src={item.club.logoSrc}
+                      alt={item.club.name}
+                      width={200}
+                      height={200}
+                    />
+                  </Link>
                 </td>
-                <td className={s.name}>{item.club.name}</td>
+                <td className={s.name}>
+                  <Link href={getClubHref(item.club.id)}>{item.club.name}</Link>
+                </td>
                 <td>{item.played}</td>
                 <td>{item.wins}</td>
                 <td>{item.draws}</td>

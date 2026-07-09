@@ -84,6 +84,15 @@
   margin-bottom: 1.4rem;
   font-weight: 700;
   font-size: 2.6rem;
+
+  &:is(a) {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .info {

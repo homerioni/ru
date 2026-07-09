@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ClubLogo, NAME_POSITION } from '@ui/ClubLogo';
 import { SIZES } from '@/constants';
 import { TTeamStats } from '@/services/matches';
+import { getClubHref } from '@/utils/getClubHref';
 import s from './styles.module.scss';
 
 type TMatchItemProps = {
@@ -51,14 +52,16 @@ export const MatchItem = ({
   const result = getResultContent();
 
   return (
-    <Link href={`/match/${id}`} className={s.main}>
-      <ClubLogo
-        logoSrc={clubs[0].logoSrc}
-        name={clubs[0].name}
-        namePosition={NAME_POSITION.BOTTOM}
-        size={SIZES.s}
-      />
-      <div className={s.infoBox}>
+    <div className={s.main}>
+      <Link href={getClubHref(clubs[0].id)} className={s.clubLink}>
+        <ClubLogo
+          logoSrc={clubs[0].logoSrc}
+          name={clubs[0].name}
+          namePosition={NAME_POSITION.BOTTOM}
+          size={SIZES.s}
+        />
+      </Link>
+      <Link href={`/match/${id}`} className={s.infoBox}>
         <p className={s.infoTitle}>{type}</p>
         <p className={s.score}>
           <span>{score.length ? `${score[0]} - ${score[1]}` : 'VS'}</span>
@@ -69,13 +72,15 @@ export const MatchItem = ({
           )}
         </p>
         <p className={s.date}>{date}</p>
-      </div>
-      <ClubLogo
-        logoSrc={clubs[1].logoSrc}
-        name={clubs[1].name}
-        namePosition={NAME_POSITION.BOTTOM}
-        size={SIZES.s}
-      />
-    </Link>
+      </Link>
+      <Link href={getClubHref(clubs[1].id)} className={s.clubLink}>
+        <ClubLogo
+          logoSrc={clubs[1].logoSrc}
+          name={clubs[1].name}
+          namePosition={NAME_POSITION.BOTTOM}
+          size={SIZES.s}
+        />
+      </Link>
+    </div>
   );
 };

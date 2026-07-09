@@ -16,6 +16,7 @@ export const NextMatch = ({ match }: NextMatchProps) => {
       <ClubLogo
         logoSrc={match?.homeClub.logoSrc}
         name={match?.homeClub.name}
+        clubId={match?.homeClub.id}
         background
       />
       <div className={s.infoBox}>
@@ -27,6 +28,7 @@ export const NextMatch = ({ match }: NextMatchProps) => {
       <ClubLogo
         logoSrc={match?.awayClub.logoSrc}
         name={match?.awayClub.name}
+        clubId={match?.awayClub.id}
         namePosition={NAME_POSITION.LEFT}
         background
       />

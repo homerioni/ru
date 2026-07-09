@@ -5,9 +5,10 @@ import { Select } from '@/components/ui/Select';
 import { TGetMatch } from '@/services/matches';
 import s from './styles.module.scss';
 import { MatchVote } from '@/components/client/MatchInfo/MatchVote';
+import Link from 'next/link';
 import Image from 'next/image';
 import defaultPlayerImg from '@/assets/img/player-default.webp';
-import Link from 'next/link';
+import { getClubHref } from '@/utils/getClubHref';
 
 type MatchTeamsProps = {
   data: TGetMatch;
@@ -49,6 +50,36 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
     matchPlayer &&
     data.players.find((item) => item.playerId === matchPlayer.id);
 
+  const isVoting = data.voteStatus === 'started';
+
+  const renderPlayerRow = (item: (typeof data.players)[number]) => (
+    <div
+      key={item.id}
+      className={s.teamItem}
+      onClick={
+        isVoting
+          ? () =>
+              setSelectedPlayer({
+                id: item.player.id,
+                name: item.player.name,
+                number: item.player.number ?? 0,
+              })
+          : undefined
+      }
+    >
+      <span className={s.number}>{item.player.number}</span>
+      {isVoting ? (
+        <span className={s.name}>{item.player.name}</span>
+      ) : (
+        <Link href={`/player/${item.player.id}`} className={s.name}>
+          {item.player.name}
+        </Link>
+      )}
+      <span className={s.stats}>{item.goals || ''}</span>
+      <span className={s.stats}>{item.assists || ''}</span>
+    </div>
+  );
+
   return (
     <>
       {data.voteStatus === 'started' && (
@@ -59,32 +90,45 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
         />
       )}
       {data.voteStatus === 'closed' && awardPlayerInfo && (
-        <Link href={`/player/${awardPlayerInfo.playerId}`} className={s.award}>
+        <div className={s.award}>
           <h3 className={s.awardTitle}>Игрок матча</h3>
           <div className={s.awardPlayer}>
-            <Image
-              className={s.awardPhoto}
-              src={awardPlayerInfo.player.photo ?? defaultPlayerImg}
-              alt={'Игрок'}
-              width={100}
-              height={100}
-            />
-            <p className={s.awardText}>
+            <Link href={`/player/${awardPlayerInfo.playerId}`}>
+              <Image
+                className={s.awardPhoto}
+                src={awardPlayerInfo.player.photo ?? defaultPlayerImg}
+                alt={'Игрок'}
+                width={100}
+                height={100}
+              />
+            </Link>
+            <Link
+              href={`/player/${awardPlayerInfo.playerId}`}
+              className={s.awardText}
+            >
               <span className={s.number}>{awardPlayerInfo?.player.number}</span>
               <span>{awardPlayerInfo.player.name}</span>
-            </p>
-            <Image
-              src={
+            </Link>
+            <Link
+              href={getClubHref(
                 awardPlayerInfo.clubId === data.homeClub.id
-                  ? data.homeClub.logoSrc
-                  : data.awayClub.logoSrc
-              }
-              alt={'Клуб'}
-              width={100}
-              height={100}
-            />
+                  ? data.homeClub.id
+                  : data.awayClub.id
+              )}
+            >
+              <Image
+                src={
+                  awardPlayerInfo.clubId === data.homeClub.id
+                    ? data.homeClub.logoSrc
+                    : data.awayClub.logoSrc
+                }
+                alt={'Клуб'}
+                width={100}
+                height={100}
+              />
+            </Link>
           </div>
-        </Link>
+        </div>
       )}
       <div className={s.mobileSelect}>
         <Select options={options} value={activeClub} onChange={setActiveClub} />
@@ -100,24 +144,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
           {data.players
             .filter((item) => item.clubId === data.homeClub.id)
             .sort((a, b) => (a.player.number ?? 0) - (b.player.number ?? 0))
-            .map((item) => (
-              <div
-                key={item.id}
-                className={s.teamItem}
-                onClick={() =>
-                  setSelectedPlayer({
-                    id: item.player.id,
-                    name: item.player.name,
-                    number: item.player.number ?? 0,
-                  })
-                }
-              >
-                <span className={s.number}>{item.player.number}</span>
-                <span className={s.name}>{item.player.name}</span>
-                <span className={s.stats}>{item.goals || ''}</span>
-                <span className={s.stats}>{item.assists || ''}</span>
-              </div>
-            ))}
+            .map(renderPlayerRow)}
         </div>
         <div className={+activeClub === data.awayClub.id ? s.active : ''}>
           <div className={s.teamHeader}>
@@ -129,24 +156,7 @@ export const MatchTeams = ({ data }: MatchTeamsProps) => {
           {data.players
             .filter((item) => item.clubId === data.awayClub.id)
             .sort((a, b) => (a.player.number ?? 0) - (b.player.number ?? 0))
-            .map((item) => (
-              <div
-                key={item.id}
-                className={s.teamItem}
-                onClick={() =>
-                  setSelectedPlayer({
-                    id: item.player.id,
-                    name: item.player.name,
-                    number: item.player.number ?? 0,
-                  })
-                }
-              >
-                <span className={s.number}>{item.player.number}</span>
-                <span className={s.name}>{item.player.name}</span>
-                <span className={s.stats}>{item.goals || ''}</span>
-                <span className={s.stats}>{item.assists || ''}</span>
-              </div>
-            ))}
+            .map(renderPlayerRow)}
         </div>
       </div>
     </>

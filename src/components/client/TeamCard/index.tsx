@@ -1,8 +1,10 @@
+import Link from 'next/link';
 import Image from 'next/image';
 import playerImage from '@/assets/img/player-default.webp';
 import s from './styles.module.scss';
 import { Club } from '@prisma/client';
 import notClubImg from '@/assets/img/not-club.webp';
+import { getClubHref } from '@/utils/getClubHref';
 import {
   Arrow,
   InstagramIcon,
@@ -11,7 +13,6 @@ import {
   YoutubeIcon,
   VkIcon,
 } from '@ui/Icons';
-import Link from 'next/link';
 
 type TTeamCardProps = {
   id?: string | number;
@@ -41,16 +42,11 @@ type TTeamCardProps = {
 };
 
 export const TeamCard = ({ id, ...props }: TTeamCardProps) => {
-  return id ? (
-    <Link href={`/player/${id}`}>
-      <TeamCardContent {...props} />
-    </Link>
-  ) : (
-    <TeamCardContent {...props} />
-  );
+  return <TeamCardContent id={id} {...props} />;
 };
 
 export const TeamCardContent = ({
+  id,
   number,
   photo,
   position,
@@ -65,16 +61,61 @@ export const TeamCardContent = ({
   className,
   socials,
 }: TTeamCardProps) => {
+  const playerHref = id ? `/player/${id}` : null;
+
+  const renderPlayerPhoto = (photoClassName: string) => {
+    const content = (
+      <Image src={photo ?? playerImage} alt={''} width={500} height={500} />
+    );
+
+    if (playerHref) {
+      return (
+        <Link href={playerHref} className={photoClassName}>
+          {content}
+        </Link>
+      );
+    }
+
+    return <div className={photoClassName}>{content}</div>;
+  };
+
+  const renderPlayerName = () => {
+    if (playerHref) {
+      return (
+        <Link href={playerHref} className={s.name}>
+          {name}
+        </Link>
+      );
+    }
+
+    return <p className={s.name}>{name}</p>;
+  };
+
+  const renderClubLogo = (clubData: Club | null | undefined) => {
+    const image = (
+      <Image
+        src={clubData?.logoSrc ?? notClubImg}
+        alt={clubData?.name ?? 'Свободный агент'}
+        width={100}
+        height={100}
+      />
+    );
+
+    if (clubData) {
+      return <Link href={getClubHref(clubData.id)}>{image}</Link>;
+    }
+
+    return image;
+  };
+
   if (transfer) {
     return (
       <div className={`${s.main} ${className}`}>
-        <div className={`${s.photo} ${!photo ? s.noPhoto : ''}`}>
-          <Image src={photo ?? playerImage} alt={''} width={500} height={500} />
-        </div>
+        {renderPlayerPhoto(`${s.photo} ${!photo ? s.noPhoto : ''}`)}
         <div className={s.wrapper}>
           {!!number && <p className={s.number}>{number}</p>}
           <div className={s.textWrapper}>
-            <p className={s.name}>{name}</p>
+            {renderPlayerName()}
             <p className={s.info}>
               <span>Позиция:</span>
               <span>{position}</span>
@@ -89,36 +130,16 @@ export const TeamCardContent = ({
               </span>
             </p>
             <div className={`${s.transfer} ${s.desktop}`}>
-              <Image
-                src={transfer.from?.logoSrc ?? notClubImg}
-                alt={transfer.from?.name ?? 'Свободный агент'}
-                width={100}
-                height={100}
-              />
+              {renderClubLogo(transfer.from)}
               <Arrow />
-              <Image
-                src={transfer.to?.logoSrc ?? notClubImg}
-                alt={transfer.to?.name ?? 'Свободный агент'}
-                width={100}
-                height={100}
-              />
+              {renderClubLogo(transfer.to)}
             </div>
           </div>
         </div>
         <div className={`${s.transfer} ${s.mobile}`}>
-          <Image
-            src={transfer.from?.logoSrc ?? notClubImg}
-            alt={transfer.from?.name ?? 'Свободный агент'}
-            width={100}
-            height={100}
-          />
+          {renderClubLogo(transfer.from)}
           <Arrow />
-          <Image
-            src={transfer.to?.logoSrc ?? notClubImg}
-            alt={transfer.to?.name ?? 'Свободный агент'}
-            width={100}
-            height={100}
-          />
+          {renderClubLogo(transfer.to)}
         </div>
       </div>
     );
@@ -126,19 +147,19 @@ export const TeamCardContent = ({
 
   return (
     <div className={`${s.main} ${small ? s.small : ''} ${className}`}>
-      <div className={s.photo}>
-        <Image src={photo ?? playerImage} alt={''} width={500} height={500} />
-      </div>
+      {renderPlayerPhoto(s.photo)}
       <div className={s.wrapper}>
         <div className={s.clubWrapper}>
           {club && (
-            <Image
-              className={s.clubImg}
-              src={club.logoSrc}
-              alt={club.name}
-              width={128}
-              height={128}
-            />
+            <Link href={getClubHref(club.id)}>
+              <Image
+                className={s.clubImg}
+                src={club.logoSrc}
+                alt={club.name}
+                width={128}
+                height={128}
+              />
+            </Link>
           )}
           {club === null && (
             <Image
@@ -152,7 +173,7 @@ export const TeamCardContent = ({
           {!!number && <p className={s.number}>{number}</p>}
         </div>
         <div className={s.textWrapper}>
-          <p className={s.name}>{name}</p>
+          {renderPlayerName()}
           <p className={s.info}>
             <span>{isTeam ? 'Роль:' : 'Позиция:'}</span>
             <span>{position}</span>

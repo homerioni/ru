@@ -34,6 +34,7 @@ export const MatchInfo = ({ data }: MatchInfoProps) => {
         <ClubLogo
           logoSrc={data.homeClub.logoSrc}
           name={data.homeClub.name}
+          clubId={data.homeClub.id}
           background
         />
         <div className={s.infoWrapper}>
@@ -53,6 +54,7 @@ export const MatchInfo = ({ data }: MatchInfoProps) => {
         <ClubLogo
           logoSrc={data.awayClub.logoSrc}
           name={data.awayClub.name}
+          clubId={data.awayClub.id}
           namePosition={NAME_POSITION.LEFT}
           background
         />

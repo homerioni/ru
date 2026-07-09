@@ -1,3 +1,8 @@
+.clubLink {
+  color: inherit;
+  text-decoration: none;
+}
+
 .main {
   position: relative;
   display: grid;
@@ -23,6 +28,8 @@
   justify-content: space-between;
   height: 100%;
   text-align: center;
+  color: inherit;
+  text-decoration: none;
 }
 
 .infoTitle {

@@ -46,7 +46,16 @@ export const GamesTable = ({
   const [activeTab, setActiveTab] = useState(+defaultId);
 
   const goals = matches?.played?.reduce<
-    Map<number, { clubImgSrc: string; name: string; qty: number }>
+    Map<
+      number,
+      {
+        clubImgSrc: string;
+        name: string;
+        qty: number;
+        playerId: number;
+        clubId: number;
+      }
+    >
   >((acc, match) => {
     match.players.forEach((stats) => {
       if (!stats.goals) return;
@@ -58,6 +67,8 @@ export const GamesTable = ({
               .logoSrc,
           name: stats.player.name,
           qty: stats.goals,
+          playerId: stats.player.id,
+          clubId: stats.clubId,
         });
       } else {
         const get = acc.get(stats.player.id)!;
@@ -70,23 +81,34 @@ export const GamesTable = ({
   }, new Map());
 
   const assists = matches?.played?.reduce<
-    Map<string, { clubImgSrc: string; name: string; qty: number }>
+    Map<
+      number,
+      {
+        clubImgSrc: string;
+        name: string;
+        qty: number;
+        playerId: number;
+        clubId: number;
+      }
+    >
   >((acc, match) => {
     match.players.forEach((stats) => {
       if (!stats.assists) return;
 
-      if (!acc.has(stats.player.name)) {
-        acc.set(stats.player.name, {
+      if (!acc.has(stats.player.id)) {
+        acc.set(stats.player.id, {
           clubImgSrc:
             match[stats.clubId === match.homeClubId ? 'homeClub' : 'awayClub']
               .logoSrc,
           name: stats.player.name,
           qty: stats.assists,
+          playerId: stats.player.id,
+          clubId: stats.clubId,
         });
       } else {
-        const get = acc.get(stats.player.name)!;
+        const get = acc.get(stats.player.id)!;
 
-        acc.set(stats.player.name, { ...get, qty: get.qty + stats.assists });
+        acc.set(stats.player.id, { ...get, qty: get.qty + stats.assists });
       }
     });
 

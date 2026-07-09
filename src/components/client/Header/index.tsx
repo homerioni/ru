@@ -13,6 +13,7 @@ import { useSession } from 'next-auth/react';
 import { LoginBtn } from '@/components/client/LoginBtn';
 import { getClub } from '@/services';
 import { Club } from '@prisma/client';
+import { getClubHref } from '@/utils/getClubHref';
 
 export const Header = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -58,13 +59,15 @@ export const Header = () => {
           <div className={s.logo}>
             {isClubPage ? (
               thisClub?.logoSrc && (
-                <Image
-                  className={s.otherLogo}
-                  src={thisClub.logoSrc}
-                  alt={'Логотип Речичане United'}
-                  width={256}
-                  height={256}
-                />
+                <Link href={getClubHref(params.clubId as string)}>
+                  <Image
+                    className={s.otherLogo}
+                    src={thisClub.logoSrc}
+                    alt={'Логотип Речичане United'}
+                    width={256}
+                    height={256}
+                  />
+                </Link>
               )
             ) : (
               <Image
