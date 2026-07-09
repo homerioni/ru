@@ -5,7 +5,6 @@ import Link from 'next/link';
 import s from './styles.module.scss';
 import { Select } from '@ui/Select';
 import { useState } from 'react';
-import { getClubHref } from '@/utils/getClubHref';
 
 const selectList = [
   { label: 'Топ бомбардиров', value: 'goals' },
@@ -27,12 +26,12 @@ type PlayerStatsTableProps = {
 
 const renderPlayerRow = (item: PlayerStatItem, index: number) => (
   <li key={item.playerId} className={s.player}>
-    <span>{index + 1}</span>
-    <Link href={getClubHref(item.clubId)}>
+    <Link href={`/player/${item.playerId}`} className={s.playerLink}>
+      <span>{index + 1}</span>
       <Image src={item.clubImgSrc} alt={'logo'} width={64} height={64} />
+      <span>{item.name}</span>
+      <span>{item.qty}</span>
     </Link>
-    <Link href={`/player/${item.playerId}`}>{item.name}</Link>
-    <span>{item.qty}</span>
   </li>
 );
 
