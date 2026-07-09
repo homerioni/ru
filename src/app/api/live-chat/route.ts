@@ -65,8 +65,8 @@ export async function POST(req: NextRequest) {
   }
 
   const username =
-    session?.user?.username ||
     session?.user?.name ||
+    session?.user?.username ||
     guestName;
 
   if (!username || username.length < 2 || username.length > 32) {

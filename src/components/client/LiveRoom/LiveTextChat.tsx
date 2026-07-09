@@ -108,11 +108,7 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
 
   const getUsername = useCallback(() => {
     if (isAuthenticated && session?.user) {
-      return (
-        session.user.username ||
-        session.user.name ||
-        'Болельщик'
-      );
+      return session.user.name || session.user.username || 'Болельщик';
     }
     return guestName.trim();
   }, [isAuthenticated, session, guestName]);
@@ -165,7 +161,7 @@ export const LiveTextChat = ({ broadcastId }: LiveTextChatProps) => {
   };
 
   const displayName = isAuthenticated
-    ? session?.user?.username || session?.user?.name || 'Болельщик'
+    ? session?.user?.name || session?.user?.username || 'Болельщик'
     : guestName;
 
   return (

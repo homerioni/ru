@@ -18,11 +18,7 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
 
   const resolveDisplayName = () => {
     if (isAuthenticated && session?.user) {
-      return (
-        session.user.username ||
-        session.user.name ||
-        'Болельщик'
-      );
+      return session.user.name || session.user.username || 'Болельщик';
     }
     return guestName.trim();
   };
@@ -48,7 +44,7 @@ export const LiveConference = ({ jitsiRoomName }: LiveConferenceProps) => {
           <p className={s.conferenceUser}>
             Вы войдёте как{' '}
             <strong>
-              {session.user.username || session.user.name || 'Болельщик'}
+              {session.user.name || session.user.username || 'Болельщик'}
             </strong>
           </p>
         )}
