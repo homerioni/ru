@@ -103,6 +103,10 @@
 }
 
 @media (min-width: 48.01em) {
+  .dog {
+    display: none;
+  }
+
   .menuItem.mobile, .menuBg {
     display: none;
   }
@@ -160,7 +164,7 @@
     top: 0;
     z-index: 11;
     width: 70vw;
-    height: 110vh;
+    height: 100vh;
     transform: translateX(-100vw);
     background-color: var(--bg-2);
     transition: transform .3s ease;
@@ -250,5 +254,11 @@
     > * > *:first-child {
       order: 1;
     }
+  }
+
+  .dog {
+    position: relative;
+    height: 26rem;
+    width: 100vw;
   }
 }

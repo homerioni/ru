@@ -14,6 +14,7 @@ import { LoginBtn } from '@/components/client/LoginBtn';
 import { getClub } from '@/services';
 import { Club } from '@prisma/client';
 import { getClubHref } from '@/utils/getClubHref';
+import { DogGaz } from '@/components/client/DogGaz';
 
 export const Header = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -113,6 +114,9 @@ export const Header = () => {
           </li>
         </ul>
         <div className={s.menuBg} onClick={() => setMenuIsOpen(false)} />
+        <div className={s.dog}>
+          <DogGaz />
+        </div>
       </nav>
       <div className={s.socials}>
         <Link
