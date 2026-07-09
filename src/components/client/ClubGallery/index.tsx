@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ClubPhoto } from '@prisma/client';
 import { Modal } from '@/components/ui/Modal';
 import s from './styles.module.scss';
+
+const SWIPE_THRESHOLD = 50;
 
 type ClubGalleryProps = {
   photos: ClubPhoto[];
@@ -12,6 +14,7 @@ type ClubGalleryProps = {
 
 export const ClubGallery = ({ photos }: ClubGalleryProps) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const swipeStartX = useRef<number | null>(null);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -25,6 +28,43 @@ export const ClubGallery = ({ photos }: ClubGalleryProps) => {
     };
   }, [activeIndex]);
 
+  const showPrev = useCallback(() => {
+    setActiveIndex((index) => {
+      if (index === null) return null;
+      return (index - 1 + photos.length) % photos.length;
+    });
+  }, [photos.length]);
+
+  const showNext = useCallback(() => {
+    setActiveIndex((index) => {
+      if (index === null) return null;
+      return (index + 1) % photos.length;
+    });
+  }, [photos.length]);
+
+  const handlePointerDown = (clientX: number) => {
+    swipeStartX.current = clientX;
+  };
+
+  const handlePointerUp = (clientX: number) => {
+    if (swipeStartX.current === null) return;
+
+    const deltaX = clientX - swipeStartX.current;
+    swipeStartX.current = null;
+
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+
+    if (deltaX > 0) {
+      showPrev();
+    } else {
+      showNext();
+    }
+  };
+
+  const resetSwipe = () => {
+    swipeStartX.current = null;
+  };
+
   if (!photos.length) {
     return (
       <div className={`${s.empty} container`}>
@@ -34,16 +74,6 @@ export const ClubGallery = ({ photos }: ClubGalleryProps) => {
   }
 
   const activePhoto = activeIndex !== null ? photos[activeIndex] : null;
-
-  const showPrev = () => {
-    if (activeIndex === null) return;
-    setActiveIndex((activeIndex - 1 + photos.length) % photos.length);
-  };
-
-  const showNext = () => {
-    if (activeIndex === null) return;
-    setActiveIndex((activeIndex + 1) % photos.length);
-  };
 
   return (
     <>
@@ -86,7 +116,13 @@ export const ClubGallery = ({ photos }: ClubGalleryProps) => {
               onClick={showPrev}
               aria-label="Предыдущее фото"
             />
-            <div className={s.lightboxImageWrap}>
+            <div
+              className={s.lightboxImageWrap}
+              onPointerDown={(e) => handlePointerDown(e.clientX)}
+              onPointerUp={(e) => handlePointerUp(e.clientX)}
+              onPointerCancel={resetSwipe}
+              onPointerLeave={resetSwipe}
+            >
               <Image
                 src={activePhoto.imageSrc}
                 alt={activePhoto.caption ?? ''}
@@ -94,6 +130,7 @@ export const ClubGallery = ({ photos }: ClubGalleryProps) => {
                 height={900}
                 className={s.lightboxImage}
                 sizes="90vw"
+                draggable={false}
               />
             </div>
             <button

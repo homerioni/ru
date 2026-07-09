@@ -71,6 +71,13 @@
   max-height: 75vh;
   display: flex;
   justify-content: center;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 .lightboxImage {
