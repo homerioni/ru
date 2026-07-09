@@ -43,7 +43,7 @@ export default async function MainPage() {
         myClubId={MY_CLUB_ID}
       />
       <TeamSlider players={players} />
-      <ClubGallerySlider photos={photos.slice(0, 12)} clubId={MY_CLUB_ID} />
+      <ClubGallerySlider photos={photos.slice(0, 10)} clubId={MY_CLUB_ID} />
       <MyMap />
     </>
   );
