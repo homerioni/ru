@@ -76,9 +76,13 @@
     visibility: visible;
     transform: translateX(-40vw) rotate(20deg);
   }
-  36% {
+  34% {
+    visibility: visible;
+    transform: translateX(-40vw) rotate(30deg);
+  }
+  40% {
     visibility: hidden;
-    transform: translateX(-40vw) rotate(20deg);
+    transform: translateX(-40vw) rotate(360deg);
   }
   100% {
     visibility: hidden;
@@ -90,11 +94,11 @@
   0% {
     visibility: hidden;
   }
-  36% {
+  40% {
     visibility: hidden;
     transform: translateX(0);
   }
-  39% {
+  43% {
     visibility: visible;
     transform: translateX(-5vw);
   }
