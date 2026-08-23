@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 3rem;
-  margin: 15rem auto;
+  //margin: 15rem auto;
 }
 
 .infoBox {
@@ -47,11 +47,57 @@
   color: var(--text-primary);
 }
 
-@keyframes anim1 {
+@keyframes dima1 {
+  0% {
+    visibility: visible;
+  }
+  28% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: hidden;
+  }
+}
+
+@keyframes dima2 {
   0% {
     visibility: hidden;
   }
-  50% {
+  28% {
+    visibility: hidden;
+    transform: translateX(0);
+  }
+  30% {
+    visibility: visible;
+    transform: translateX(0);
+  }
+  33% {
+    visibility: visible;
+    transform: translateX(-40vw) rotate(20deg);
+  }
+  100% {
+    visibility: visible;
+    transform: translateX(-40vw) rotate(20deg);
+  }
+}
+
+@keyframes shifu1 {
+  0% {
+    visibility: visible;
+  }
+  20% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: hidden;
+  }
+}
+
+@keyframes shifu2 {
+  0% {
+    visibility: hidden;
+  }
+  20% {
     visibility: hidden;
   }
   100% {
@@ -59,15 +105,18 @@
   }
 }
 
-@keyframes anim2 {
+@keyframes nad {
   0% {
-    visibility: visible;
+    transform: translate(0, 0) rotate(0) scale(1);
   }
-  50% {
-    visibility: hidden;
+  32% {
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+  60% {
+    transform: translate(-40vw, -15vh) rotate(-1800deg) scale(0);
   }
   100% {
-    visibility: hidden;
+    transform: translate(-40vw, -15vh) rotate(-1800deg) scale(0);
   }
 }
 
@@ -82,14 +131,55 @@
     top: 0;
     width: 100%;
     height: 100%;
+    object-fit: contain;
+
+    &:nth-child(1) {
+      left: 75%;
+      top: 10%;
+      width: 20rem;
+      height: 40rem;
+      animation: dima1 10s linear infinite;
+    }
+
+    &:nth-child(2) {
+      left: 75%;
+      top: 0;
+      width: 28rem;
+      height: 46rem;
+      animation: dima2 10s linear infinite;
+    }
+
+    &:nth-child(3) {
+      left: 60%;
+      top: 50%;
+      width: 17rem;
+      height: 20rem;
+      animation: shifu1 10s linear infinite;
+    }
+
+    &:nth-child(4) {
+      left: 60%;
+      top: 50%;
+      width: 17rem;
+      height: 20rem;
+      animation: shifu2 10s linear infinite;
+    }
+
+    &:nth-child(5) {
+      left: 15%;
+      top: 11%;
+      width: 25rem;
+      height: 40rem;
+      animation: nad 10s linear infinite;
+    }
   }
 
   > *:first-child {
-    animation: anim1 1.4s linear infinite;
+    //animation: anim1 1.4s linear infinite;
   }
 
   > *:last-child {
-    animation: anim2 1.4s linear infinite;
+    //animation: anim2 1.4s linear infinite;
   }
 }
 
@@ -97,6 +187,7 @@
   .main {
     flex-direction: column;
     gap: 6rem;
+    margin-bottom: -15rem;
   }
 
   .infoBox {
