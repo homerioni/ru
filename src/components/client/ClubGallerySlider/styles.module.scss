@@ -3,8 +3,14 @@
 }
 
 .slide {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
   border-radius: 1.2rem;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .image {

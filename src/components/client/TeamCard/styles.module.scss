@@ -1,3 +1,14 @@
+.cardLink {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.innerLink {
+  position: relative;
+  z-index: 2;
+}
+
 .main {
   position: relative;
   display: flex;
@@ -8,6 +19,10 @@
   backdrop-filter: blur(5px) brightness(1.6);
   border-bottom: 1px solid var(--border-primary);
   border-top: 1px solid var(--border-primary);
+
+  &:has(.cardLink) {
+    cursor: pointer;
+  }
 
   &:before {
     content: '';
@@ -84,15 +99,6 @@
   margin-bottom: 1.4rem;
   font-weight: 700;
   font-size: 2.6rem;
-
-  &:is(a) {
-    color: inherit;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }
 
 .info {
@@ -253,12 +259,16 @@
   }
 
   .socials {
+    position: relative;
+    z-index: 2;
     display: flex;
     gap: 2rem;
     margin-top: auto;
   }
 
   .link {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;

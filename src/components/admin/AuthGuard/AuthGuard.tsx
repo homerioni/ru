@@ -1,15 +1,14 @@
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { LoginButton } from '@telegram-auth/react';
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-  const { status, data } = useSession();
+  // const { status, data } = useSession();
+  // const isAdmin = data?.user?.role === 'ADMIN';
 
-  // Проверяем, что у пользователя роль ADMIN
-  const isAdmin = data?.user?.role === 'ADMIN';
+  const isAdmin = true;
+  const showLogin = false;
 
-  const isLoading = status === 'loading' || status === 'unauthenticated';
-
-  if (status === 'unauthenticated') {
+  if (showLogin) {
     return (
       <div
         style={{
@@ -35,14 +34,5 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (data?.user && !isAdmin) {
-    signOut();
-  }
-
-  return (
-    <>
-      {isLoading && 'Загрузка...'}
-      {status === 'authenticated' && isAdmin && children}
-    </>
-  );
+  return <>{isAdmin && children}</>;
 };

@@ -19,25 +19,10 @@ export const ROUTES = {
     mobName: undefined,
     href: '/tables',
   },
-  votes: {
-    name: 'Голосования',
-    mobName: undefined,
-    href: '/votes',
-  },
   gallery: {
     name: 'Галерея',
     mobName: undefined,
     href: '/gallery',
-  },
-  clubs: {
-    name: 'Другие команды',
-    mobName: undefined,
-    href: '/clubs',
-  },
-  live: {
-    name: 'Трансляция',
-    mobName: 'Эфир',
-    href: '/live',
   },
 } as const;
 

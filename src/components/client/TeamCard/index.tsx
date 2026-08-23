@@ -63,34 +63,6 @@ export const TeamCardContent = ({
 }: TTeamCardProps) => {
   const playerHref = id ? `/player/${id}` : null;
 
-  const renderPlayerPhoto = (photoClassName: string) => {
-    const content = (
-      <Image src={photo ?? playerImage} alt={''} width={500} height={500} />
-    );
-
-    if (playerHref) {
-      return (
-        <Link href={playerHref} className={photoClassName}>
-          {content}
-        </Link>
-      );
-    }
-
-    return <div className={photoClassName}>{content}</div>;
-  };
-
-  const renderPlayerName = () => {
-    if (playerHref) {
-      return (
-        <Link href={playerHref} className={s.name}>
-          {name}
-        </Link>
-      );
-    }
-
-    return <p className={s.name}>{name}</p>;
-  };
-
   const renderClubLogo = (clubData: Club | null | undefined) => {
     const image = (
       <Image
@@ -102,7 +74,11 @@ export const TeamCardContent = ({
     );
 
     if (clubData) {
-      return <Link href={getClubHref(clubData.id)}>{image}</Link>;
+      return (
+        <Link href={getClubHref(clubData.id)} className={s.innerLink}>
+          {image}
+        </Link>
+      );
     }
 
     return image;
@@ -111,11 +87,16 @@ export const TeamCardContent = ({
   if (transfer) {
     return (
       <div className={`${s.main} ${className}`}>
-        {renderPlayerPhoto(`${s.photo} ${!photo ? s.noPhoto : ''}`)}
+        {playerHref && (
+          <Link href={playerHref} className={s.cardLink} aria-label={name} />
+        )}
+        <div className={`${s.photo} ${!photo ? s.noPhoto : ''}`}>
+          <Image src={photo ?? playerImage} alt={''} width={500} height={500} />
+        </div>
         <div className={s.wrapper}>
           {!!number && <p className={s.number}>{number}</p>}
           <div className={s.textWrapper}>
-            {renderPlayerName()}
+            <p className={s.name}>{name}</p>
             <p className={s.info}>
               <span>Позиция:</span>
               <span>{position}</span>
@@ -147,11 +128,16 @@ export const TeamCardContent = ({
 
   return (
     <div className={`${s.main} ${small ? s.small : ''} ${className}`}>
-      {renderPlayerPhoto(s.photo)}
+      {playerHref && (
+        <Link href={playerHref} className={s.cardLink} aria-label={name} />
+      )}
+      <div className={s.photo}>
+        <Image src={photo ?? playerImage} alt={''} width={500} height={500} />
+      </div>
       <div className={s.wrapper}>
         <div className={s.clubWrapper}>
           {club && (
-            <Link href={getClubHref(club.id)}>
+            <Link href={getClubHref(club.id)} className={s.innerLink}>
               <Image
                 className={s.clubImg}
                 src={club.logoSrc}
@@ -173,7 +159,7 @@ export const TeamCardContent = ({
           {!!number && <p className={s.number}>{number}</p>}
         </div>
         <div className={s.textWrapper}>
-          {renderPlayerName()}
+          <p className={s.name}>{name}</p>
           <p className={s.info}>
             <span>{isTeam ? 'Роль:' : 'Позиция:'}</span>
             <span>{position}</span>
