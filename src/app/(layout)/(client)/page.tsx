@@ -36,7 +36,7 @@ export default async function MainPage() {
     <>
       <SiteUpdatesModal />
       <MainIntro />
-      {nextMatch && <NewNextMatch match={nextMatch} />}
+      {nextMatch && <NewNextMatch />}
       {nextMatch && <NextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} clubId={MY_CLUB_ID} />
       <LeagueTable
