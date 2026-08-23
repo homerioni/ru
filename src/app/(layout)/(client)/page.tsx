@@ -42,7 +42,7 @@ export default async function MainPage() {
         title={matchType.name}
         myClubId={MY_CLUB_ID}
       />
-      <TeamSlider players={players} />
+      <TeamSlider players={players.filter((player) => player.isShow)} />
       <ClubGallerySlider photos={photos.slice(0, 10)} clubId={MY_CLUB_ID} />
       <MyMap />
     </>
