@@ -14,7 +14,7 @@ import { ClubGallerySlider } from '@/components/client/ClubGallerySlider';
 import { NewNextMatch } from '@/components/client/NewNextMatch';
 import { NextMatch } from '@/components/client/NextMatch';
 
-export const revalidate = 1;
+export const revalidate = 1800;
 
 export default async function MainPage() {
   const [nextMatch, matches, players, matchType, photos] = await Promise.all([
