@@ -76,9 +76,31 @@
     visibility: visible;
     transform: translateX(-40vw) rotate(20deg);
   }
+  36% {
+    visibility: hidden;
+    transform: translateX(-40vw) rotate(20deg);
+  }
+  100% {
+    visibility: hidden;
+    transform: translateX(-40vw) rotate(20deg);
+  }
+}
+
+@keyframes dima3 {
+  0% {
+    visibility: hidden;
+  }
+  36% {
+    visibility: hidden;
+    transform: translateX(0);
+  }
+  39% {
+    visibility: visible;
+    transform: translateX(-5vw);
+  }
   100% {
     visibility: visible;
-    transform: translateX(-40vw) rotate(20deg);
+    transform: translateX(-5vw);
   }
 }
 
@@ -172,6 +194,14 @@
       width: 25rem;
       height: 40rem;
       animation: nad 10s linear infinite;
+    }
+
+    &:nth-child(6) {
+      left: 25%;
+      top: 20%;
+      width: 24rem;
+      height: 40rem;
+      animation: dima3 10s linear infinite;
     }
   }
 
