@@ -11,7 +11,6 @@ import { getMatchType } from '@/services/matchTypes';
 import { LeagueTable } from '@/components/client/LeagueTable';
 import { getTableStats } from '@/utils/getTableStats';
 import { ClubGallerySlider } from '@/components/client/ClubGallerySlider';
-import { NewNextMatch } from '@/components/client/NewNextMatch';
 import { NextMatch } from '@/components/client/NextMatch';
 
 export const revalidate = 1800;
@@ -36,7 +35,6 @@ export default async function MainPage() {
     <>
       <SiteUpdatesModal />
       <MainIntro />
-      {nextMatch && <NewNextMatch />}
       {nextMatch && <NextMatch match={nextMatch} />}
       <PreviousMatchesSlider matches={matches} clubId={MY_CLUB_ID} />
       <LeagueTable
