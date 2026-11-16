@@ -23,6 +23,11 @@ type TTeamCardProps = {
   matches?: number;
   goals?: number;
   assists?: number;
+  goalsAssists?: number;
+  matchesPercent?: number;
+  goalsPerGame?: number;
+  assistsPerGame?: number;
+  goalsAssistsPerGame?: number;
   small?: boolean;
   isTeam?: boolean;
   transfer?: {
@@ -41,6 +46,13 @@ type TTeamCardProps = {
   };
 };
 
+const formatStat = (value?: number, percent?: number) => {
+  if (value === undefined) return null;
+  if (percent === undefined) return value;
+
+  return `${value} (${percent}%)`;
+};
+
 export const TeamCard = ({ id, ...props }: TTeamCardProps) => {
   return <TeamCardContent id={id} {...props} />;
 };
@@ -53,7 +65,12 @@ export const TeamCardContent = ({
   name,
   assists,
   goals,
+  goalsAssists,
   matches,
+  matchesPercent,
+  goalsPerGame,
+  assistsPerGame,
+  goalsAssistsPerGame,
   small,
   isTeam,
   transfer,
@@ -166,7 +183,9 @@ export const TeamCardContent = ({
           </p>
           <p className={s.info}>
             <span>Матчей:</span>
-            <span className={s.num}>{matches}</span>
+            <span className={s.num}>
+              {formatStat(matches, matchesPercent)}
+            </span>
           </p>
           {!small && (
             <>
@@ -175,8 +194,24 @@ export const TeamCardContent = ({
                 <span className={s.num}>{goals}</span>
               </p>
               <p className={s.info}>
+                <span>Г/И:</span>
+                <span className={s.num}>{goalsPerGame}</span>
+              </p>
+              <p className={s.info}>
                 <span>Асистов:</span>
                 <span className={s.num}>{assists}</span>
+              </p>
+              <p className={s.info}>
+                <span>П/И:</span>
+                <span className={s.num}>{assistsPerGame}</span>
+              </p>
+              <p className={s.info}>
+                <span>Гол+Пас:</span>
+                <span className={s.num}>{goalsAssists}</span>
+              </p>
+              <p className={s.info}>
+                <span>Г+П/И:</span>
+                <span className={s.num}>{goalsAssistsPerGame}</span>
               </p>
             </>
           )}

@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
             club: true,
             playedIn: {
               select: {
+                matchId: true,
                 clubId: true,
                 goals: true,
                 assists: true,

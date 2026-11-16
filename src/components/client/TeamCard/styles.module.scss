@@ -103,13 +103,19 @@
 
 .info {
   display: grid;
-  grid-template-columns: 9.4rem 1fr;
+  grid-template-columns: 11rem 1fr;
+  padding: .6rem;
+  border-radius: .6rem;
   font-size: 2rem;
+
+  &:nth-child(2n) {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
 
   > span {
     &:last-child {
       font-weight: 700;
-      color: var(--text-red);
+      color: #ffc763;
     }
 
     &.num {
@@ -118,7 +124,7 @@
   }
 
   &:not(:last-child) {
-    margin-bottom: 1rem;
+    // margin-bottom: 1rem;
   }
 }
 
@@ -155,7 +161,7 @@
     }
 
     .info {
-      grid-template-columns: 9rem 1fr;
+      grid-template-columns: 11rem 1fr;
       font-size: 1.8rem;
 
       &:not(:last-child) {
@@ -241,7 +247,7 @@
 
   .info {
     display: grid;
-    grid-template-columns: 15rem 1fr;
+    grid-template-columns: 18rem 1fr;
     font-size: 3.2rem;
   }
 

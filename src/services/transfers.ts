@@ -13,6 +13,7 @@ export type TGetTransfer = Transfer & {
   player: Player & {
     club: Club | null;
     playedIn: {
+      matchId: number;
       clubId: number;
       goals: number;
       assists: number;

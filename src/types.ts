@@ -21,6 +21,8 @@ export type TCreatePlayerData = Omit<Player, 'id' | 'createdAt' | 'updateAt'>;
 
 export type TGetPlayers = Player & {
   playedIn: {
+    matchId: number;
+    clubId: number;
     goals: number;
     assists: number;
     match: { type: { id: number }; date: Date };
