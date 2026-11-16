@@ -4,6 +4,7 @@ export type TSfxName =
   | 'sip1'
   | 'sip2'
   | 'canDrop'
+  | 'burp'
   | 'burp1'
   | 'burp2'
   | 'creak'
@@ -70,7 +71,6 @@ export const TEAMMATE_VOICE_CLIPS: Record<1 | 2, readonly TCommandClip[]> = {
 
 type TSfxCfg = {
   urls: string[];
-  channels: number;
   volume: number;
   jitterPitch?: number;
   stickMin?: number;
@@ -78,18 +78,13 @@ type TSfxCfg = {
 };
 
 const SFX_GROUPS: Record<string, TSfxCfg> = {
-  open: {
-    urls: [],
-    channels: 1,
-    volume: 0.48,
-  },
+  open: { urls: [], volume: 0.48 },
   sip: {
     urls: [
       '/game/kvas/sfx/sip1.mp3',
       '/game/kvas/sfx/sip-3.wav',
       '/game/kvas/sfx/sip-4.wav',
     ],
-    channels: 2,
     volume: 0.25,
     jitterPitch: 0.03,
     stickMin: 8,
@@ -102,24 +97,15 @@ const SFX_GROUPS: Record<string, TSfxCfg> = {
       '/game/kvas/sfx/can-drop-4.wav',
       '/game/kvas/sfx/can-drop-5.wav',
     ],
-    channels: 2,
     volume: 0.38,
     jitterPitch: 0.04,
     stickMin: 4,
     stickMax: 7,
   },
-  burp1: {
-    urls: ['/game/kvas/sfx/burp1.mp3'],
-    channels: 2,
-    volume: 0.75,
-  },
-  burp2: {
-    urls: ['/game/kvas/sfx/burp2.mp3'],
-    channels: 2,
-    volume: 0.8,
-  },
-  creak: { urls: ['/game/kvas/sfx/creak.wav'], channels: 1, volume: 0.42 },
-  whistle: { urls: ['/game/kvas/sfx/whistle.wav'], channels: 1, volume: 0.55 },
+  burp1: { urls: ['/game/kvas/sfx/burp1.mp3'], volume: 0.75 },
+  burp2: { urls: ['/game/kvas/sfx/burp2.mp3'], volume: 0.8 },
+  creak: { urls: ['/game/kvas/sfx/creak.wav'], volume: 0.42 },
+  whistle: { urls: ['/game/kvas/sfx/whistle.wav'], volume: 0.55 },
   coin: {
     urls: [
       '/game/kvas/sfx/coin.wav',
@@ -128,7 +114,6 @@ const SFX_GROUPS: Record<string, TSfxCfg> = {
       '/game/kvas/sfx/coin-5.wav',
       '/game/kvas/sfx/coin-6.wav',
     ],
-    channels: 2,
     volume: 0.42,
     jitterPitch: 0.03,
     stickMin: 3,
@@ -140,147 +125,175 @@ const SFX_GROUPS: Record<string, TSfxCfg> = {
       '/game/kvas/sfx/levelup-2.wav',
       '/game/kvas/sfx/levelup-3.wav',
     ],
-    channels: 1,
     volume: 0.5,
   },
-  pigeon: { urls: ['/game/kvas/sfx/pigeon.wav'], channels: 1, volume: 0.5 },
-  sweep: { urls: ['/game/kvas/sfx/sweep.wav'], channels: 1, volume: 0.45 },
-  veloCrash: { urls: ['/game/kvas/sfx/velo-crash.wav'], channels: 1, volume: 0.85 },
-  click: {
-    urls: [],
-    channels: 1,
-    volume: 0.35,
-  },
+  pigeon: { urls: ['/game/kvas/sfx/pigeon.wav'], volume: 0.5 },
+  sweep: { urls: ['/game/kvas/sfx/sweep.wav'], volume: 0.45 },
+  veloCrash: { urls: ['/game/kvas/sfx/velo-crash.wav'], volume: 0.85 },
+  click: { urls: [], volume: 0.35 },
 };
+
+const CORE_PRELOAD = [
+  '/game/kvas/sfx/sip1.mp3',
+  '/game/kvas/sfx/burp1.mp3',
+  '/game/kvas/sfx/burp2.mp3',
+  '/game/kvas/sfx/can-drop-2.wav',
+  '/game/kvas/sfx/coin.wav',
+];
 
 const resolveGroup = (name: TSfxName): string => {
   if (name === 'sip1' || name === 'sip2') return 'sip';
   return name;
 };
 
-type GroupPool = {
-  variants: { cursor: number; items: HTMLAudioElement[] }[];
+type GroupState = {
   lastVariant: number;
   stickRemaining: number;
-  stickMin: number;
-  stickMax: number;
-  volume: number;
-  jitterPitch: number;
 };
 
 class SfxManager {
-  private pools: Record<string, GroupPool> = {};
-  private voices: HTMLAudioElement[] = [];
-  private veloVoices: HTMLAudioElement[] = [];
-  private mateVoices: Record<1 | 2, HTMLAudioElement[]> = { 1: [], 2: [] };
-  private activeVoice: HTMLAudioElement | null = null;
+  private ctx: AudioContext | null = null;
+  private buffers = new Map<string, AudioBuffer>();
+  private loading = new Map<string, Promise<AudioBuffer | null>>();
+  private groupState: Record<string, GroupState> = {};
+  private voiceAudio: HTMLAudioElement | null = null;
   private lastVoiceIndex = -1;
   private lastVeloIndex = -1;
   private lastMateIndex: Record<1 | 2, number> = { 1: -1, 2: -1 };
   private ready = false;
 
+  private ensureContext() {
+    if (typeof window === 'undefined') return null;
+    if (!this.ctx) {
+      const Ctor =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (Ctor) this.ctx = new Ctor();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => undefined);
+    }
+    return this.ctx;
+  }
+
+  private loadBuffer(url: string): Promise<AudioBuffer | null> {
+    const cached = this.buffers.get(url);
+    if (cached) return Promise.resolve(cached);
+    const inflight = this.loading.get(url);
+    if (inflight) return inflight;
+
+    const ctx = this.ensureContext();
+    if (!ctx) return Promise.resolve(null);
+
+    const task = fetch(url)
+      .then((res) => (res.ok ? res.arrayBuffer() : Promise.reject(new Error('HTTP'))))
+      .then((buf) => ctx.decodeAudioData(buf))
+      .then((decoded) => {
+        this.buffers.set(url, decoded);
+        this.loading.delete(url);
+        return decoded;
+      })
+      .catch(() => {
+        this.loading.delete(url);
+        return null;
+      });
+    this.loading.set(url, task);
+    return task;
+  }
+
   init() {
     if (this.ready || typeof window === 'undefined') return;
     this.ready = true;
-    Object.entries(SFX_GROUPS).forEach(([group, cfg]) => {
-      const variants = cfg.urls.map((url) => ({
-        cursor: 0,
-        items: Array.from({ length: cfg.channels }, () => {
-          const audio = new Audio(url);
-          audio.preload = 'auto';
-          audio.volume = cfg.volume;
-          return audio;
-        }),
-      }));
-      this.pools[group] = {
-        variants,
-        lastVariant: -1,
-        stickRemaining: 0,
-        stickMin: cfg.stickMin ?? 1,
-        stickMax: cfg.stickMax ?? 1,
-        volume: cfg.volume,
-        jitterPitch: cfg.jitterPitch ?? 0,
-      };
-    });
-    this.voices = VOICE_PHRASE_URLS.map((url) => {
-      const audio = new Audio(url);
-      audio.preload = 'auto';
-      audio.volume = 1.0;
-      return audio;
-    });
-    this.veloVoices = VELO_VOICE_URLS.map((url) => {
-      const audio = new Audio(url);
-      audio.preload = 'auto';
-      audio.volume = 1.0;
-      return audio;
-    });
-    ([1, 2] as const).forEach((mate) => {
-      this.mateVoices[mate] = TEAMMATE_VOICE_CLIPS[mate].map((clip) => {
-        const audio = new Audio(clip.url);
-        audio.preload = 'auto';
-        audio.volume = 1.0;
-        return audio;
-      });
+    // Lazy-preload only the 5 core tap SFX instead of all 50+ WAVs upfront
+    CORE_PRELOAD.forEach((url) => {
+      void this.loadBuffer(url);
     });
   }
 
   isVoiceBusy() {
-    return !!(this.activeVoice && !this.activeVoice.paused && !this.activeVoice.ended);
+    return !!(this.voiceAudio && !this.voiceAudio.paused && !this.voiceAudio.ended);
   }
 
   play(name: TSfxName, enabled: boolean, rate = 1) {
     if (!enabled || typeof window === 'undefined') return;
     if (!this.ready) this.init();
-    const pool = this.pools[resolveGroup(name)];
-    if (!pool || pool.variants.length === 0) return;
+    const groupKey = resolveGroup(name);
+    const cfg = SFX_GROUPS[groupKey];
+    if (!cfg || cfg.urls.length === 0) return;
 
-    if (pool.lastVariant < 0 || pool.stickRemaining <= 0) {
-      let vIdx = Math.floor(Math.random() * pool.variants.length);
-      if (pool.variants.length > 1 && vIdx === pool.lastVariant) {
-        vIdx = (vIdx + 1) % pool.variants.length;
+    const st =
+      this.groupState[groupKey] ??
+      (this.groupState[groupKey] = { lastVariant: -1, stickRemaining: 0 });
+
+    if (st.lastVariant < 0 || st.stickRemaining <= 0) {
+      let vIdx = Math.floor(Math.random() * cfg.urls.length);
+      if (cfg.urls.length > 1 && vIdx === st.lastVariant) {
+        vIdx = (vIdx + 1) % cfg.urls.length;
       }
-      pool.lastVariant = vIdx;
-      const span = Math.max(0, pool.stickMax - pool.stickMin);
-      pool.stickRemaining = pool.stickMin + Math.floor(Math.random() * (span + 1));
+      st.lastVariant = vIdx;
+      const min = cfg.stickMin ?? 1;
+      const max = cfg.stickMax ?? 1;
+      st.stickRemaining = min + Math.floor(Math.random() * (Math.max(0, max - min) + 1));
     }
-    pool.stickRemaining -= 1;
+    st.stickRemaining -= 1;
 
-    const variant = pool.variants[pool.lastVariant];
-    const audio = variant.items[variant.cursor % variant.items.length];
-    variant.cursor += 1;
-    const jitter = pool.jitterPitch > 0 ? 1 + (Math.random() * 2 - 1) * pool.jitterPitch : 1;
+    const url = cfg.urls[st.lastVariant];
+    const jitter = cfg.jitterPitch ? 1 + (Math.random() * 2 - 1) * cfg.jitterPitch : 1;
+    const playbackRate = Math.max(0.55, Math.min(1.6, rate * jitter));
 
+    const ctx = this.ensureContext();
+    if (!ctx) return;
+
+    const trigger = (buf: AudioBuffer | null) => {
+      if (!buf || !this.ctx) return;
+      try {
+        const src = this.ctx.createBufferSource();
+        src.buffer = buf;
+        src.playbackRate.value = playbackRate;
+        const gain = this.ctx.createGain();
+        gain.gain.value = cfg.volume;
+        src.connect(gain);
+        gain.connect(this.ctx.destination);
+        src.start(0);
+      } catch {
+        // Ignore audio errors
+      }
+    };
+
+    const cached = this.buffers.get(url);
+    if (cached) {
+      trigger(cached);
+    } else {
+      void this.loadBuffer(url).then(trigger);
+    }
+  }
+
+  private playVoiceUrl(url: string) {
     try {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.playbackRate = Math.max(0.55, Math.min(1.6, rate * jitter));
-      audio.volume = pool.volume;
-      audio.play().catch(() => undefined);
+      if (!this.voiceAudio) {
+        this.voiceAudio = new Audio();
+        this.voiceAudio.preload = 'none';
+      }
+      this.voiceAudio.pause();
+      this.voiceAudio.src = url;
+      this.voiceAudio.volume = 1.0;
+      this.voiceAudio.play().catch(() => undefined);
     } catch {
-      // Ignore autoplay errors before user gesture
+      // Ignore autoplay errors
     }
   }
 
   playRandomVoice(enabled: boolean, rng: () => number = Math.random): string | null {
     if (!enabled || typeof window === 'undefined') return null;
-    if (!this.ready) this.init();
-    if (this.voices.length === 0 || this.isVoiceBusy()) return null;
-    let index = Math.floor(rng() * this.voices.length);
-    if (this.voices.length > 1 && index === this.lastVoiceIndex) {
-      index = (index + 1) % this.voices.length;
+    if (this.isVoiceBusy()) return null;
+    let index = Math.floor(rng() * VOICE_PHRASE_URLS.length);
+    if (VOICE_PHRASE_URLS.length > 1 && index === this.lastVoiceIndex) {
+      index = (index + 1) % VOICE_PHRASE_URLS.length;
     }
     this.lastVoiceIndex = index;
-    const audio = this.voices[index];
-    this.activeVoice = audio;
-    try {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.volume = 1.0;
-      audio.play().catch(() => undefined);
-      return VOICE_PHRASE_URLS[index];
-    } catch {
-      return null;
-    }
+    const url = VOICE_PHRASE_URLS[index];
+    this.playVoiceUrl(url);
+    return url;
   }
 
   playTeammateVoice(
@@ -289,66 +302,40 @@ class SfxManager {
     rng: () => number = Math.random
   ): { caption: string; durationMs: number } | null {
     if (typeof window === 'undefined') return null;
-    if (!this.ready) this.init();
-    const list = this.mateVoices[mate];
     const clips = TEAMMATE_VOICE_CLIPS[mate];
-    if (list.length === 0) return null;
-    let index = Math.floor(rng() * list.length);
-    if (list.length > 1 && index === this.lastMateIndex[mate]) {
-      index = (index + 1) % list.length;
+    let index = Math.floor(rng() * clips.length);
+    if (clips.length > 1 && index === this.lastMateIndex[mate]) {
+      index = (index + 1) % clips.length;
     }
     this.lastMateIndex[mate] = index;
     const clip = clips[index];
-    const audio = list[index];
     if (enabled && !this.isVoiceBusy()) {
-      this.activeVoice = audio;
-      try {
-        audio.pause();
-        audio.currentTime = 0;
-        audio.volume = 1.0;
-        audio.play().catch(() => undefined);
-      } catch {
-        // Ignore autoplay errors before user gesture
-      }
+      this.playVoiceUrl(clip.url);
     }
-    const audioMs =
-      Number.isFinite(audio.duration) && audio.duration > 0
-        ? Math.ceil(audio.duration * 1000)
-        : clip.durationMs;
-    return { caption: clip.caption, durationMs: Math.max(clip.durationMs, audioMs) };
+    return { caption: clip.caption, durationMs: clip.durationMs };
   }
 
   playVeloVoice(enabled: boolean, rng: () => number = Math.random): string | null {
     if (!enabled || typeof window === 'undefined') return null;
-    if (!this.ready) this.init();
-    if (this.veloVoices.length === 0 || this.isVoiceBusy()) return null;
-    let index = Math.floor(rng() * this.veloVoices.length);
-    if (this.veloVoices.length > 1 && index === this.lastVeloIndex) {
-      index = (index + 1) % this.veloVoices.length;
+    if (this.isVoiceBusy()) return null;
+    let index = Math.floor(rng() * VELO_VOICE_URLS.length);
+    if (VELO_VOICE_URLS.length > 1 && index === this.lastVeloIndex) {
+      index = (index + 1) % VELO_VOICE_URLS.length;
     }
     this.lastVeloIndex = index;
-    const audio = this.veloVoices[index];
-    this.activeVoice = audio;
-    try {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.volume = 1.0;
-      audio.play().catch(() => undefined);
-      return VELO_VOICE_URLS[index];
-    } catch {
-      return null;
-    }
+    const url = VELO_VOICE_URLS[index];
+    this.playVoiceUrl(url);
+    return url;
   }
 
   stopVoices() {
-    if (!this.activeVoice) return;
+    if (!this.voiceAudio) return;
     try {
-      this.activeVoice.pause();
-      this.activeVoice.currentTime = 0;
+      this.voiceAudio.pause();
+      this.voiceAudio.currentTime = 0;
     } catch {
       // Ignore
     }
-    this.activeVoice = null;
   }
 }
 

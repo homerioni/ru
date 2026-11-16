@@ -26,7 +26,7 @@ import {
 } from '../logic/phrases';
 import { pick } from '../logic/random';
 import { reduceGame } from '../logic/reducer';
-import { voiceTriggerChance } from '../logic/selectors';
+import { bellyStage, voiceTriggerChance } from '../logic/selectors';
 import { sfx, TSfxName } from '../logic/sfx';
 import { loadState, saveState } from '../logic/storage';
 import { TAction, TEffect, TGameState, TSkillId } from '../types';
@@ -117,10 +117,10 @@ export const useGame = (playerId: number) => {
   const pushPopup = useCallback(
     (x: number, y: number, text: string, tone: TTapPopup['tone'] = 'gold') => {
       const id = ++popupId.current;
-      setPopups((prev) => [...prev, { id, x, y, text, tone }].slice(-6));
+      setPopups((prev) => [...prev, { id, x, y, text, tone }].slice(-4));
       window.setTimeout(() => {
         setPopups((prev) => prev.filter((item) => item.id !== id));
-      }, 720);
+      }, 650);
     },
     []
   );
@@ -309,29 +309,22 @@ export const useGame = (playerId: number) => {
   useEffect(() => {
     sfx.init();
     reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const loaded = stateRef.current;
+    const curBelly = loaded ? bellyStage(loaded.cans) : 0;
+    const curRoom = loaded?.roomLevel ?? 1;
     const urls = [
       '/game/kvas/room/base.png',
-      '/game/kvas/room/dark.png',
+      '/game/kvas/room/upgrade-1.png',
       '/game/kvas/players/_default/head.png',
       '/game/kvas/props/can.png',
       '/game/kvas/props/can-drink.png',
       '/game/kvas/props/can-crushed.png',
       '/game/kvas/props/grip-idle.png',
       '/game/kvas/props/grip-drink.png',
-      '/game/kvas/props/tattoo-1.png',
-      '/game/kvas/props/tattoo-2.png',
-      '/game/kvas/props/tattoo-3.png',
-      '/game/kvas/props/pile.png',
-      '/game/kvas/props/coach.png',
-      '/game/kvas/props/teammate-1.png',
-      '/game/kvas/props/teammate-2.png',
-      '/game/kvas/props/velo.png',
-      '/game/kvas/props/cleaner.png',
-      '/game/kvas/props/pigeon.png',
-      '/game/kvas/props/icons.png',
-      '/game/kvas/props/skills.png',
-      ...Array.from({ length: 12 }, (_, index) => `/game/kvas/room/upgrade-${index + 1}.png`),
-      ...Array.from({ length: 6 }, (_, index) => `/game/kvas/body/belly-${index}.png`),
+      `/game/kvas/body/belly-${curBelly}.png`,
+      ...(curBelly < 9 ? [`/game/kvas/body/belly-${curBelly + 1}.png`] : []),
+      ...(curRoom > 1 ? [`/game/kvas/room/upgrade-${curRoom}.png`] : []),
+      ...(curRoom < 12 ? [`/game/kvas/room/upgrade-${curRoom + 1}.png`] : []),
     ];
     urls.forEach((url) => {
       const image = new Image();
@@ -357,8 +350,8 @@ export const useGame = (playerId: number) => {
   useEffect(() => {
     const timer = window.setInterval(() => {
       if (document.hidden || !stateRef.current) return;
-      applyRef.current({ type: 'TICK_PLAYTIME', ms: 5000 });
-    }, 5000);
+      applyRef.current({ type: 'TICK_PLAYTIME', ms: 15000 });
+    }, 15000);
     return () => window.clearInterval(timer);
   }, [playerId]);
 

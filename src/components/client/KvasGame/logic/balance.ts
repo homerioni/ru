@@ -27,15 +27,19 @@ export const HYPE_VOICE_BONUS_CHANCE = [0, 0.01, 0.02, 0.03, 0.04];
 export const HYPE_TEAMMATE_BONUS = [0, 15, 30, 55, 90];
 export const MARATHON_BASE_BONUS = [0, 1, 2, 3, 4, 5];
 
-export const BELLY_THRESHOLDS = [0, 3, 12, 35, 90, 220];
-export const BELLY_MULT = [1, 1.2, 1.5, 2, 2.5, 3];
+export const BELLY_THRESHOLDS = [0, 3, 10, 25, 55, 110, 200, 330, 480, 660];
+export const BELLY_MULT = [1, 1.15, 1.35, 1.6, 1.9, 2.25, 2.65, 3.1, 3.6, 4.2];
 export const BELLY_NAMES = [
   'Атлет',
   'Лёгкий намёк',
+  'Под пивко',
   'Мозоль пивная',
+  'Солидный запас',
   'Ветеран',
+  'Арбуз под майкой',
   'Трещит по швам',
   'Шар',
+  'Мега-пузо 3000',
 ];
 export const ROOM_UPGRADE_BONUS = 0.08;
 export const SKILL_PRICE_GROWTH = 1.55;

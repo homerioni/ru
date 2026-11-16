@@ -1,10 +1,13 @@
+import { memo } from 'react';
 import { kvasManifest } from '../manifest';
-import { bellyStage, canCrushStage } from '../logic/selectors';
-import { TGameState } from '../types';
 import s from './styles.module.scss';
 
 type PlayerProps = {
-  state: TGameState;
+  playerId: number;
+  stage: number;
+  crush: number;
+  tattooLevel: number;
+  canOpen: boolean;
   bodyFrame: number;
   headFrame: number;
   canPop: boolean;
@@ -15,17 +18,23 @@ const headUrl = (playerId: number) =>
     ? `/game/kvas/players/${playerId}/head.png`
     : '/game/kvas/players/_default/head.png';
 
-export const PlayerSprite = ({ state, bodyFrame, headFrame, canPop }: PlayerProps) => {
-  const stage = bellyStage(state.cans);
-  const crush = canCrushStage(state);
-  const tattooLevel = Math.min(3, state.skills.tattoo ?? 0);
+export const PlayerSprite = memo(function PlayerSprite({
+  playerId,
+  stage,
+  crush,
+  tattooLevel,
+  canOpen,
+  bodyFrame,
+  headFrame,
+  canPop,
+}: PlayerProps) {
   const anchors = kvasManifest.body.anchors[String(stage)];
   const anchor = anchors[bodyFrame] ?? anchors[0];
   const [bodyW, bodyH] = kvasManifest.body.cell;
   const [headW, headH] = kvasManifest.head.cell;
   const [canW, canH] = kvasManifest.can.cell;
   const [drinkW, drinkH] = kvasManifest.canDrink.cell;
-  const canFrame = canPop ? 1 : state.can.state === 'open' ? 2 + crush : 0;
+  const canFrame = canPop ? 1 : canOpen ? 2 + crush : 0;
   const isChugging = bodyFrame === 1 || bodyFrame === 2;
   const isBurping = bodyFrame === 3;
   const isIdle = bodyFrame === 0;
@@ -51,7 +60,7 @@ export const PlayerSprite = ({ state, bodyFrame, headFrame, canPop }: PlayerProp
             top: anchor.neck[1] - kvasManifest.head.neck[1],
             width: headW,
             height: headH,
-            backgroundImage: `url(${headUrl(state.playerId)})`,
+            backgroundImage: `url(${headUrl(playerId)})`,
             backgroundSize: `${headW * kvasManifest.head.frames}px ${headH}px`,
             backgroundPosition: `${-headFrame * headW}px 0`,
           }}
@@ -154,4 +163,4 @@ export const PlayerSprite = ({ state, bodyFrame, headFrame, canPop }: PlayerProp
       )}
     </div>
   );
-};
+});

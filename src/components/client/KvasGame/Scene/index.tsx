@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { bellyStage, canCrushStage } from '../logic/selectors';
 import { kvasManifest } from '../manifest';
 import { TGameState } from '../types';
 import { Cans } from './Cans';
@@ -34,6 +35,7 @@ const [FOCUS_X, FOCUS_Y] = kvasManifest.focus;
 export const Scene = (props: SceneProps) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [view, setView] = useState({ scale: 1, left: 0, top: 0 });
+  const { state } = props;
 
   useEffect(() => {
     const node = wrapRef.current;
@@ -54,6 +56,11 @@ export const Scene = (props: SceneProps) => {
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  const floorCount = useMemo(() => state.slots.floor.filter(Boolean).length, [state.slots.floor]);
+  const stage = bellyStage(state.cans);
+  const crush = canCrushStage(state);
+  const tattooLevel = Math.min(3, state.skills.tattoo ?? 0);
 
   return (
     <div
@@ -84,20 +91,32 @@ export const Scene = (props: SceneProps) => {
         <div
           className={s.scene}
           style={{
-            transform: `translate(${view.left}px, ${view.top}px) scale(${view.scale}) translate(${props.shake[0]}px, ${props.shake[1]}px)`,
+            transform: `translate3d(${view.left}px, ${view.top}px, 0) scale(${view.scale}) translate3d(${props.shake[0]}px, ${props.shake[1]}px, 0)`,
             transformOrigin: 'top left',
           }}
         >
-          <Room roomLevel={props.state.roomLevel} dark={props.dark} />
-          <Cans state={props.state} crashImpulse={props.veloImpulse} />
+          <Room roomLevel={state.roomLevel} dark={props.dark} />
+          <Cans
+            cans={state.cans}
+            pileCount={state.pileCount}
+            floorCount={floorCount}
+            megaBurps={state.stats.megaBurps}
+            benchSlots={state.slots.bench}
+            shelfSlots={state.slots.shelf}
+            crashImpulse={props.veloImpulse}
+          />
           <PlayerSprite
-            state={props.state}
+            playerId={state.playerId}
+            stage={stage}
+            crush={crush}
+            tattooLevel={tattooLevel}
+            canOpen={state.can.state === 'open'}
             bodyFrame={props.bodyFrame}
             headFrame={props.headFrame}
             canPop={props.canPop}
           />
           <Events
-            state={props.state}
+            pileCount={state.pileCount}
             coach={props.coach}
             coachYell={props.coachYell}
             cleaner={props.cleaner}

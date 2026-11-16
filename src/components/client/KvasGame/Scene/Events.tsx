@@ -1,11 +1,10 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, memo } from 'react';
 import { kvasManifest } from '../manifest';
 import { pileStage } from '../logic/selectors';
-import { TGameState } from '../types';
 import s from './styles.module.scss';
 
 type EventsProps = {
-  state: TGameState;
+  pileCount: number;
   coach: 'idle' | 'creak' | 'look';
   coachYell: boolean;
   cleaner: boolean;
@@ -22,8 +21,8 @@ const [VELO_W, VELO_H] = kvasManifest.velo.cell;
 const [CLEANER_W, CLEANER_H] = kvasManifest.cleaner.cell;
 const [PIGEON_W, PIGEON_H] = kvasManifest.pigeon.cell;
 
-export const Events = ({
-  state,
+export const Events = memo(function Events({
+  pileCount,
   coach,
   coachYell,
   cleaner,
@@ -32,10 +31,10 @@ export const Events = ({
   teammateFrame,
   velo,
   onPigeon,
-}: EventsProps) => {
+}: EventsProps) {
   const coachFrame = coachYell ? 2 : coach === 'look' ? 1 : 0;
   const pigeonAt =
-    kvasManifest.pigeonOnPile[pileStage(state.pileCount)] ?? kvasManifest.pigeonOnPile[1];
+    kvasManifest.pigeonOnPile[pileStage(pileCount)] ?? kvasManifest.pigeonOnPile[1];
 
   return (
     <>
@@ -128,4 +127,4 @@ export const Events = ({
       )}
     </>
   );
-};
+});

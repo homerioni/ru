@@ -48,7 +48,7 @@ export const canVolume = (throatLevel: number) =>
 
 export const multiplier = (state: TGameState) => {
   const belly = BELLY_MULT[bellyStage(state.cans)];
-  const room = 1 + ROOM_UPGRADE_BONUS * state.roomLevel;
+  const room = 1 + ROOM_UPGRADE_BONUS * Math.max(0, state.roomLevel - 1);
   const armband =
     1 + ARMBAND_BONUS_BY_LEVEL[Math.min(ARMBAND_BONUS_BY_LEVEL.length - 1, state.skills.armband ?? 0)];
   const tattoo =

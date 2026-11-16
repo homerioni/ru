@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, memo } from 'react';
 import { kvasManifest } from '../manifest';
 import s from './styles.module.scss';
 
@@ -16,25 +16,27 @@ type RoomProps = {
   dark: boolean;
 };
 
-export const Room = ({ roomLevel, dark }: RoomProps) => (
-  <>
-    <div className={s.layer} style={layerStyle('/game/kvas/room/base.png', 1)} />
-    {UPGRADE_IDS.map((level) => {
-      if (roomLevel < level) return null;
-      if (level === 4 && roomLevel >= 5) return null;
-      const frames = kvasManifest.upgradeFrames[String(level)] ?? 1;
-      const motion =
-        frames === 4 ? s.f4 : frames === 3 ? s.f3 : frames === 2 ? s.f2 : '';
-      return (
-        <div
-          key={level}
-          className={`${s.layer} ${motion}`}
-          style={layerStyle(`/game/kvas/room/upgrade-${level}.png`, frames)}
-        />
-      );
-    })}
-    {dark && (
-      <div className={`${s.layer} ${s.dark}`} style={layerStyle('/game/kvas/room/dark.png', 1)} />
-    )}
-  </>
-);
+export const Room = memo(function Room({ roomLevel, dark }: RoomProps) {
+  return (
+    <>
+      <div className={s.layer} style={layerStyle('/game/kvas/room/base.png', 1)} />
+      {UPGRADE_IDS.map((level) => {
+        if (roomLevel < level) return null;
+        if (level === 4 && roomLevel >= 5) return null;
+        const frames = kvasManifest.upgradeFrames[String(level)] ?? 1;
+        const motion =
+          frames === 4 ? s.f4 : frames === 3 ? s.f3 : frames === 2 ? s.f2 : '';
+        return (
+          <div
+            key={level}
+            className={`${s.layer} ${motion}`}
+            style={layerStyle(`/game/kvas/room/upgrade-${level}.png`, frames)}
+          />
+        );
+      })}
+      {dark && (
+        <div className={`${s.layer} ${s.dark}`} style={layerStyle('/game/kvas/room/dark.png', 1)} />
+      )}
+    </>
+  );
+});

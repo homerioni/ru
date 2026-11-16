@@ -632,7 +632,7 @@ def build_player():
         tsheet.paste(b_can, (PLAYER_W * 4, 2), b_can)
         tsheet.save(os.path.join(OUT_DIR, f"props/tattoo-{tier}.png"))
 
-    # Belly warping: clear, progressive 3D beer belly from stage 1 to 5
+    # Belly warping: 10 highly expressive stages (0..9), max belly ~3x larger than before
     waist_cx, waist_cy = mpt(472, 540)
     shirt_top_y = mpt(0, 390)[1]
     shirt_bot_y = mpt(0, 646)[1]
@@ -649,85 +649,105 @@ def build_player():
         out = img.copy()
         spx = img.load()
         opx = out.load()
+        t9 = stage / 9.0
         cx = waist_cx - 2
-        cy = waist_cy + 7 + dy_shift
-        rx = 23 + stage * 3.8
-        ry = 14 + stage * 3.5
-        expand_w = 0.48 * (stage / 5.0)
-        hem_drop = stage * 3.4
+        cy = waist_cy + 6 + dy_shift + int(round(stage * 1.4))
+        rx = 22 + stage * 3.5
+        ry = 14 + stage * 3.3
+        expand_w = 0.92 * (t9 ** 0.9)
+        hem_drop = stage * 2.6
 
-        y_end = min(PLAYER_H - 10, shirt_bot_y + int(round(stage * 4.0)) + 4)
-        for y in range(shirt_top_y, y_end):
-            for x in range(max(torso_x0 - 8, cx - int(rx) - 4), min(torso_x1 + 8, cx + int(rx) + 4)):
+        # Shirt bulge & stretch (covers upper torso & lifts/curves text over giant dome)
+        y_end = min(PLAYER_H - 10, shirt_bot_y + int(round(stage * 2.0)) + 2)
+        for y in range(shirt_top_y + 6, y_end):
+            for x in range(max(24, cx - int(rx) - 4), min(PLAYER_W - 18, cx + int(rx) + 4)):
                 if not (0 <= x < PLAYER_W and 0 <= y < PLAYER_H):
                     continue
-                if is_fg_arm(spx[x, y]) and (x < cx - 18 or x > cx + 16 or y > shirt_bot_y + 2):
+                # Keep his right arm/hand (left side) and left wrist/fingers (right side) intact
+                if is_fg_arm(spx[x, y]) and (x < cx - 22 or x > cx + 22 or y > shirt_bot_y + 2):
                     continue
                 nx = (x - cx) / rx
                 ny = (y - cy) / ry
                 d2 = nx * nx + ny * ny
                 if d2 < 1.0:
-                    falloff = (1.0 - d2) ** 0.8
+                    falloff = (1.0 - d2) ** 0.78
+                    radial_mag = 1.0 + 0.65 * t9 * falloff
                     src_x = int(round(cx + (x - cx) / (1.0 + expand_w * falloff)))
-                    src_y = int(round(y - hem_drop * falloff))
+                    src_y = int(round(cy + (y - cy) / radial_mag - stage * 0.65 * falloff))
                     src_x = max(torso_x0, min(torso_x1, src_x))
-                    src_y = max(shirt_top_y, min(shirt_bot_y, src_y))
+                    src_y = max(shirt_top_y + 8, min(shirt_bot_y, src_y))
                     r, g, b, a = spx[src_x, src_y]
-                    # If stretching past bottom hem, paint stretched white jersey fabric!
-                    if (a == 0 or (r < 45 and g < 45 and b < 50)) and y > shirt_bot_y - 6 and abs(nx) < 0.85:
+                    if (a == 0 or (r < 45 and g < 45 and b < 50)) and y > shirt_bot_y - 6 and abs(nx) < 0.88:
                         r, g, b, a = 228, 226, 224, 255
                     if a > 0 and not is_fg_arm((r, g, b, a)):
-                        shade = 1.0 + 0.08 * falloff * (1.0 - max(0.0, ny)) - 0.25 * max(0.0, ny) * falloff
-                        if ny > 0.72 and d2 > 0.78:
-                            shade *= 0.72
+                        dome_hi = max(0.0, 1.0 - ((nx + 0.15) ** 2 + (ny + 0.22) ** 2))
+                        shade = 1.0 + 0.10 * dome_hi * t9 - 0.28 * max(0.0, ny) * falloff
+                        if ny > 0.70 and d2 > 0.74:
+                            shade *= 0.70
                         opx[x, y] = (
                             max(0, min(255, int(r * shade))),
                             max(0, min(255, int(g * shade))),
                             max(0, min(255, int(b * shade))),
                             255,
                         )
+                    elif d2 > 0.86 and abs(nx) > 0.82 and y > cy - ry * 0.15 and spx[x, y][3] == 0:
+                        opx[x, y] = (26, 22, 20, 255)
 
-        # Exposed round beer belly skin peeking under stretched jersey hem from stage 2..5
+        # Exposed round beer belly hanging out beneath the stretched jersey (stages 2..9, up to 3x larger!)
         if stage >= 2:
-            brx = 13 + (stage - 2) * 3.8
-            hem_y = shirt_bot_y + dy_shift + int(round((stage - 2) * 1.4))
-            max_arc = 3.2 + (stage - 2) * 2.5
-            for x in range(int(cx - brx), int(cx + brx) + 1):
+            s_gut = stage - 1  # 1..8
+            brx = 14 + s_gut * 3.4          # 17.4 .. 41.2 px half-width
+            base_hem = shirt_bot_y + dy_shift
+            max_arc = 5.0 + (s_gut ** 1.26) * 2.55   # ~7px at stage 2 -> ~40px drop at stage 9!
+            arch_lift = min(7.0, s_gut * 0.85)
+            for x in range(int(cx - brx - 1), int(cx + brx + 2)):
                 if not (0 <= x < PLAYER_W):
                     continue
-                if x > cx + 13 and is_fg_arm(spx[x, min(PLAYER_H - 1, hem_y + 2)]):
-                    continue
                 u = (x - cx) / brx
-                arc = int(round(max(0.0, 1.0 - u * u) * max_arc))
+                if abs(u) > 1.0:
+                    continue
+                curve = max(0.0, 1.0 - u * u)
+                hem_y = int(round(base_hem - curve * arch_lift))
+                arc = int(round((curve ** 0.70) * max_arc + curve * arch_lift))
                 if arc <= 0:
                     continue
                 for yy in range(hem_y, hem_y + arc + 1):
-                    if 0 <= yy < PLAYER_H:
-                        if is_fg_arm(spx[x, yy]) and x > cx + 11:
-                            continue
-                        if yy == hem_y:
-                            opx[x, yy] = (158, 155, 152, 255)
-                        elif yy == hem_y + arc:
-                            opx[x, yy] = (22, 12, 8, 255)
-                        else:
-                            v = (yy - hem_y) / max(1, arc)
-                            shade = 1.04 - 0.16 * abs(u) - 0.20 * v
-                            opx[x, yy] = (
-                                max(0, min(255, int(218 * shade))),
-                                max(0, min(255, int(146 * shade))),
-                                max(0, min(255, int(86 * shade))),
-                                255,
-                            )
+                    if not (0 <= yy < PLAYER_H):
+                        continue
+                    # Preserve his resting left fingers/hand on the lower-right side, and right can-hand on left
+                    if is_fg_arm(spx[x, yy]) and (x < cx - 26 or x > cx + 18):
+                        continue
+                    if yy == hem_y:
+                        opx[x, yy] = (158, 154, 150, 255)
+                    elif yy == hem_y + 1 and abs(u) < 0.94:
+                        opx[x, yy] = (164, 102, 54, 255)
+                    elif yy >= hem_y + arc - 1:
+                        opx[x, yy] = (24, 12, 8, 255)
+                    elif abs(u) > 0.94:
+                        opx[x, yy] = (28, 14, 10, 255)
+                    else:
+                        v = (yy - hem_y) / max(1, arc)
+                        hi = max(0.0, 1.0 - ((u + 0.18) ** 2 + (v - 0.36) ** 2) * 2.2)
+                        shade = 1.0 + 0.12 * hi - 0.16 * abs(u) - 0.28 * (v ** 1.4)
+                        opx[x, yy] = (
+                            max(0, min(255, int(222 * shade))),
+                            max(0, min(255, int(148 * shade))),
+                            max(0, min(255, int(88 * shade))),
+                            255,
+                        )
+            # Navel / belly-button
             if stage >= 3:
-                ny_dot = hem_y + max(1, int(max_arc * 0.52))
-                if 0 <= ny_dot < PLAYER_H:
-                    opx[cx, ny_dot] = (112, 58, 28, 255)
-                    if stage >= 4 and ny_dot + 1 < PLAYER_H:
-                        opx[cx, ny_dot + 1] = (138, 76, 38, 255)
+                ny_dot = int(round(base_hem - arch_lift * 0.5 + max_arc * 0.52))
+                navel_w = 1 if stage < 6 else 2
+                for dx_n in range(-navel_w + 1, navel_w):
+                    if 0 <= cx + dx_n < PLAYER_W and 0 <= ny_dot < PLAYER_H:
+                        opx[cx + dx_n, ny_dot] = (92, 44, 20, 255)
+                        if stage >= 5 and ny_dot + 1 < PLAYER_H:
+                            opx[cx + dx_n, ny_dot + 1] = (124, 64, 30, 255)
         return out
 
     anchors_manifest = {}
-    for stage in range(6):
+    for stage in range(10):
         sheet = Image.new("RGBA", (PLAYER_W * 5, PLAYER_H), (0, 0, 0, 0))
         stage_anchors = []
 

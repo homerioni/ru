@@ -11,7 +11,7 @@ type ShopRoomProps = {
 
 export const ShopRoom = ({ state, onBuy }: ShopRoomProps) => {
   const next = ROOM_UPGRADES[state.roomLevel];
-  const bonusPct = Math.round(state.roomLevel * ROOM_UPGRADE_BONUS * 100);
+  const bonusPct = Math.round(Math.max(0, state.roomLevel - 1) * ROOM_UPGRADE_BONUS * 100);
   const affordable = !!next && state.kvasiki >= next.price;
 
   return (

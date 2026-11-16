@@ -14,6 +14,7 @@ export const loadState = (playerId: number): TGameState => {
     const base = createState(playerId);
     return {
       ...parsed,
+      roomLevel: Math.max(1, parsed.roomLevel ?? 1),
       skills: { ...base.skills, ...parsed.skills },
       stats: { ...base.stats, ...parsed.stats },
     };

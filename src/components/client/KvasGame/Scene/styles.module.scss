@@ -2,6 +2,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
+  contain: strict;
   background: #141a15;
   cursor: pointer;
   touch-action: manipulation;
@@ -25,6 +26,8 @@
   left: 0;
   width: 270px;
   height: 480px;
+  contain: layout style;
+  will-change: transform;
   background: #141a15;
 }
 

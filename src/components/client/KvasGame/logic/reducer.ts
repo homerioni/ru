@@ -57,7 +57,7 @@ export const createState = (playerId: number, soundOn = true): TGameState => ({
     hype: 0,
     marathon: 0,
   },
-  roomLevel: 0,
+  roomLevel: 1,
   slots: {
     floor: Array(SLOT_COUNTS.floor).fill(null),
     bench: Array(SLOT_COUNTS.bench).fill(null),

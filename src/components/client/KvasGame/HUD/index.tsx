@@ -1,6 +1,6 @@
 'use client';
 
-import { CSSProperties } from 'react';
+import { CSSProperties, memo } from 'react';
 import { BELLY_NAMES, FINAL_CANS } from '../logic/balance';
 import { bellyStage, canCrushStage, canVolume, multiplier, rankName } from '../logic/selectors';
 import { kvasManifest } from '../manifest';
@@ -18,7 +18,7 @@ const iconBg = (index: number): CSSProperties => ({
   backgroundPosition: `${-index * 32}px 0`,
 });
 
-export const HUD = ({ state, onSound }: HUDProps) => {
+export const HUD = memo(function HUD({ state, onSound }: HUDProps) {
   const belly = bellyStage(state.cans);
   const mult = multiplier(state);
   const multText = Number.isInteger(mult) ? `${mult}` : mult.toFixed(2).replace(/\.?0+$/, '');
@@ -60,9 +60,9 @@ export const HUD = ({ state, onSound }: HUDProps) => {
       </div>
     </div>
   );
-};
+});
 
-export const CanMeter = ({ state }: { state: TGameState }) => {
+export const CanMeter = memo(function CanMeter({ state }: { state: TGameState }) {
   const volume = canVolume(state.skills.throat);
   const isOpen = state.can.state === 'open';
   const crush = canCrushStage(state);
@@ -93,4 +93,4 @@ export const CanMeter = ({ state }: { state: TGameState }) => {
       </div>
     </div>
   );
-};
+});
