@@ -24,6 +24,11 @@ export const ROUTES = {
     mobName: undefined,
     href: '/gallery',
   },
+  game: {
+    name: 'Ясен Квасен',
+    mobName: undefined,
+    href: '/game',
+  },
 } as const;
 
 export const LINKS = {

@@ -1,0 +1,582 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 25%, #2a342a 0%, #14120e 72%);
+  color: #f4f1e8;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.select {
+  flex: 1;
+  overflow: auto;
+  padding: max(16px, env(safe-area-inset-top)) 12px calc(20px + env(safe-area-inset-bottom));
+}
+
+.selectInner {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.warmup {
+  margin: 24px auto;
+  font-size: 20px;
+  color: #f7d685;
+}
+
+.logo {
+  width: min(260px, 76vw);
+  aspect-ratio: 16 / 9;
+  margin: 0 auto 8px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  image-rendering: pixelated;
+}
+
+.title {
+  margin: 4px 0 12px;
+  font-size: 20px;
+  text-align: center;
+  color: #f7d685;
+  text-shadow: 0 2px 0 #120803;
+}
+
+.emptyText {
+  text-align: center;
+  color: #d6cbb5;
+}
+
+.layout {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.hudOverlay {
+  position: absolute;
+  top: max(8px, env(safe-area-inset-top));
+  left: 8px;
+  right: 8px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.speech {
+  position: absolute;
+  top: calc(max(8px, env(safe-area-inset-top)) + 114px);
+  left: 12px;
+  right: 76px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.canDock {
+  position: absolute;
+  left: 8px;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  z-index: 3;
+  width: min(192px, calc(100% - 178px));
+  pointer-events: none;
+}
+
+.shopBtn {
+  position: absolute;
+  right: 8px;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: min(162px, 44%);
+  min-height: 52px;
+  padding: 6px 10px;
+  color: #241307;
+  font-size: 16px;
+  font-weight: 700;
+  background: linear-gradient(180deg, #f3aa37 0%, #d47618 100%);
+  border: 3px solid #241307;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 0 #ffd87d, 0 4px 0 #120803;
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 0 #ffd87d, 0 2px 0 #120803;
+  }
+}
+
+.shopBtnIcon {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 14px;
+  height: 14px;
+  background: #5ee038;
+  border: 2px solid #1b120b;
+  border-radius: 50%;
+}
+
+.popups {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.popup {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: 2px 2px 0 #140a04, -1px -1px 0 #140a04;
+  animation: floatUp 0.72s ease-out forwards;
+}
+
+.popup_gold {
+  color: #ffe17a;
+}
+
+.popup_burp {
+  font-size: 18px;
+  color: #ff9f2e;
+}
+
+.popup_warn {
+  font-size: 18px;
+  color: #ff5646;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -80%) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -220%) scale(1.1);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  color: #241307;
+  background: linear-gradient(180deg, #f3aa37 0%, #d47618 100%);
+  border: 3px solid #241307;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 0 #ffd87d, 0 4px 0 #120803;
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 0 #ffd87d, 0 2px 0 #120803;
+  }
+}
+
+.cardPortraitWrap {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  background: #22170e;
+  border: 3px solid #241307;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.cardHead {
+  width: 72px;
+  height: 72px;
+  background-repeat: no-repeat;
+  background-size: 288px 72px;
+  image-rendering: pixelated;
+}
+
+.cardNum {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  padding: 1px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #f7d685;
+  background: rgba(20, 11, 5, 0.85);
+  border-radius: 3px;
+}
+
+.cardName {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  color: #1f0f05;
+}
+
+.cardCans {
+  padding: 2px 6px;
+  font-size: 11px;
+  color: #f7d685;
+  background: #2b180b;
+  border-radius: 4px;
+}
+
+.drawerTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-right: 8px;
+}
+
+.drawerBank {
+  padding: 3px 8px;
+  font-size: 14px;
+  color: #241307;
+  background: #f3aa37;
+  border: 2px solid #241307;
+  border-radius: 5px;
+}
+
+.drawerTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.drawerTab {
+  min-height: 44px;
+  padding: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  color: #d6c3a5;
+  background: #2c1e14;
+  border: 2px solid #593b22;
+  border-radius: 6px;
+}
+
+.drawerTabActive {
+  color: #241307;
+  background: linear-gradient(180deg, #f3aa37 0%, #d47618 100%);
+  border-color: #241307;
+  box-shadow: inset 0 2px 0 #ffd87d;
+}
+
+.buildSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 7px 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #f6d27a;
+  background: #23160d;
+  border: 2px solid #593b22;
+  border-radius: 6px;
+}
+
+.shopList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shopCard {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  background: #261a11;
+  border: 2px solid #543720;
+  border-radius: 8px;
+}
+
+.skillIcon {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  background-image: url('/game/kvas/props/skills.png');
+  background-repeat: no-repeat;
+  background-size: 384px 32px;
+  image-rendering: pixelated;
+}
+
+.shopText {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.shopHeadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.shopName,
+.shopDesc,
+.shopBonus {
+  margin: 0;
+}
+
+.shopName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f4f1e8;
+}
+
+.levelPill {
+  padding: 1px 5px;
+  font-size: 11px;
+  color: #f7d685;
+  background: #3d2817;
+  border-radius: 4px;
+}
+
+.shopDesc {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #c5b49b;
+}
+
+.shopBonus {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #f6c453;
+}
+
+.levelPips {
+  display: flex;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.lvlPip,
+.lvlPipOn {
+  height: 6px;
+  flex: 1;
+  max-width: 24px;
+  border-radius: 2px;
+  background: #3d2a1b;
+}
+
+.lvlPipOn {
+  background: #71c946;
+}
+
+.buy,
+.buyFull {
+  min-width: 78px;
+  min-height: 44px;
+  padding: 8px 10px;
+  color: #d6c3a5;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  background: #3d2817;
+  border: 2px solid #593b22;
+  border-radius: 6px;
+  flex: none;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.buyFull {
+  width: 100%;
+}
+
+.buyReady {
+  color: #241307;
+  background: linear-gradient(180deg, #f3aa37 0%, #d47618 100%);
+  border-color: #241307;
+  box-shadow: inset 0 2px 0 #ffd87d, 0 2px 0 #120803;
+}
+
+.roomShop {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roomHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #d6c3a5;
+}
+
+.roomNextCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: #2c1e14;
+  border: 2px solid #b47022;
+  border-radius: 8px;
+}
+
+.roomSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roomStep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  font-size: 12px;
+  color: #9e8c73;
+  background: #22170e;
+  border: 1px solid #3c2919;
+  border-radius: 6px;
+}
+
+.roomCurr {
+  color: #f7d685;
+  border-color: #b47022;
+}
+
+.roomDone {
+  color: #b8dc98;
+  border-color: #3f6a2e;
+}
+
+.stepMark {
+  width: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.stepName {
+  flex: 1;
+}
+
+.stepPrice {
+  font-weight: 700;
+}
+
+.final {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(14, 9, 5, 0.9);
+}
+
+.finalCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+  padding: 16px;
+  color: #f4f1e8;
+  background: #231810;
+  border: 3px solid #e08a20;
+  border-radius: 10px;
+  box-shadow: 0 6px 0 #120803;
+}
+
+.trophyIcon {
+  width: 32px;
+  height: 32px;
+  transform: scale(1.5);
+  margin: 6px 0;
+  background-image: url('/game/kvas/props/icons.png');
+  background-repeat: no-repeat;
+  background-size: 416px 32px;
+  image-rendering: pixelated;
+}
+
+.finalTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  color: #f7d685;
+}
+
+.finalSub {
+  margin: 0;
+  font-size: 14px;
+  color: #ff9f2e;
+}
+
+.finalStats {
+  width: 100%;
+  margin: 4px 0;
+  padding: 10px 12px 10px 26px;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #1a110a;
+  border-radius: 6px;
+}
+
+.finalActions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+.disclaimer {
+  max-width: 480px;
+  margin: 16px auto 0;
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.7;
+}

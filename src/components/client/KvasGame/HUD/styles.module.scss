@@ -1,0 +1,154 @@
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: calc(100% - 76px);
+}
+
+.panel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  color: #241307;
+  background: linear-gradient(180deg, #f3aa37 0%, #d47618 100%);
+  border: 3px solid #241307;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 0 #ffd87d, 0 3px 0 #120803;
+}
+
+.icon32 {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.meta {
+  min-width: 0;
+}
+
+.rank,
+.kvasiki,
+.sub {
+  margin: 0;
+  line-height: 1.15;
+}
+
+.rank {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f0f05;
+}
+
+.kvasiki {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f0f05;
+}
+
+.sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #3d210b;
+}
+
+.rightDock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dockBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 58px;
+  min-height: 54px;
+  padding: 4px;
+  color: #241307;
+  pointer-events: auto;
+  background: linear-gradient(180deg, #f3aa37 0%, #d47618 100%);
+  border: 3px solid #241307;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 0 #ffd87d, 0 3px 0 #120803;
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 0 #ffd87d, 0 1px 0 #120803;
+  }
+}
+
+.muted {
+  filter: grayscale(0.55) brightness(0.85);
+}
+
+.dockLabel {
+  font-size: 10px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.canPanel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  color: #f4f1e8;
+  background: rgba(24, 15, 9, 0.9);
+  border: 3px solid #241307;
+  outline: 1px solid #8a5624;
+  border-radius: 6px;
+  box-shadow: 0 3px 0 #120803;
+  pointer-events: none;
+}
+
+.miniCan {
+  width: 24px;
+  height: 44px;
+  flex: none;
+  background-image: url('/game/kvas/props/can.png');
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.canInfo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.canText {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.1;
+  color: #f7d685;
+}
+
+.track {
+  width: 100%;
+  height: 10px;
+  background: #2c1d12;
+  border: 2px solid #120a05;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(180deg, #ffd15c 0%, #e07b18 100%);
+}
+
+.fillClosed {
+  background: linear-gradient(180deg, #74b848 0%, #3d7b24 100%);
+}

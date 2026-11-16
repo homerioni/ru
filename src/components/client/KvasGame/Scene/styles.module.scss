@@ -1,0 +1,300 @@
+.wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #141a15;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid #f09a28;
+    outline-offset: -2px;
+  }
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+}
+
+.scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 270px;
+  height: 480px;
+  background: #141a15;
+}
+
+.scene,
+.scene * {
+  image-rendering: pixelated;
+}
+
+.layer,
+.sprite {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+.layer {
+  width: 270px;
+  height: 480px;
+}
+
+.shelfCan,
+.pile {
+  z-index: 4;
+}
+
+.player {
+  z-index: 5;
+  pointer-events: none;
+}
+
+.benchCan,
+.floorCan {
+  z-index: 6;
+}
+
+.teammate {
+  z-index: 4;
+}
+
+.actor {
+  z-index: 7;
+}
+
+.velo {
+  z-index: 7;
+}
+
+.veloRide {
+  animation:
+    veloFly 0.56s linear forwards,
+    shift 0.18s steps(2) infinite;
+}
+
+.veloCrash {
+  transform: translate(4px, 24px) rotate(-14deg);
+  opacity: 0;
+  transition: opacity 0.28s steps(3) 0.14s;
+}
+
+.crashBurst {
+  position: absolute;
+  z-index: 8;
+  width: 58px;
+  height: 58px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 26px 28px, rgba(255, 224, 110, 0.95) 8px, transparent 10px),
+    radial-gradient(circle at 16px 22px, rgba(255, 138, 42, 0.9) 10px, transparent 12px),
+    radial-gradient(circle at 38px 32px, rgba(185, 175, 160, 0.85) 11px, transparent 13px),
+    radial-gradient(circle at 28px 18px, rgba(220, 210, 195, 0.8) 9px, transparent 11px);
+  animation: crashPop 0.42s steps(4) forwards;
+}
+
+.pigeon {
+  z-index: 8;
+  position: absolute;
+  padding: 0;
+  pointer-events: auto;
+  background-repeat: no-repeat;
+  animation: shift 0.42s steps(2) infinite;
+}
+
+.dark {
+  z-index: 9;
+}
+
+.bubbles {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.bubble {
+  margin: 0;
+  padding: 8px 10px 12px;
+  color: #231810;
+  font-size: 14px;
+  line-height: 1.2;
+  background: #f6edd2;
+  border: 3px solid #231409;
+  border-radius: 8px;
+  box-shadow: 0 3px 0 #140a04;
+}
+
+.chest {
+  position: absolute;
+  top: 86px;
+  left: 0;
+  width: 168px;
+  color: #f4f1e8;
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 1px 1px 0 #0e1e12, -1px -1px 0 #0e1e12;
+  opacity: 0.92;
+}
+
+.f2 {
+  animation: shift 0.4s steps(2) infinite;
+}
+
+.f3 {
+  animation: shift 0.45s steps(3) infinite;
+}
+
+.f4 {
+  animation: shift 0.6s steps(4) infinite;
+}
+
+.cleaner {
+  animation: shift 0.45s steps(3) infinite;
+}
+
+.playerIdle {
+  animation: idleBreath 1.2s steps(2) infinite;
+}
+
+.canPop {
+  animation: canPopKick 0.18s steps(2) 1;
+}
+
+.drinkTilt {
+  animation: sipChug 0.16s steps(2) infinite;
+}
+
+.fizzSpray {
+  position: absolute;
+  width: 20px;
+  height: 16px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 4px 12px, #fff8d6 2px, transparent 2.5px),
+    radial-gradient(circle at 10px 6px, #ffe28a 2px, transparent 2.5px),
+    radial-gradient(circle at 16px 11px, #fff8d6 2px, transparent 2.5px),
+    radial-gradient(circle at 8px 13px, #f7b74d 1.5px, transparent 2px);
+  animation: fizzRise 0.24s steps(3) forwards;
+}
+
+.burpCloud {
+  position: absolute;
+  width: 22px;
+  height: 16px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 6px 10px, rgba(164, 212, 74, 0.85) 4px, transparent 4.5px),
+    radial-gradient(circle at 14px 8px, rgba(212, 232, 98, 0.8) 5px, transparent 5.5px),
+    radial-gradient(circle at 10px 5px, rgba(140, 188, 56, 0.75) 3.5px, transparent 4px);
+  animation: burpPuff 0.35s steps(3) infinite;
+}
+
+@keyframes shift {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: var(--shift);
+  }
+}
+
+@keyframes idleBreath {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes canPopKick {
+  0% {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes sipChug {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(1px, -1px);
+  }
+}
+
+@keyframes fizzRise {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes burpPuff {
+  0% {
+    opacity: 0.95;
+    transform: translate(0, 0) scale(0.85);
+  }
+  100% {
+    opacity: 0.25;
+    transform: translate(-8px, -6px) scale(1.2);
+  }
+}
+
+@keyframes veloFly {
+  0% {
+    transform: translate(236px, -16px) scale(0.86);
+  }
+  50% {
+    transform: translate(118px, 6px) scale(0.95);
+  }
+  100% {
+    transform: translate(6px, 22px) scale(1.02);
+  }
+}
+
+@keyframes crashPop {
+  0% {
+    opacity: 1;
+    transform: scale(0.6);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .f2,
+  .f3,
+  .f4,
+  .cleaner,
+  .pigeon,
+  .playerIdle,
+  .drinkTilt,
+  .burpCloud {
+    animation: none;
+  }
+}
