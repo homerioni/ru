@@ -10,6 +10,9 @@ type PlayerStatsListProps = {
   playedIn: TGetPlayer['playedIn'];
 };
 
+const toPerGame = (value: number, matches: number) =>
+  matches > 0 ? Number((value / matches).toFixed(2)) : 0;
+
 export const PlayerStatsList = ({ playedIn }: PlayerStatsListProps) => {
   const [activeSeason, setActiveSeason] = useState('2025');
 
@@ -86,15 +89,23 @@ export const PlayerStatsList = ({ playedIn }: PlayerStatsListProps) => {
           />
         </div>
       )}
-      {tables[+activeSeason]?.map((table) => (
-        <PlayerStats
-          key={table.name}
-          matches={table.matches}
-          goals={table.goals}
-          assists={table.assists}
-          title={table.name}
-        />
-      ))}
+      {tables[+activeSeason]?.map((table) => {
+        const goalsAssists = table.goals + table.assists;
+
+        return (
+          <PlayerStats
+            key={table.name}
+            matches={table.matches}
+            goals={table.goals}
+            assists={table.assists}
+            goalsPerGame={toPerGame(table.goals, table.matches)}
+            assistsPerGame={toPerGame(table.assists, table.matches)}
+            goalsAssists={goalsAssists}
+            goalsAssistsPerGame={toPerGame(goalsAssists, table.matches)}
+            title={table.name}
+          />
+        );
+      })}
     </div>
   );
 };

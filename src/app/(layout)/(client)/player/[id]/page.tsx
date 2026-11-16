@@ -8,6 +8,9 @@ import { PlayerEdit } from '@/components/client/PlayerEdit';
 
 export const dynamic = 'force-dynamic';
 
+const toPerGame = (value: number, matches: number) =>
+  matches > 0 ? Number((value / matches).toFixed(2)) : 0;
+
 export default async function MatchPage({
   params,
 }: {
@@ -21,18 +24,18 @@ export default async function MatchPage({
     redirect('/');
   }
 
+  const matches = player.playedIn.length;
   const { goals, assists } = player.playedIn.reduce(
-    (item, acc) => {
-      return {
-        goals: acc.goals + item.goals,
-        assists: acc.assists + item.assists,
-      };
-    },
+    (acc, item) => ({
+      goals: acc.goals + item.goals,
+      assists: acc.assists + item.assists,
+    }),
     {
       goals: 0,
       assists: 0,
     }
   );
+  const goalsAssists = goals + assists;
 
   return (
     <div className={s.main}>
@@ -41,9 +44,13 @@ export default async function MatchPage({
         name={player.name}
         position={player.position}
         isTeam={player.type === 'team'}
-        matches={player.playedIn.length}
+        matches={matches}
         goals={goals}
         assists={assists}
+        goalsAssists={goalsAssists}
+        goalsPerGame={toPerGame(goals, matches)}
+        assistsPerGame={toPerGame(assists, matches)}
+        goalsAssistsPerGame={toPerGame(goalsAssists, matches)}
         photo={player.photo}
         number={player.number}
         club={player.club}
