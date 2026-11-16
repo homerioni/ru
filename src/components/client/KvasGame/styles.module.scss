@@ -580,3 +580,250 @@
   text-align: center;
   opacity: 0.7;
 }
+
+.nickGate {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(12, 8, 5, 0.86);
+}
+
+.nickCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+  padding: 16px;
+  color: #f4f1e8;
+  background: #231810;
+  border: 3px solid #e08a20;
+  border-radius: 10px;
+  box-shadow: 0 6px 0 #120803;
+}
+
+.nickTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #f7d685;
+  text-align: center;
+}
+
+.nickDesc {
+  margin: 0;
+  font-size: 13px;
+  color: #d6c3a5;
+  text-align: center;
+}
+
+.nickForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.nickInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  color: #f4f1e8;
+  font-size: 15px;
+  font-family: inherit;
+  background: #140d08;
+  border: 2px solid #8a5624;
+  border-radius: 6px;
+  outline: none;
+
+  &:focus {
+    border-color: #f3aa37;
+  }
+}
+
+.nickError {
+  margin: 0;
+  font-size: 12px;
+  color: #ff6b57;
+}
+
+.nickSkip {
+  min-height: 38px;
+  padding: 6px 10px;
+  color: #c5b49b;
+  font-size: 12px;
+  background: transparent;
+  border: 1px solid #593b22;
+  border-radius: 6px;
+}
+
+.lbWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lbProfileBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: #261a11;
+  border: 2px solid #b47022;
+  border-radius: 8px;
+}
+
+.lbProfileTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lbLabel {
+  margin: 0;
+  font-size: 11px;
+  color: #c5b49b;
+}
+
+.lbMyNick {
+  margin: 2px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #f7d685;
+}
+
+.lbEditRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lbMyStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 12px;
+  color: #f4f1e8;
+}
+
+.lbToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lbSyncNote {
+  font-size: 11px;
+  color: #c5b49b;
+}
+
+.lbSmallBtn {
+  min-height: 34px;
+  padding: 5px 10px;
+  color: #f7d685;
+  font-size: 12px;
+  font-weight: 700;
+  background: #3d2817;
+  border: 2px solid #754a24;
+  border-radius: 6px;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.lbList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lbRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #24170e;
+  border: 2px solid #48301c;
+  border-radius: 8px;
+}
+
+.lbRowMe {
+  background: #332212;
+  border-color: #f3aa37;
+}
+
+.lbPos {
+  min-width: 34px;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  color: #c5b49b;
+}
+
+.lbRank1 {
+  color: #ffd84d;
+}
+
+.lbRank2 {
+  color: #dce4ee;
+}
+
+.lbRank3 {
+  color: #e89b5a;
+}
+
+.lbMeta {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.lbName,
+.lbSub,
+.lbCans,
+.lbSips {
+  margin: 0;
+}
+
+.lbName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f4f1e8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lbSub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #c5b49b;
+}
+
+.lbScore {
+  text-align: right;
+  flex: none;
+}
+
+.lbCans {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f7d685;
+}
+
+.lbSips {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #c5b49b;
+}

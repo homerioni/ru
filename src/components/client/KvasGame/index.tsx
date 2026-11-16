@@ -2,11 +2,12 @@
 
 import '@mantine/core/styles.css';
 import { Drawer, MantineProvider } from '@mantine/core';
-import { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import { canBuyAny } from './logic/selectors';
 import { FinalScreen } from './FinalScreen';
 import { CanMeter, HUD } from './HUD';
 import { useGame } from './hooks/useGame';
+import { LeaderboardPanel, NicknameGate } from './Leaderboard';
 import { Scene } from './Scene';
 import { ShopRoom } from './ShopRoom';
 import { ShopSkills } from './ShopSkills';
@@ -24,6 +25,22 @@ const iconBg = (index: number): CSSProperties => ({
   backgroundSize: '416px 32px',
   backgroundPosition: `${-index * 32}px 0`,
 });
+
+const DRAWER_STYLES = {
+  content: {
+    background: '#1b120b',
+    color: '#f4f1e8',
+    borderTop: '3px solid #e08a20',
+  },
+  header: {
+    background: '#1b120b',
+    color: '#f6d27a',
+    borderBottom: '2px solid #3a2414',
+  },
+  title: { color: '#f6d27a', fontSize: 20, width: '100%' },
+  body: { color: '#f4f1e8', paddingTop: 12 },
+  close: { color: '#f6d27a', width: 44, height: 44 },
+} as const;
 
 const Shops = ({
   state,
@@ -69,10 +86,17 @@ const Shops = ({
 const Match = () => {
   const game = useGame(PLAYER_ID);
   const [shopOpen, setShopOpen] = useState(false);
+  const [boardOpen, setBoardOpen] = useState(false);
 
-  if (!game.state) return <p className={s.warmup}>Разминка...</p>;
+  const openBoard = useCallback(() => {
+    game.clickUi();
+    setBoardOpen(true);
+  }, [game]);
+
+  if (!game.state || !game.profile) return <p className={s.warmup}>Разминка...</p>;
 
   const hasUpgrade = canBuyAny(game.state);
+  const needsNickname = game.profile.nickname.length < 2;
 
   return (
     <div className={s.layout}>
@@ -108,7 +132,7 @@ const Match = () => {
       </div>
 
       <div className={s.hudOverlay}>
-        <HUD state={game.state} onSound={game.toggleSound} />
+        <HUD state={game.state} onSound={game.toggleSound} onLeaderboard={openBoard} />
       </div>
 
       <div className={s.canDock}>
@@ -128,6 +152,16 @@ const Match = () => {
         {hasUpgrade && <span className={s.badge} aria-label="Доступно улучшение" />}
       </button>
 
+      {needsNickname && (
+        <NicknameGate
+          profile={game.profile}
+          onSubmit={(nick) => {
+            game.clickUi();
+            game.setNickname(nick);
+          }}
+        />
+      )}
+
       <Drawer
         opened={shopOpen}
         onClose={() => setShopOpen(false)}
@@ -141,27 +175,35 @@ const Match = () => {
             </span>
           </span>
         }
-        styles={{
-          content: {
-            background: '#1b120b',
-            color: '#f4f1e8',
-            borderTop: '3px solid #e08a20',
-          },
-          header: {
-            background: '#1b120b',
-            color: '#f6d27a',
-            borderBottom: '2px solid #3a2414',
-          },
-          title: { color: '#f6d27a', fontSize: 20, width: '100%' },
-          body: { color: '#f4f1e8', paddingTop: 12 },
-          close: { color: '#f6d27a', width: 44, height: 44 },
-        }}
+        styles={DRAWER_STYLES}
       >
         <Shops
           state={game.state}
           onSkill={game.buySkill}
           onRoom={game.buyRoom}
           onTab={game.clickUi}
+        />
+      </Drawer>
+
+      <Drawer
+        opened={boardOpen}
+        onClose={() => setBoardOpen(false)}
+        position="bottom"
+        size="82%"
+        title={
+          <span className={s.drawerTitleRow}>
+            <span>Общий рейтинг</span>
+            <span className={s.drawerBank}>{game.state.cans} бан.</span>
+          </span>
+        }
+        styles={DRAWER_STYLES}
+      >
+        <LeaderboardPanel
+          opened={boardOpen}
+          profile={game.profile}
+          cans={game.state.cans}
+          sips={game.state.sips}
+          onRename={game.setNickname}
         />
       </Drawer>
 

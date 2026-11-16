@@ -10,6 +10,7 @@ import s from './styles.module.scss';
 type HUDProps = {
   state: TGameState;
   onSound: () => void;
+  onLeaderboard: () => void;
 };
 
 const iconBg = (index: number): CSSProperties => ({
@@ -18,7 +19,7 @@ const iconBg = (index: number): CSSProperties => ({
   backgroundPosition: `${-index * 32}px 0`,
 });
 
-export const HUD = memo(function HUD({ state, onSound }: HUDProps) {
+export const HUD = memo(function HUD({ state, onSound, onLeaderboard }: HUDProps) {
   const belly = bellyStage(state.cans);
   const mult = multiplier(state);
   const multText = Number.isInteger(mult) ? `${mult}` : mult.toFixed(2).replace(/\.?0+$/, '');
@@ -56,6 +57,16 @@ export const HUD = memo(function HUD({ state, onSound }: HUDProps) {
         >
           <span className={s.icon32} style={iconBg(3)} aria-hidden />
           <span className={s.dockLabel}>{state.soundOn ? 'Звук' : 'Тихо'}</span>
+        </button>
+
+        <button
+          type="button"
+          className={s.dockBtn}
+          onClick={onLeaderboard}
+          aria-label="Общий рейтинг"
+        >
+          <span className={s.icon32} style={iconBg(11)} aria-hidden />
+          <span className={s.dockLabel}>Топ</span>
         </button>
       </div>
     </div>

@@ -25,6 +25,14 @@ import {
   TEAMMATE_BANTER,
 } from '../logic/phrases';
 import { pick } from '../logic/random';
+import {
+  LEADERBOARD_SYNC_MS,
+  loadProfile,
+  normalizeNickname,
+  saveProfile,
+  syncLeaderboardScore,
+  TPlayerProfile,
+} from '../logic/leaderboard';
 import { reduceGame } from '../logic/reducer';
 import { bellyStage, voiceTriggerChance } from '../logic/selectors';
 import { sfx, TSfxName } from '../logic/sfx';
@@ -62,7 +70,11 @@ const playSequence = (
 
 export const useGame = (playerId: number) => {
   const [state, setState] = useState<TGameState | null>(null);
+  const [profile, setProfile] = useState<TPlayerProfile | null>(null);
   const stateRef = useRef<TGameState | null>(null);
+  const profileRef = useRef<TPlayerProfile | null>(null);
+  const lastSyncAtRef = useRef(0);
+  const lastSyncedSnapshot = useRef({ cans: -1, sips: -1, kvasiki: -1, nickname: '' });
   const [bodyFrame, setBodyFrame] = useState(0);
   const [headFrame, setHeadFrame] = useState(0);
   const [canPop, setCanPop] = useState(false);
@@ -267,8 +279,11 @@ export const useGame = (playerId: number) => {
 
   useEffect(() => {
     const loaded = loadState(playerId);
+    const loadedProfile = loadProfile();
     stateRef.current = loaded;
+    profileRef.current = loadedProfile;
     setState(loaded);
+    setProfile(loadedProfile);
     setCoach('idle');
     setCoachYell(false);
     setCleaner(false);
@@ -353,6 +368,53 @@ export const useGame = (playerId: number) => {
       applyRef.current({ type: 'TICK_PLAYTIME', ms: 15000 });
     }, 15000);
     return () => window.clearInterval(timer);
+  }, [playerId]);
+
+  // Throttled leaderboard sync: once every 30s if score or nickname changed
+  useEffect(() => {
+    const trySync = (beacon = false) => {
+      const curState = stateRef.current;
+      const curProfile = profileRef.current;
+      if (!curState || !curProfile || curProfile.nickname.length < 2) return;
+      const last = lastSyncedSnapshot.current;
+      const dirty =
+        curState.cans !== last.cans ||
+        curState.sips !== last.sips ||
+        curState.kvasiki !== last.kvasiki ||
+        curProfile.nickname !== last.nickname;
+      if (!dirty) return;
+      const now = Date.now();
+      if (beacon && now - lastSyncAtRef.current < 15000) return;
+      lastSyncAtRef.current = now;
+      lastSyncedSnapshot.current = {
+        cans: curState.cans,
+        sips: curState.sips,
+        kvasiki: curState.kvasiki,
+        nickname: curProfile.nickname,
+      };
+      void syncLeaderboardScore(
+        curProfile,
+        { cans: curState.cans, sips: curState.sips, kvasiki: curState.kvasiki },
+        beacon
+      );
+    };
+
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      trySync(false);
+    }, LEADERBOARD_SYNC_MS);
+
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') trySync(true);
+    };
+    const onUnload = () => trySync(true);
+    window.addEventListener('beforeunload', onUnload);
+    document.addEventListener('visibilitychange', onHide);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('beforeunload', onUnload);
+      document.removeEventListener('visibilitychange', onHide);
+    };
   }, [playerId]);
 
   const coachLevel = state?.skills.coach;
@@ -555,6 +617,7 @@ export const useGame = (playerId: number) => {
 
   return {
     state,
+    profile,
     bodyFrame,
     headFrame,
     canPop,
@@ -572,6 +635,31 @@ export const useGame = (playerId: number) => {
     veloImpulse,
     finalOpen,
     sip,
+    setNickname: async (rawName: string) => {
+      const curProfile = profileRef.current;
+      const curState = stateRef.current;
+      if (!curProfile) return;
+      const nickname = normalizeNickname(rawName);
+      if (nickname.length < 2) return;
+      const next: TPlayerProfile = { ...curProfile, nickname };
+      profileRef.current = next;
+      setProfile(next);
+      saveProfile(next);
+      if (curState) {
+        lastSyncAtRef.current = Date.now();
+        lastSyncedSnapshot.current = {
+          cans: curState.cans,
+          sips: curState.sips,
+          kvasiki: curState.kvasiki,
+          nickname,
+        };
+        await syncLeaderboardScore(
+          next,
+          { cans: curState.cans, sips: curState.sips, kvasiki: curState.kvasiki },
+          false
+        );
+      }
+    },
     buySkill: (id: TSkillId) => {
       const prev = stateRef.current?.kvasiki ?? 0;
       applyRef.current({ type: 'BUY_SKILL', id });

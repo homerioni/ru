@@ -322,3 +322,18 @@ model ClubAdminRequestLog {
   @@index([clubAdminId])
   @@map("club_admin_request_logs")
 }
+
+model KvasLeaderboardEntry {
+  id        String   @id
+  nickname  String
+  cans      Int      @default(0)
+  sips      Int      @default(0)
+  kvasiki   Int      @default(0)
+  rankName  String   @default("Запасной") @map("rank_name")
+  bellyName String   @default("Атлет") @map("belly_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([cans(sort: Desc), sips(sort: Desc), updatedAt(sort: Asc)])
+  @@map("kvas_leaderboard")
+}
