@@ -222,10 +222,26 @@ const Match = () => {
 
 export const KvasGame = ({ fontClass }: KvasGameProps) => {
   useEffect(() => {
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const bodyStyle = document.body.style as CSSStyleDeclaration & { webkitUserSelect?: string };
+    const prevOverflow = bodyStyle.overflow;
+    const prevUserSelect = bodyStyle.userSelect;
+    const prevWebkitSelect = bodyStyle.webkitUserSelect ?? '';
+    bodyStyle.overflow = 'hidden';
+    bodyStyle.userSelect = 'none';
+    bodyStyle.webkitUserSelect = 'none';
+
+    const onSelectStart = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
+      event.preventDefault();
+    };
+    document.addEventListener('selectstart', onSelectStart);
+
     return () => {
-      document.body.style.overflow = previous;
+      bodyStyle.overflow = prevOverflow;
+      bodyStyle.userSelect = prevUserSelect;
+      bodyStyle.webkitUserSelect = prevWebkitSelect;
+      document.removeEventListener('selectstart', onSelectStart);
     };
   }, []);
 

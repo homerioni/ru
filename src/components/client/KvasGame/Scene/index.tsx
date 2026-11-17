@@ -77,6 +77,11 @@ export const Scene = (props: SceneProps) => {
         event.preventDefault();
         props.onSip({ x: event.clientX, y: event.clientY });
       }}
+      onMouseDown={(event) => {
+        if ((event.target as HTMLElement).closest('[data-pigeon], button')) return;
+        event.preventDefault();
+      }}
+      onDragStart={(event) => event.preventDefault()}
       onKeyDown={(event) => {
         if (event.repeat) return;
         if (event.key === ' ' || event.key === 'Enter') {
