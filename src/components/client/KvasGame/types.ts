@@ -30,6 +30,7 @@ export type TGameState = {
   can: { state: 'closed' | 'open'; left: number };
   skills: Record<TSkillId, number>;
   roomLevel: number;
+  roomItems: number[];
   slots: Record<TSlotZone, (TCanPose | null)[]>;
   pileCount: number;
   stats: {
@@ -56,7 +57,7 @@ export type TEffect =
 export type TAction =
   | { type: 'SIP'; auto: boolean; caught: boolean; lastBurp: string | null }
   | { type: 'BUY_SKILL'; id: TSkillId }
-  | { type: 'BUY_ROOM' }
+  | { type: 'BUY_ROOM'; id: number }
   | { type: 'CLEANER_CLEAN' }
   | { type: 'COACH_BONUS' }
   | { type: 'TEAMMATE_BONUS' }
@@ -84,6 +85,7 @@ export type TManifest = {
   pigeonOnPile: TPoint[];
   coachPosition: TPoint;
   teammatePosition: TPoint;
+  egorPosition: TPoint;
   cleanerPosition: TPoint;
   can: { cell: TPoint; sheetCell: TPoint; frames: number };
   canDrink: { cell: TPoint; sheetCell: TPoint; frames: number };
@@ -91,6 +93,7 @@ export type TManifest = {
   pile: { cell: TPoint; frames: number };
   coach: { cell: TPoint; frames: number };
   teammate: { cell: TPoint; frames: number };
+  egor: { cell: TPoint; frames: number };
   velo: { cell: TPoint; frames: number };
   cleaner: { cell: TPoint; frames: number };
   pigeon: { cell: TPoint; frames: number };

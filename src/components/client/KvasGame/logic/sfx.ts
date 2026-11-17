@@ -25,10 +25,12 @@ export type TCommandClip = {
 export const VOICE_PHRASE_URLS = [
   '/game/kvas/sfx/phrases/cherkizon.wav',
   '/game/kvas/sfx/phrases/cherkizony.wav',
+  '/game/kvas/sfx/phrases/chudiche.wav',
   '/game/kvas/sfx/phrases/dima-puzo.wav',
   '/game/kvas/sfx/phrases/hmm.wav',
   '/game/kvas/sfx/phrases/induk.wav',
   '/game/kvas/sfx/phrases/levoe.wav',
+  '/game/kvas/sfx/phrases/maks-1.wav',
   '/game/kvas/sfx/phrases/malchik.wav',
   '/game/kvas/sfx/phrases/pivo-top.wav',
   '/game/kvas/sfx/phrases/shpricy.wav',
@@ -44,9 +46,30 @@ export const VELO_VOICE_URLS = [
   '/game/kvas/sfx/velo/4.wav',
   '/game/kvas/sfx/velo/6.wav',
   '/game/kvas/sfx/velo/7.wav',
+  '/game/kvas/sfx/velo/vlad.wav',
+  '/game/kvas/sfx/velo/vlad-2.wav',
+  '/game/kvas/sfx/velo/vlad-3.wav',
+  '/game/kvas/sfx/velo/vlad-4.wav',
 ] as const;
 
-export const TEAMMATE_VOICE_CLIPS: Record<1 | 2, readonly TCommandClip[]> = {
+export type TTeammateId = 1 | 2 | 3;
+
+export const TEAMMATE_NAMES: Record<TTeammateId, string> = {
+  1: 'Belford',
+  2: 'Ден',
+  3: 'Igor',
+};
+
+export const VELO_NAME = 'Буряк';
+export const EGOR_NAME = 'Egor';
+
+export const EGOR_VOICE_CLIPS: readonly TCommandClip[] = [
+  { url: '/game/kvas/sfx/command/egor-1.wav', caption: 'Egor из шкафа!', durationMs: 2400 },
+  { url: '/game/kvas/sfx/command/egor-2.wav', caption: 'Egor проверяет', durationMs: 3000 },
+  { url: '/game/kvas/sfx/command/egor-3.wav', caption: 'Egor в теме!', durationMs: 2000 },
+];
+
+export const TEAMMATE_VOICE_CLIPS: Record<TTeammateId, readonly TCommandClip[]> = {
   1: [
     { url: '/game/kvas/sfx/command/4i5.wav', caption: 'Четыре и пять!', durationMs: 3100 },
     { url: '/game/kvas/sfx/command/eblani.wav', caption: 'Ну вы исполняете!', durationMs: 2600 },
@@ -54,6 +77,13 @@ export const TEAMMATE_VOICE_CLIPS: Record<1 | 2, readonly TCommandClip[]> = {
     { url: '/game/kvas/sfx/command/penisa.wav', caption: 'Вот это расклад...', durationMs: 3000 },
     { url: '/game/kvas/sfx/command/pianitsa.wav', caption: 'Опять бухаешь?!', durationMs: 2800 },
     { url: '/game/kvas/sfx/command/v3.wav', caption: 'В три касания!', durationMs: 4800 },
+    { url: '/game/kvas/sfx/command/bel-1.wav', caption: 'Belford на связи', durationMs: 7500 },
+    { url: '/game/kvas/sfx/command/bel-2.wav', caption: 'Belford заглянул', durationMs: 3100 },
+    { url: '/game/kvas/sfx/command/bel-3.wav', caption: 'Belford в теме', durationMs: 4500 },
+    { url: '/game/kvas/sfx/command/bel-4.wav', caption: 'Belford подсказывает', durationMs: 4000 },
+    { url: '/game/kvas/sfx/command/bel-5.wav', caption: 'Belford в раздевалке', durationMs: 3000 },
+    { url: '/game/kvas/sfx/command/bel-6.wav', caption: 'Belford даёт расклад', durationMs: 3900 },
+    { url: '/game/kvas/sfx/command/bel-7.wav', caption: 'Belford заряжает', durationMs: 6600 },
   ],
   2: [
     { url: '/game/kvas/sfx/command/capitan.wav', caption: 'Капитан на базе', durationMs: 5200 },
@@ -66,6 +96,26 @@ export const TEAMMATE_VOICE_CLIPS: Record<1 | 2, readonly TCommandClip[]> = {
     { url: '/game/kvas/sfx/command/progress.wav', caption: 'Прогресс пошёл!', durationMs: 4500 },
     { url: '/game/kvas/sfx/command/rechichane.wav', caption: 'Речичане United!', durationMs: 4200 },
     { url: '/game/kvas/sfx/command/zaebis.wav', caption: 'Вообще чётко!', durationMs: 2800 },
+    { url: '/game/kvas/sfx/command/den-1.wav', caption: 'Ден на базе', durationMs: 3600 },
+    { url: '/game/kvas/sfx/command/den-2.wav', caption: 'Ден зашёл', durationMs: 4800 },
+    { url: '/game/kvas/sfx/command/den-3.wav', caption: 'Ден в раздевалке', durationMs: 5700 },
+    { url: '/game/kvas/sfx/command/den-4.wav', caption: 'Ден даёт газа', durationMs: 2000 },
+    { url: '/game/kvas/sfx/command/den-5.wav', caption: 'Ден на связи', durationMs: 5600 },
+    { url: '/game/kvas/sfx/command/den-6.wav', caption: 'Ден заряжает', durationMs: 7500 },
+    { url: '/game/kvas/sfx/command/den-7.wav', caption: 'Ден в теме', durationMs: 4500 },
+    { url: '/game/kvas/sfx/command/den-8.wav', caption: 'Ден разносит', durationMs: 7500 },
+    { url: '/game/kvas/sfx/command/den-9.wav', caption: 'Ден проверяет', durationMs: 4700 },
+    { url: '/game/kvas/sfx/command/den-10.wav', caption: 'Ден по делу', durationMs: 6000 },
+    { url: '/game/kvas/sfx/command/den-11.wav', caption: 'Ден подсказывает', durationMs: 7500 },
+    { url: '/game/kvas/sfx/command/den-12.wav', caption: 'Ден рулит', durationMs: 6200 },
+    { url: '/game/kvas/sfx/command/den-13.wav', caption: 'Ден на опыте', durationMs: 7500 },
+  ],
+  3: [
+    { url: '/game/kvas/sfx/command/igor.wav', caption: 'Igor заглянул', durationMs: 3850 },
+    { url: '/game/kvas/sfx/command/igor-2.wav', caption: 'Igor в раздевалке', durationMs: 3210 },
+    { url: '/game/kvas/sfx/command/igor-3.wav', caption: 'Igor на связи', durationMs: 4170 },
+    { url: '/game/kvas/sfx/command/igor-4.wav', caption: 'Igor даёт расклад', durationMs: 5130 },
+    { url: '/game/kvas/sfx/command/igor-5.wav', caption: 'Igor в теме', durationMs: 2130 },
   ],
 };
 
@@ -159,7 +209,8 @@ class SfxManager {
   private voiceAudio: HTMLAudioElement | null = null;
   private lastVoiceIndex = -1;
   private lastVeloIndex = -1;
-  private lastMateIndex: Record<1 | 2, number> = { 1: -1, 2: -1 };
+  private lastEgorIndex = -1;
+  private lastMateIndex: Record<TTeammateId, number> = { 1: -1, 2: -1, 3: -1 };
   private ready = false;
 
   private ensureContext() {
@@ -297,7 +348,7 @@ class SfxManager {
   }
 
   playTeammateVoice(
-    mate: 1 | 2,
+    mate: TTeammateId,
     enabled: boolean,
     rng: () => number = Math.random
   ): { caption: string; durationMs: number } | null {
@@ -326,6 +377,23 @@ class SfxManager {
     const url = VELO_VOICE_URLS[index];
     this.playVoiceUrl(url);
     return url;
+  }
+
+  playEgorVoice(
+    enabled: boolean,
+    rng: () => number = Math.random
+  ): { caption: string; durationMs: number } | null {
+    if (typeof window === 'undefined') return null;
+    let index = Math.floor(rng() * EGOR_VOICE_CLIPS.length);
+    if (EGOR_VOICE_CLIPS.length > 1 && index === this.lastEgorIndex) {
+      index = (index + 1) % EGOR_VOICE_CLIPS.length;
+    }
+    this.lastEgorIndex = index;
+    const clip = EGOR_VOICE_CLIPS[index];
+    if (enabled && !this.isVoiceBusy()) {
+      this.playVoiceUrl(clip.url);
+    }
+    return { caption: clip.caption, durationMs: clip.durationMs };
   }
 
   stopVoices() {

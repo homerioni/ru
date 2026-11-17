@@ -6,58 +6,57 @@ import s from '../styles.module.scss';
 
 type ShopRoomProps = {
   state: TGameState;
-  onBuy: () => void;
+  onBuy: (id: number) => void;
 };
 
 export const ShopRoom = ({ state, onBuy }: ShopRoomProps) => {
-  const next = ROOM_UPGRADES[state.roomLevel];
-  const bonusPct = Math.round(Math.max(0, state.roomLevel - 1) * ROOM_UPGRADE_BONUS * 100);
-  const affordable = !!next && state.kvasiki >= next.price;
+  const bought = new Set(state.roomItems);
+  const extraCount = state.roomItems.filter((id) => id !== 1).length;
+  const bonusPct = Math.round(extraCount * ROOM_UPGRADE_BONUS * 100);
+  const itemBonusPct = Math.round(ROOM_UPGRADE_BONUS * 100);
 
   return (
     <div className={s.roomShop}>
       <div className={s.roomHeader}>
         <span>
-          Уровень раздевалки: {state.roomLevel}/{ROOM_UPGRADES.length}
+          Куплено вещей: {state.roomItems.length}/{ROOM_UPGRADES.length}
         </span>
         <span className={s.shopBonus}>+{bonusPct}% к Квасикам</span>
       </div>
 
-      {next ? (
-        <div className={s.roomNextCard}>
-          <p className={s.shopBonus}>Следующее улучшение (#{state.roomLevel + 1})</p>
-          <p className={s.shopName}>{next.name}</p>
-          <p className={s.shopDesc}>
-            {next.text} (+{Math.round(ROOM_UPGRADE_BONUS * 100)}% к доходу)
-          </p>
-          <button
-            type="button"
-            className={`${s.buyFull} ${affordable ? s.buyReady : ''}`}
-            disabled={!affordable}
-            onClick={onBuy}
-          >
-            Улучшить · {next.price.toLocaleString('ru-RU')} кв.
-          </button>
-        </div>
-      ) : (
-        <div className={s.roomNextCard}>
-          <p className={s.shopName}>Раздевалка мечты собрана!</p>
-          <p className={s.shopDesc}>Все {ROOM_UPGRADES.length} улучшений установлены.</p>
-        </div>
-      )}
+      <p className={s.shopDesc}>
+        Любую вещь можно купить сразу — каждая даёт +{itemBonusPct}% к доходу.
+      </p>
 
-      <ul className={s.roomSteps}>
-        {ROOM_UPGRADES.map((item, idx) => {
-          const done = idx < state.roomLevel;
-          const isCurrent = idx === state.roomLevel;
+      <ul className={s.shopList}>
+        {ROOM_UPGRADES.map((item) => {
+          const done = bought.has(item.id);
+          const affordable = !done && state.kvasiki >= item.price;
           return (
             <li
-              key={item.name}
-              className={`${s.roomStep} ${done ? s.roomDone : ''} ${isCurrent ? s.roomCurr : ''}`}
+              key={item.id}
+              className={`${s.shopCard} ${done ? s.roomCardDone : ''}`}
             >
-              <span className={s.stepMark}>{done ? '✓' : idx + 1}</span>
-              <span className={s.stepName}>{item.name}</span>
-              <span className={s.stepPrice}>{done ? 'Есть' : `${item.price} кв.`}</span>
+              <span className={s.stepMark}>{done ? '✓' : '•'}</span>
+              <div className={s.shopText}>
+                <div className={s.shopHeadRow}>
+                  <p className={s.shopName}>{item.name}</p>
+                  <span className={s.levelPill}>+{itemBonusPct}%</span>
+                </div>
+                <p className={s.shopDesc}>{item.text}</p>
+              </div>
+              {done ? (
+                <span className={s.roomOwned}>Есть</span>
+              ) : (
+                <button
+                  type="button"
+                  className={`${s.buy} ${affordable ? s.buyReady : ''}`}
+                  disabled={!affordable}
+                  onClick={() => onBuy(item.id)}
+                >
+                  {item.price.toLocaleString('ru-RU')} кв.
+                </button>
+              )}
             </li>
           );
         })}

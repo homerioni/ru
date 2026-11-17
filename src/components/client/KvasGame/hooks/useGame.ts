@@ -12,7 +12,6 @@ import {
   PIGEON_STAY_MAX_MS,
   PIGEON_STAY_MIN_MS,
   SLOT_COUNTS,
-  VELO_CHANCE,
 } from '../logic/balance';
 import { canStartCleaner, canStartCoach, coachRoll } from '../logic/events';
 import {
@@ -35,7 +34,7 @@ import {
 } from '../logic/leaderboard';
 import { reduceGame } from '../logic/reducer';
 import { bellyStage, voiceTriggerChance } from '../logic/selectors';
-import { sfx, TSfxName } from '../logic/sfx';
+import { EGOR_NAME, sfx, TEAMMATE_NAMES, TSfxName, TTeammateId, VELO_NAME } from '../logic/sfx';
 import { loadState, saveState } from '../logic/storage';
 import { TAction, TEffect, TGameState, TSkillId } from '../types';
 
@@ -86,8 +85,10 @@ export const useGame = (playerId: number) => {
   const [coachYell, setCoachYell] = useState(false);
   const [cleaner, setCleaner] = useState(false);
   const [pigeon, setPigeon] = useState(false);
-  const [teammate, setTeammate] = useState<1 | 2 | null>(null);
+  const [teammate, setTeammate] = useState<TTeammateId | null>(null);
   const [teammateFrame, setTeammateFrame] = useState(0);
+  const [egor, setEgor] = useState(false);
+  const [egorFrame, setEgorFrame] = useState(0);
   const [velo, setVelo] = useState<'idle' | 'ride' | 'crash'>('idle');
   const [veloImpulse, setVeloImpulse] = useState(0);
 
@@ -106,14 +107,18 @@ export const useGame = (playerId: number) => {
   const coachRef = useRef(coach);
   const cleanerRef = useRef(cleaner);
   const teammateRef = useRef(teammate);
+  const egorRef = useRef(egor);
   const veloRef = useRef(velo);
   const teammateTimer = useRef<number | null>(null);
   const teammateAnimTimer = useRef<number | null>(null);
+  const egorTimer = useRef<number | null>(null);
+  const egorAnimTimer = useRef<number | null>(null);
   const veloTimers = useRef<number[]>([]);
   const reducedRef = useRef(false);
   coachRef.current = coach;
   cleanerRef.current = cleaner;
   teammateRef.current = teammate;
+  egorRef.current = egor;
   veloRef.current = velo;
   bodyFrameRef.current = bodyFrame;
   headFrameRef.current = headFrame;
@@ -290,6 +295,8 @@ export const useGame = (playerId: number) => {
     setPigeon(false);
     setTeammate(null);
     setTeammateFrame(0);
+    setEgor(false);
+    setEgorFrame(0);
     setVelo('idle');
     setBubbles([]);
     setPopups([]);
@@ -303,6 +310,8 @@ export const useGame = (playerId: number) => {
     return () => {
       if (teammateTimer.current !== null) window.clearTimeout(teammateTimer.current);
       if (teammateAnimTimer.current !== null) window.clearInterval(teammateAnimTimer.current);
+      if (egorTimer.current !== null) window.clearTimeout(egorTimer.current);
+      if (egorAnimTimer.current !== null) window.clearInterval(egorAnimTimer.current);
       veloTimers.current.forEach((id) => window.clearTimeout(id));
       veloTimers.current = [];
     };
@@ -326,7 +335,7 @@ export const useGame = (playerId: number) => {
     reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const loaded = stateRef.current;
     const curBelly = loaded ? bellyStage(loaded.cans) : 0;
-    const curRoom = loaded?.roomLevel ?? 1;
+    const curItems = loaded?.roomItems ?? [1];
     const urls = [
       '/game/kvas/room/base.png',
       '/game/kvas/room/upgrade-1.png',
@@ -338,8 +347,9 @@ export const useGame = (playerId: number) => {
       '/game/kvas/props/grip-drink.png',
       `/game/kvas/body/belly-${curBelly}.png`,
       ...(curBelly < 9 ? [`/game/kvas/body/belly-${curBelly + 1}.png`] : []),
-      ...(curRoom > 1 ? [`/game/kvas/room/upgrade-${curRoom}.png`] : []),
-      ...(curRoom < 12 ? [`/game/kvas/room/upgrade-${curRoom + 1}.png`] : []),
+      ...curItems
+        .filter((id) => id > 1)
+        .map((id) => `/game/kvas/room/upgrade-${id}.png`),
     ];
     urls.forEach((url) => {
       const image = new Image();
@@ -445,6 +455,7 @@ export const useGame = (playerId: number) => {
         coachRef.current !== 'idle' ||
         cleanerRef.current ||
         teammateRef.current !== null ||
+        egorRef.current ||
         veloRef.current !== 'idle';
       const now = Date.now();
       if (canStartCoach(now, lastCoachAt.current, busy) && coachRoll(Math.random)) {
@@ -508,7 +519,7 @@ export const useGame = (playerId: number) => {
   }, [pigeon, playSound]);
 
   const spawnTeammateVisit = useCallback(
-    (mate: 1 | 2, point?: { x: number; y: number }) => {
+    (mate: TTeammateId, point?: { x: number; y: number }) => {
       if (teammateTimer.current !== null) window.clearTimeout(teammateTimer.current);
       if (teammateAnimTimer.current !== null) window.clearInterval(teammateAnimTimer.current);
       const clip = sfx.playTeammateVoice(mate, !!stateRef.current?.soundOn);
@@ -521,7 +532,12 @@ export const useGame = (playerId: number) => {
       if (hypeLevel > 0 && (HYPE_TEAMMATE_BONUS[hypeLevel] ?? 0) > 0) {
         const bonus = applyRef.current({ type: 'TEAMMATE_BONUS' });
         if (bonus > 0 && point) {
-          pushPopup(point.x + 18, point.y - 24, `+${bonus} БРАТВА!`, 'gold');
+          pushPopup(
+            point.x + 18,
+            point.y - 24,
+            `+${bonus} ${TEAMMATE_NAMES[mate].toUpperCase()}!`,
+            'gold'
+          );
         }
       }
 
@@ -543,35 +559,94 @@ export const useGame = (playerId: number) => {
     [pushBubble, pushPopup]
   );
 
-  const spawnVeloCrash = useCallback(() => {
-    veloTimers.current.forEach((id) => window.clearTimeout(id));
-    veloTimers.current = [];
-    setVelo('ride');
+  const spawnEgorVisit = useCallback(
+    (point?: { x: number; y: number }) => {
+      if (egorTimer.current !== null) window.clearTimeout(egorTimer.current);
+      if (egorAnimTimer.current !== null) window.clearInterval(egorAnimTimer.current);
+      const clip = sfx.playEgorVoice(!!stateRef.current?.soundOn);
+      const stayMs = Math.min(5000, Math.max(2200, clip?.durationMs ?? 2400));
+      setEgor(true);
+      setEgorFrame(0);
 
-    const tCrash = window.setTimeout(() => {
-      setVelo('crash');
-      setVeloImpulse((prev) => prev + 1);
-      playSound('veloCrash');
-      runShake([
-        [6, -3],
-        [-6, 4],
-        [5, -2],
-        [-4, 2],
-        [2, 0],
-        [0, 0],
-      ]);
-    }, 540);
+      const hypeLevel = stateRef.current?.skills.hype ?? 0;
+      if (hypeLevel > 0 && (HYPE_TEAMMATE_BONUS[hypeLevel] ?? 0) > 0) {
+        const bonus = applyRef.current({ type: 'TEAMMATE_BONUS' });
+        if (bonus > 0 && point) {
+          pushPopup(
+            point.x + 18,
+            point.y - 24,
+            `+${bonus} ${EGOR_NAME.toUpperCase()}!`,
+            'gold'
+          );
+        }
+      }
 
-    const tVoice = window.setTimeout(() => {
-      sfx.playVeloVoice(!!stateRef.current?.soundOn);
-    }, 840);
+      let step = 0;
+      egorAnimTimer.current = window.setInterval(() => {
+        step += 1;
+        setEgorFrame(step % 2 === 1 ? 1 : 2);
+      }, 240);
 
-    const tDone = window.setTimeout(() => {
-      setVelo('idle');
-    }, 1060);
+      egorTimer.current = window.setTimeout(() => {
+        if (egorAnimTimer.current !== null) {
+          window.clearInterval(egorAnimTimer.current);
+          egorAnimTimer.current = null;
+        }
+        setEgorFrame(0);
+        egorTimer.current = window.setTimeout(() => {
+          setEgor(false);
+          egorTimer.current = null;
+        }, 160);
+      }, stayMs);
+    },
+    [pushPopup]
+  );
 
-    veloTimers.current = [tCrash, tVoice, tDone];
-  }, [playSound, runShake]);
+  const spawnVeloCrash = useCallback(
+    (point?: { x: number; y: number }) => {
+      veloTimers.current.forEach((id) => window.clearTimeout(id));
+      veloTimers.current = [];
+      setVelo('ride');
+
+      const hypeLevel = stateRef.current?.skills.hype ?? 0;
+      if (hypeLevel > 0 && (HYPE_TEAMMATE_BONUS[hypeLevel] ?? 0) > 0) {
+        const bonus = applyRef.current({ type: 'TEAMMATE_BONUS' });
+        if (bonus > 0 && point) {
+          pushPopup(
+            point.x + 18,
+            point.y - 24,
+            `+${bonus} ${VELO_NAME.toUpperCase()}!`,
+            'gold'
+          );
+        }
+      }
+
+      const tCrash = window.setTimeout(() => {
+        setVelo('crash');
+        setVeloImpulse((prev) => prev + 1);
+        playSound('veloCrash');
+        runShake([
+          [6, -3],
+          [-6, 4],
+          [5, -2],
+          [-4, 2],
+          [2, 0],
+          [0, 0],
+        ]);
+      }, 540);
+
+      const tVoice = window.setTimeout(() => {
+        sfx.playVeloVoice(!!stateRef.current?.soundOn);
+      }, 840);
+
+      const tDone = window.setTimeout(() => {
+        setVelo('idle');
+      }, 1060);
+
+      veloTimers.current = [tCrash, tVoice, tDone];
+    },
+    [playSound, pushPopup, runShake]
+  );
 
   const sip = (auto = false, point?: { x: number; y: number }) => {
     const current = stateRef.current;
@@ -583,26 +658,30 @@ export const useGame = (playerId: number) => {
       playSound('whistle');
     }
     applyRef.current({ type: 'SIP', auto, caught, lastBurp: lastBurp.current }, point);
-    const canRunVelo =
-      !auto &&
-      veloRef.current === 'idle' &&
-      coachRef.current === 'idle' &&
-      !cleanerRef.current &&
-      !teammateRef.current &&
-      !sfx.isVoiceBusy();
-    if (canRunVelo && Math.random() < VELO_CHANCE) {
-      spawnVeloCrash();
-    } else if (!auto && Math.random() < voiceTriggerChance(current)) {
-      const canRunTeammate =
+    if (!auto && Math.random() < voiceTriggerChance(current)) {
+      const canRunVisitor =
         coachRef.current === 'idle' &&
         !cleanerRef.current &&
         !teammateRef.current &&
+        !egorRef.current &&
         veloRef.current === 'idle' &&
         !sfx.isVoiceBusy();
-      // Combined 5% (+ hype bonus) pool: 6 clips (teammate 1) + 10 clips (teammate 2) + 12 clips (ordinary) = 28
-      const roll = Math.random() * 28;
-      if (canRunTeammate && roll < 16) {
-        spawnTeammateVisit(roll < 6 ? 1 : 2, point);
+      // Equal chance inside the 5% (+ hype bonus) pool: Belford, Ден, Igor, Буряк, Egor, or ordinary voice (1/6 each)
+      if (canRunVisitor) {
+        const roll = Math.floor(Math.random() * 6);
+        if (roll === 0) {
+          spawnTeammateVisit(1, point);
+        } else if (roll === 1) {
+          spawnTeammateVisit(2, point);
+        } else if (roll === 2) {
+          spawnTeammateVisit(3, point);
+        } else if (roll === 3) {
+          spawnVeloCrash(point);
+        } else if (roll === 4) {
+          spawnEgorVisit(point);
+        } else {
+          sfx.playRandomVoice(!!stateRef.current?.soundOn);
+        }
       } else {
         sfx.playRandomVoice(!!stateRef.current?.soundOn);
       }
@@ -622,7 +701,7 @@ export const useGame = (playerId: number) => {
     headFrame,
     canPop,
     shake,
-    dark: dark || (state ? state.roomLevel < 1 : true),
+    dark: dark || (state ? !state.roomItems.includes(1) : true),
     bubbles,
     popups,
     coach,
@@ -631,6 +710,8 @@ export const useGame = (playerId: number) => {
     pigeon,
     teammate,
     teammateFrame,
+    egor,
+    egorFrame,
     velo,
     veloImpulse,
     finalOpen,
@@ -677,10 +758,10 @@ export const useGame = (playerId: number) => {
       else sfx.stopVoices();
       if (stateRef.current) saveState(stateRef.current);
     },
-    buyRoom: () => {
-      const prev = stateRef.current?.roomLevel ?? 0;
-      applyRef.current({ type: 'BUY_ROOM' });
-      if ((stateRef.current?.roomLevel ?? 0) > prev) playSound('levelup');
+    buyRoom: (id: number) => {
+      const prevCount = stateRef.current?.roomItems.length ?? 0;
+      applyRef.current({ type: 'BUY_ROOM', id });
+      if ((stateRef.current?.roomItems.length ?? 0) > prevCount) playSound('levelup');
       if (stateRef.current) saveState(stateRef.current);
     },
     flushSave: () => {

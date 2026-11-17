@@ -12,9 +12,22 @@ export const loadState = (playerId: number): TGameState => {
     const parsed: unknown = JSON.parse(raw);
     if (!isGameState(parsed, playerId)) return createState(playerId);
     const base = createState(playerId);
+    const legacyLevel = Math.max(1, parsed.roomLevel ?? 1);
+    const legacyItems = Array.from({ length: Math.min(12, legacyLevel) }, (_, i) => i + 1);
+    const rawItems = Array.isArray(parsed.roomItems)
+      ? Array.from(
+          new Set(
+            parsed.roomItems.filter(
+              (id): id is number => typeof id === 'number' && Number.isInteger(id) && id >= 1
+            )
+          )
+        )
+      : legacyItems;
+    const roomItems = rawItems.includes(1) ? rawItems : [1, ...rawItems];
     return {
       ...parsed,
-      roomLevel: Math.max(1, parsed.roomLevel ?? 1),
+      roomItems,
+      roomLevel: roomItems.length,
       skills: { ...base.skills, ...parsed.skills },
       stats: { ...base.stats, ...parsed.stats },
     };

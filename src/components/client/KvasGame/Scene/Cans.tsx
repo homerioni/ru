@@ -3,24 +3,14 @@
 import { memo, useEffect, useRef } from 'react';
 import { kvasManifest } from '../manifest';
 import { mulberry32 } from '../logic/random';
-import { pileStage } from '../logic/selectors';
-import { TCanPose, TGameState, TSlotZone } from '../types';
+import { TGameState } from '../types';
 import s from './styles.module.scss';
 
 const [SCENE_W, SCENE_H] = kvasManifest.scene;
-const POSE_FRAME: Record<TCanPose, number> = { stand: 6, lie: 7, crushed: 8 };
-const UPPER_ZONES: TSlotZone[] = ['bench', 'shelf'];
-
-const SLOT_CAN_W = 20;
-const SLOT_CAN_H = 38;
-const CAN_SHEET_W = SLOT_CAN_W * kvasManifest.can.frames;
 
 const [CRUSH_W, CRUSH_H] = kvasManifest.canCrushed.cell;
 const CRUSH_FRAMES = kvasManifest.canCrushed.frames;
 const [SHEET_CRUSH_W, SHEET_CRUSH_H] = kvasManifest.canCrushed.sheetCell;
-
-const [PILE_W, PILE_H] = kvasManifest.pile.cell;
-const PILE_SHEET_W = PILE_W * kvasManifest.pile.frames;
 
 const MAX_PHYSICS_CANS = 36;
 const CAN_RADIUS = 6.4;
@@ -270,16 +260,6 @@ const drawCans = (
   }
 };
 
-const canStyle = (frame: number, x: number, y: number) => ({
-  left: x,
-  top: y,
-  width: SLOT_CAN_W,
-  height: SLOT_CAN_H,
-  backgroundImage: 'url(/game/kvas/props/can.png)',
-  backgroundSize: `${CAN_SHEET_W}px ${SLOT_CAN_H}px`,
-  backgroundPosition: `${-frame * SLOT_CAN_W}px 0`,
-});
-
 type CansProps = {
   cans: number;
   pileCount: number;
@@ -299,8 +279,12 @@ export const Cans = memo(function Cans({
   shelfSlots,
   crashImpulse = 0,
 }: CansProps) {
-  const stage = pileStage(pileCount);
-  const targetMoundCount = Math.min(MAX_PHYSICS_CANS, floorCount + pileCount);
+  const extraSlotsCount =
+    benchSlots.filter(Boolean).length + shelfSlots.filter(Boolean).length;
+  const targetMoundCount = Math.min(
+    MAX_PHYSICS_CANS,
+    floorCount + extraSlotsCount + pileCount
+  );
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const spriteRef = useRef<HTMLImageElement | null>(null);
@@ -428,48 +412,12 @@ export const Cans = memo(function Cans({
     if (changed) startLoop();
   }, [cans, floorCount, megaBurps, crashImpulse]);
 
-  const zones: { zone: TSlotZone; list: TGameState['slots']['bench'] }[] = [
-    { zone: 'bench', list: benchSlots },
-    { zone: 'shelf', list: shelfSlots },
-  ];
-
   return (
-    <>
-      {stage > 0 && (
-        <div
-          className={`${s.sprite} ${s.pile}`}
-          style={{
-            left: kvasManifest.pilePosition[0],
-            top: kvasManifest.pilePosition[1],
-            width: PILE_W,
-            height: PILE_H,
-            backgroundImage: 'url(/game/kvas/props/pile.png)',
-            backgroundSize: `${PILE_SHEET_W}px ${PILE_H}px`,
-            backgroundPosition: `${-(stage - 1) * PILE_W}px 0`,
-          }}
-        />
-      )}
-      {UPPER_ZONES.map((zone, zIdx) =>
-        zones[zIdx].list.map((pose, index) => {
-          if (!pose) return null;
-          const point = kvasManifest.slots[zone][index];
-          if (!point) return null;
-          const zoneClass = zone === 'bench' ? s.benchCan : s.shelfCan;
-          return (
-            <div
-              key={`${zone}-${index}`}
-              className={`${s.sprite} ${zoneClass}`}
-              style={canStyle(POSE_FRAME[pose], point[0], point[1])}
-            />
-          );
-        })
-      )}
-      <canvas
-        ref={canvasRef}
-        width={SCENE_W}
-        height={SCENE_H}
-        className={`${s.sprite} ${s.floorCan}`}
-      />
-    </>
+    <canvas
+      ref={canvasRef}
+      width={SCENE_W}
+      height={SCENE_H}
+      className={`${s.sprite} ${s.floorCan}`}
+    />
   );
 });

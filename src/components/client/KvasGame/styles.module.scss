@@ -491,6 +491,27 @@
   border-color: #3f6a2e;
 }
 
+.roomCardDone {
+  border-color: #3f6a2e;
+  background: #1f2618;
+}
+
+.roomOwned {
+  min-width: 78px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b8dc98;
+  background: #27381c;
+  border: 2px solid #3f6a2e;
+  border-radius: 6px;
+  flex: none;
+}
+
 .stepMark {
   width: 20px;
   text-align: center;

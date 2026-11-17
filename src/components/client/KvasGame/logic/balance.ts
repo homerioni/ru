@@ -58,7 +58,6 @@ export const CLEANER_STAY_MS = 3000;
 export const CLEANER_BONUS = 100;
 export const PIGEON_CHANCE = 0.03;
 export const VOICE_PHRASE_CHANCE = 0.05;
-export const VELO_CHANCE = 0.004;
 export const PIGEON_STAY_MIN_MS = 10000;
 export const PIGEON_STAY_MAX_MS = 20000;
 export const FINAL_CANS = 1300;
@@ -72,19 +71,28 @@ export const RANKS = [
   { cans: 500, name: "Квасной Балон д'Ор" },
 ];
 
-export const ROOM_UPGRADES = [
-  { name: 'Лампочка на проводе', price: 50, text: 'Да будет свет. Тусклый.' },
-  { name: 'Гирлянда', price: 150, text: 'Новый год круглый год' },
-  { name: 'Плакат «Ясен Квасен»', price: 300, text: 'Реклама работает' },
-  { name: 'Магнитофон «Весна»', price: 600, text: 'Кассета одна, зато любимая' },
-  { name: 'Колонка', price: 1000, text: 'Басы бьют по банкам' },
-  { name: 'Холодильник с Квасеном', price: 1600, text: 'Стратегический запас' },
-  { name: 'Ковёр с оленями', price: 2500, text: 'Как у бабушки, но в раздевалке' },
-  { name: 'Пузатый телевизор', price: 3500, text: 'Повтор гола 2008 года. Опять.' },
-  { name: 'Диван вместо скамейки', price: 5000, text: 'Раздевалка мечты' },
-  { name: 'Неоновая вывеска «КВАС»', price: 7000, text: 'Светит ярче прожекторов' },
-  { name: 'Золотой бочонок Квасена', price: 10000, text: 'Безлимитный кран прямо у шкафчиков' },
-  { name: 'Чемпионский вымпел', price: 15000, text: 'Элитная база «Речичане United»' },
+export type TRoomUpgrade = {
+  id: number;
+  name: string;
+  price: number;
+  text: string;
+};
+
+export const ROOM_UPGRADES: TRoomUpgrade[] = [
+  { id: 1, name: 'Лампочка на проводе', price: 50, text: 'Да будет свет. Тусклый.' },
+  { id: 2, name: 'Гирлянда', price: 150, text: 'Новый год круглый год' },
+  { id: 3, name: 'Плакат «Ясен Квасен»', price: 300, text: 'Реклама работает' },
+  { id: 4, name: 'Магнитофон «Весна»', price: 600, text: 'Кассета одна, зато любимая' },
+  { id: 5, name: 'Колонка', price: 1000, text: 'Басы бьют по банкам' },
+  { id: 13, name: 'Шарф «БАТЭ»', price: 1200, text: 'Жёлто-синий на крючке' },
+  { id: 14, name: 'Шарф «ФК Гомель»', price: 1200, text: 'Зелёно-белая шашка у двери' },
+  { id: 6, name: 'Холодильник «Ясен Квасен»', price: 1600, text: 'Стратегический запас' },
+  { id: 7, name: 'Ковёр', price: 2500, text: 'Как у бабушки, но в раздевалке' },
+  { id: 8, name: 'Пузатый телевизор', price: 3500, text: 'Повтор гола 2008 года. Опять.' },
+  { id: 9, name: 'Диван вместо скамейки', price: 5000, text: 'Раздевалка мечты' },
+  { id: 10, name: 'Неоновая табличка «Ясен Квасен»', price: 7000, text: 'Светит ярче прожекторов' },
+  { id: 11, name: 'Золотой бочонок Квасена', price: 10000, text: 'Безлимитный кран прямо у шкафчиков' },
+  { id: 12, name: 'Чемпионский вымпел', price: 15000, text: 'Элитная база «Речичане United»' },
 ];
 
 export const ROOM_UPGRADE_PRICES = ROOM_UPGRADES.map((item) => item.price);

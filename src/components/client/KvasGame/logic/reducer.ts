@@ -58,6 +58,7 @@ export const createState = (playerId: number, soundOn = true): TGameState => ({
     marathon: 0,
   },
   roomLevel: 1,
+  roomItems: [1],
   slots: {
     floor: Array(SLOT_COUNTS.floor).fill(null),
     bench: Array(SLOT_COUNTS.bench).fill(null),
@@ -73,6 +74,7 @@ const clone = (state: TGameState): TGameState => ({
   ...state,
   can: { ...state.can },
   skills: { ...state.skills },
+  roomItems: state.roomItems.slice(),
   slots: {
     floor: state.slots.floor.slice(),
     bench: state.slots.bench.slice(),
@@ -233,10 +235,18 @@ export const reduceGame = (
   }
 
   if (action.type === 'BUY_ROOM') {
-    const upgrade = ROOM_UPGRADES[state.roomLevel];
-    if (!upgrade || state.kvasiki < upgrade.price) return same(state);
+    const upgrade = ROOM_UPGRADES.find((item) => item.id === action.id);
+    if (!upgrade || state.roomItems.includes(action.id) || state.kvasiki < upgrade.price) {
+      return same(state);
+    }
+    const roomItems = [...state.roomItems, action.id];
     return {
-      state: { ...state, kvasiki: state.kvasiki - upgrade.price, roomLevel: state.roomLevel + 1 },
+      state: {
+        ...state,
+        kvasiki: state.kvasiki - upgrade.price,
+        roomItems,
+        roomLevel: roomItems.length,
+      },
       effects: [],
     };
   }

@@ -48,7 +48,8 @@ export const canVolume = (throatLevel: number) =>
 
 export const multiplier = (state: TGameState) => {
   const belly = BELLY_MULT[bellyStage(state.cans)];
-  const room = 1 + ROOM_UPGRADE_BONUS * Math.max(0, state.roomLevel - 1);
+  const extraRoom = state.roomItems.filter((id) => id !== 1).length;
+  const room = 1 + ROOM_UPGRADE_BONUS * extraRoom;
   const armband =
     1 + ARMBAND_BONUS_BY_LEVEL[Math.min(ARMBAND_BONUS_BY_LEVEL.length - 1, state.skills.armband ?? 0)];
   const tattoo =
@@ -89,6 +90,7 @@ export const canBuyAny = (state: TGameState) => {
     return level < skill.max && state.kvasiki >= skillPrice(skill.base, level);
   });
   if (canSkill) return true;
-  const nextRoom = ROOM_UPGRADES[state.roomLevel];
-  return !!nextRoom && state.kvasiki >= nextRoom.price;
+  return ROOM_UPGRADES.some(
+    (item) => !state.roomItems.includes(item.id) && state.kvasiki >= item.price
+  );
 };

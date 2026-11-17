@@ -1,4 +1,5 @@
 import { CSSProperties, memo } from 'react';
+import { EGOR_NAME, TEAMMATE_NAMES, TTeammateId, VELO_NAME } from '../logic/sfx';
 import { kvasManifest } from '../manifest';
 import { pileStage } from '../logic/selectors';
 import s from './styles.module.scss';
@@ -9,14 +10,17 @@ type EventsProps = {
   coachYell: boolean;
   cleaner: boolean;
   pigeon: boolean;
-  teammate: 1 | 2 | null;
+  teammate: TTeammateId | null;
   teammateFrame: number;
+  egor: boolean;
+  egorFrame: number;
   velo: 'idle' | 'ride' | 'crash';
   onPigeon: () => void;
 };
 
 const [COACH_W, COACH_H] = kvasManifest.coach.cell;
 const [TEAMMATE_W, TEAMMATE_H] = kvasManifest.teammate.cell;
+const [EGOR_W, EGOR_H] = kvasManifest.egor.cell;
 const [VELO_W, VELO_H] = kvasManifest.velo.cell;
 const [CLEANER_W, CLEANER_H] = kvasManifest.cleaner.cell;
 const [PIGEON_W, PIGEON_H] = kvasManifest.pigeon.cell;
@@ -29,18 +33,36 @@ export const Events = memo(function Events({
   pigeon,
   teammate,
   teammateFrame,
+  egor,
+  egorFrame,
   velo,
   onPigeon,
 }: EventsProps) {
   const coachFrame = coachYell ? 2 : coach === 'look' ? 1 : 0;
-  const pigeonAt =
-    kvasManifest.pigeonOnPile[pileStage(pileCount)] ?? kvasManifest.pigeonOnPile[1];
+  const stage = pileStage(pileCount);
+  const pigeonAt: [number, number] = [56, 388 - Math.min(2, stage) * 10];
 
   return (
     <>
+      {egor && (
+        <div
+          className={`${s.sprite} ${s.teammate}`}
+          aria-label={EGOR_NAME}
+          style={{
+            left: kvasManifest.egorPosition[0],
+            top: kvasManifest.egorPosition[1],
+            width: EGOR_W,
+            height: EGOR_H,
+            backgroundImage: 'url(/game/kvas/props/egor.png)',
+            backgroundSize: `${EGOR_W * kvasManifest.egor.frames}px ${EGOR_H}px`,
+            backgroundPosition: `${-egorFrame * EGOR_W}px 0`,
+          }}
+        />
+      )}
       {teammate !== null && (
         <div
           className={`${s.sprite} ${s.teammate}`}
+          aria-label={TEAMMATE_NAMES[teammate]}
           style={{
             left: kvasManifest.teammatePosition[0],
             top: kvasManifest.teammatePosition[1],
@@ -55,6 +77,7 @@ export const Events = memo(function Events({
       {velo !== 'idle' && (
         <div
           className={`${s.sprite} ${s.velo} ${velo === 'ride' ? s.veloRide : s.veloCrash}`}
+          aria-label={VELO_NAME}
           style={
             {
               left: 0,

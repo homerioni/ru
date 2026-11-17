@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { bellyStage, canCrushStage } from '../logic/selectors';
+import { TTeammateId } from '../logic/sfx';
 import { kvasManifest } from '../manifest';
 import { TGameState } from '../types';
 import { Cans } from './Cans';
@@ -21,8 +22,10 @@ type SceneProps = {
   coachYell: boolean;
   cleaner: boolean;
   pigeon: boolean;
-  teammate: 1 | 2 | null;
+  teammate: TTeammateId | null;
   teammateFrame: number;
+  egor: boolean;
+  egorFrame: number;
   velo: 'idle' | 'ride' | 'crash';
   veloImpulse: number;
   onSip: (point?: { x: number; y: number }) => void;
@@ -95,7 +98,7 @@ export const Scene = (props: SceneProps) => {
             transformOrigin: 'top left',
           }}
         >
-          <Room roomLevel={state.roomLevel} dark={props.dark} />
+          <Room roomItems={state.roomItems} dark={props.dark} />
           <Cans
             cans={state.cans}
             pileCount={state.pileCount}
@@ -123,6 +126,8 @@ export const Scene = (props: SceneProps) => {
             pigeon={props.pigeon}
             teammate={props.teammate}
             teammateFrame={props.teammateFrame}
+            egor={props.egor}
+            egorFrame={props.egorFrame}
             velo={props.velo}
             onPigeon={props.onPigeon}
           />

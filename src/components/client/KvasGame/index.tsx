@@ -50,7 +50,7 @@ const Shops = ({
 }: {
   state: TGameState;
   onSkill: (id: TSkillId) => void;
-  onRoom: () => void;
+  onRoom: (id: number) => void;
   onTab: () => void;
 }) => {
   const [tab, setTab] = useState(0);
@@ -113,6 +113,8 @@ const Match = () => {
         pigeon={game.pigeon}
         teammate={game.teammate}
         teammateFrame={game.teammateFrame}
+        egor={game.egor}
+        egorFrame={game.egorFrame}
         velo={game.velo}
         veloImpulse={game.veloImpulse}
         onSip={(point) => game.sip(false, point)}
