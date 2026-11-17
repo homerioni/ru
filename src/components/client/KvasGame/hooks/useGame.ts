@@ -34,7 +34,15 @@ import {
 } from '../logic/leaderboard';
 import { reduceGame } from '../logic/reducer';
 import { bellyStage, voiceTriggerChance } from '../logic/selectors';
-import { EGOR_NAME, sfx, TEAMMATE_NAMES, TSfxName, TTeammateId, VELO_NAME } from '../logic/sfx';
+import {
+  EGOR_NAME,
+  pickVisitorByClips,
+  sfx,
+  TEAMMATE_NAMES,
+  TSfxName,
+  TTeammateId,
+  VELO_NAME,
+} from '../logic/sfx';
 import { loadState, saveState } from '../logic/storage';
 import { TAction, TEffect, TGameState, TSkillId } from '../types';
 
@@ -666,18 +674,18 @@ export const useGame = (playerId: number) => {
         !egorRef.current &&
         veloRef.current === 'idle' &&
         !sfx.isVoiceBusy();
-      // Equal chance inside the 5% (+ hype bonus) pool: Belford, Ден, Igor, Буряк, Egor, or ordinary voice (1/6 each)
+      // Weighted by each character's clip count so characters with fewer phrases don't repeat too often
       if (canRunVisitor) {
-        const roll = Math.floor(Math.random() * 6);
-        if (roll === 0) {
+        const kind = pickVisitorByClips(Math.random);
+        if (kind === 'mate1') {
           spawnTeammateVisit(1, point);
-        } else if (roll === 1) {
+        } else if (kind === 'mate2') {
           spawnTeammateVisit(2, point);
-        } else if (roll === 2) {
+        } else if (kind === 'mate3') {
           spawnTeammateVisit(3, point);
-        } else if (roll === 3) {
+        } else if (kind === 'velo') {
           spawnVeloCrash(point);
-        } else if (roll === 4) {
+        } else if (kind === 'egor') {
           spawnEgorVisit(point);
         } else {
           sfx.playRandomVoice(!!stateRef.current?.soundOn);

@@ -119,6 +119,28 @@ export const TEAMMATE_VOICE_CLIPS: Record<TTeammateId, readonly TCommandClip[]> 
   ],
 };
 
+export type TVisitorKind = 'mate1' | 'mate2' | 'mate3' | 'velo' | 'egor' | 'phrase';
+
+const VISITOR_WEIGHTS: readonly { kind: TVisitorKind; weight: number }[] = [
+  { kind: 'mate1', weight: TEAMMATE_VOICE_CLIPS[1].length },
+  { kind: 'mate2', weight: TEAMMATE_VOICE_CLIPS[2].length },
+  { kind: 'mate3', weight: TEAMMATE_VOICE_CLIPS[3].length },
+  { kind: 'velo', weight: VELO_VOICE_URLS.length },
+  { kind: 'egor', weight: EGOR_VOICE_CLIPS.length },
+  { kind: 'phrase', weight: VOICE_PHRASE_URLS.length },
+];
+
+const VISITOR_TOTAL_WEIGHT = VISITOR_WEIGHTS.reduce((sum, item) => sum + item.weight, 0);
+
+export const pickVisitorByClips = (rng: () => number = Math.random): TVisitorKind => {
+  let target = rng() * VISITOR_TOTAL_WEIGHT;
+  for (const item of VISITOR_WEIGHTS) {
+    target -= item.weight;
+    if (target < 0) return item.kind;
+  }
+  return 'phrase';
+};
+
 type TSfxCfg = {
   urls: string[];
   volume: number;
